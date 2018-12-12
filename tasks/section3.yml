@@ -1,0 +1,490 @@
+---
+- name: "SCORED | 3.1.1 | PATCH | Ensure IP forwarding is disabled"
+  sysctl:
+      name: net.ipv4.ip_forward
+      value: 0
+      state: present
+      reload: true
+      ignoreerrors: true
+  when: ubuntu1604cis_is_router == false
+  notify:
+      - sysctl flush ipv4 route table
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.1.1
+
+- name: "SCORED | 3.1.2 | PATCH | Ensure packet redirect sending is disabled"
+  sysctl:
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: true
+      state: present
+      reload: true
+      ignoreerrors: true
+  with_items:
+      - { name: net.ipv4.conf.all.send_redirects, value: 0 }
+      - { name: net.ipv4.conf.default.send_redirects, value: 0 }
+  when: ubuntu1604cis_is_router == false
+  notify:
+      - sysctl flush ipv4 route table
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.1.2
+
+- name: "SCORED | 3.2.1 | PATCH | Ensure source routed packets are not accepted"
+  sysctl:
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: true
+      state: present
+      reload: true
+      ignoreerrors: true
+  with_items:
+      - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
+      - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
+  notify:
+      - sysctl flush ipv4 route table
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.2.1
+
+- name: "SCORED | 3.2.2 | PATCH | Ensure ICMP redirects are not accepted"
+  sysctl:
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: true
+      state: present
+      reload: true
+      ignoreerrors: true
+  with_items:
+      - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
+      - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
+  notify:
+      - sysctl flush ipv4 route table
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.2.2
+
+- name: "SCORED | 3.2.3 | PATCH | Ensure secure ICMP redirects are not accepted"
+  sysctl:
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: true
+      state: present
+      reload: true
+      ignoreerrors: true
+  with_items:
+      - { name: net.ipv4.conf.all.secure_redirects, value: 0 }
+      - { name: net.ipv4.conf.default.secure_redirects, value: 0 }
+  notify:
+      - sysctl flush ipv4 route table
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.2.3
+
+- name: "SCORED | 3.2.4 | PATCH | Ensure suspicious packets are logged"
+  sysctl:
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: true
+      state: present
+      reload: true
+      ignoreerrors: true
+  with_items:
+      - { name: net.ipv4.conf.all.log_martians, value: 1 }
+      - { name: net.ipv4.conf.default.log_martians, value: 1 }
+  notify:
+      - sysctl flush ipv4 route table
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.2.4
+
+- name: "SCORED | 3.2.5 | PATCH | Ensure broadcast ICMP requests are ignored"
+  sysctl:
+      name: net.ipv4.icmp_echo_ignore_broadcasts
+      value: 1
+      state: present
+      reload: true
+      ignoreerrors: true
+  notify:
+      - sysctl flush ipv4 route table
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.2.5
+
+- name: "SCORED | 3.2.6 | PATCH | Ensure bogus ICMP responses are ignored"
+  sysctl:
+      name: net.ipv4.icmp_ignore_bogus_error_responses
+      value: 1
+      state: present
+      reload: true
+      ignoreerrors: true
+  notify:
+      - sysctl flush ipv4 route table
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.2.6
+
+- name: "SCORED | 3.2.7 | PATCH | Ensure Reverse Path Filtering is enabled"
+  sysctl:
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: true
+      state: present
+      reload: true
+      ignoreerrors: true
+  with_items:
+      - { name: net.ipv4.conf.all.rp_filter, value: 1 }
+      - { name: net.ipv4.conf.default.rp_filter, value: 1 }
+  notify:
+      - sysctl flush ipv4 route table
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.2.7
+
+- name: "SCORED | 3.2.8 | PATCH | Ensure TCP SYN Cookies is enabled"
+  sysctl:
+      name: net.ipv4.tcp_syncookies
+      value: 1
+      state: present
+      reload: true
+      ignoreerrors: true
+  notify:
+      - sysctl flush ipv4 route table
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.2.8
+
+- name: "SCORED | 3.3.1 | PATCH | Ensure IPv6 router advertisements are not accepted"
+  sysctl:
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: true
+      state: present
+      reload: true
+      ignoreerrors: true
+  with_items:
+      - { name: net.ipv6.conf.all.accept_ra, value: 0 }
+      - { name: net.ipv6.conf.default.accept_ra, value: 0 }
+  when: ubuntu1604cis_ipv6_required == true
+  notify:
+      - sysctl flush ipv6 route table
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.3.1
+
+- name: "SCORED | 3.3.2 | PATCH | Ensure IPv6 redirects are not accepted"
+  sysctl:
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: true
+      state: present
+      reload: true
+      ignoreerrors: true
+  with_items:
+      - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
+      - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
+  when: ubuntu1604cis_ipv6_required == true
+  notify:
+      - sysctl flush ipv6 route table
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.3.2
+
+- name: "NOTSCORED | 3.3.3 | PATCH | Ensure IPv6 is disabled"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?options ipv6 disable="
+      line: "options ipv6 disable=1"
+      create: true
+  when: ubuntu1604cis_ipv6_required == false
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.3.3
+
+- name: "SCORED | 3.4.1 | PATCH | Ensure TCP Wrappers is installed"
+  apt:
+      name: "{{ tcp_wrapper_package[ansible_os_family] }}"
+      state: present
+      install_recommends: false
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.4.1
+
+- name: "SCORED | 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured"
+  template:
+      src: hosts.allow.j2
+      dest: /etc/hosts.allow
+      owner: root
+      group: root
+      mode: 0644
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.4.2
+
+- name: "SCORED | 3.4.3 | PATCH | Ensure /etc/hosts.deny is configured"
+  lineinfile:
+      dest: /etc/hosts.deny
+      regexp: "^(#)?ALL"
+      line: "ALL: ALL"
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.4.3
+
+- name: "SCORED | 3.4.4 | PATCH | Ensure permissions on /etc/hosts.allow are configured"
+  file:
+      dest: /etc/hosts.allow
+      owner: root
+      group: root
+      mode: 0644
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.4.4
+
+- name: "SCORED | 3.4.5 | PATCH | Ensure permissions on /etc/hosts.deny are 644"
+  file:
+      dest: /etc/hosts.deny
+      owner: root
+      group: root
+      mode: 0644
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.4.5
+
+- name: "NOTSCORED | 3.5.1 | PATCH | Ensure DCCP is disabled"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install dccp(\\s|$)"
+      line: "install dccp /bin/true"
+      create: true
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.5.1
+
+- name: "NOTSCORED | 3.5.2 | PATCH | Ensure SCTP is disabled"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install sctp(\\s|$)"
+      line: "install sctp /bin/true"
+      create: true
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.5.2
+
+- name: "NOTSCORED | 3.5.3 | PATCH | Ensure RDS is disabled"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install rds(\\s|$)"
+      line: "install rds /bin/true"
+      create: true
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.5.3
+
+- name: "NOTSCORED | 3.5.4 | PATCH | Ensure TIPC is disabled"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install tipc(\\s|$)"
+      line: "install tipc /bin/true"
+      create: true
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.5.4
+
+- name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+  apt:
+      name: firewalld
+      state: present
+      install_recommends: false
+  when: ubuntu1604cis_firewall == "firewalld" and ubuntu1604cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.6
+
+- name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+  service:
+      name: firewalld
+      state: started
+      enabled: true
+  when: ubuntu1604cis_firewall == "firewalld" and ubuntu1604cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.6
+
+- name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed"
+  apt:
+      name: iptables
+      state: present
+      install_recommends: false
+  when: ubuntu1604cis_firewall == "iptables" and ubuntu1604cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.6.1
+
+- name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed and started"
+  service:
+      name: iptables
+      state: started
+      enabled: true
+  when: ubuntu1604cis_firewall == "iptables" and ubuntu1604cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.6.1
+
+- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
+  lineinfile:
+      dest: /etc/firewalld/firewalld.conf
+      regexp: "^DefaultZone"
+      line: "DefaultZone=drop"
+  when: ubuntu1604cis_firewall == "firewalld" and ubuntu1604cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.6.2
+
+- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
+  firewalld:
+      state: enabled
+      zone: drop
+      permanent: true
+  when: ubuntu1604cis_firewall == "firewalld" and ubuntu1604cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.6.2
+
+- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
+  command: /bin/true
+  changed_when: false
+  when: ubuntu1604cis_firewall == "iptables" and ubuntu1604cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.6.2
+      - notimplemented
+
+- name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
+  command: /bin/true
+  changed_when: false
+  when: ubuntu1604cis_firewall == "iptables" and ubuntu1604cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.6.3
+      - notimplemented
+
+- name: "NOTSCORED | 3.6.4 | PATCH | Ensure outbound and established connections are configured"
+  command: /bin/true
+  changed_when: false
+  when: ubuntu1604cis_firewall == "iptables" and ubuntu1604cis_setup_firewall
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.6.4
+      - notimplemented
+
+- name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
+  firewalld:
+      service: "{{ item }}"
+      state: enabled
+      zone: drop
+      permanent: true
+      immediate: true
+  when: ubuntu1604cis_firewall == "firewalld" and ubuntu1604cis_setup_firewall
+  notify: restart firewalld
+  with_items: "{{ ubuntu1604cis_firewall_services }}"
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.6.5
+
+- name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
+  command: /bin/true
+  changed_when: false
+  when: ubuntu1604cis_firewall == "iptables" and ubuntu1604cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.6.5
+      - notimplemented
+
+- name: "NOTSCORED | 3.7 | PATCH | Ensure wireless interfaces are disabled"
+  command: /bin/true
+  changed_when: false
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.7
+      - notimplemented

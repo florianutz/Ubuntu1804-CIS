@@ -1,0 +1,20 @@
+---
+galaxy_info:
+  author: ""
+  description: "Ansible role to apply Ubuntu 16.04 CIS Baseline"
+  company:
+  license: MIT
+  min_ansible_version: 2.4
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+
+  galaxy_tags:
+    - system
+    - security
+    - cis
+    - hardening
+
+dependencies: []

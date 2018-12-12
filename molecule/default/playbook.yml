@@ -1,0 +1,31 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    ubuntu1604cis_skip_for_travis: true
+    ubuntu1604cis_selinux_disable: true
+  pre_tasks:
+    - name: install packages for testing under docker
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - openssh-server
+    - name: pretask2
+      file:
+        name: /boot/grub
+        state: directory
+      changed_when: false
+    - name: pretask3
+      file:
+        name: /boot/grub/grub.cfg
+        state: touch
+      changed_when: false
+    - name: pretask3
+      file:
+        name: /etc/default/grub
+        state: touch
+      changed_when: false
+
+  roles:
+    - role: Ubuntu1604-CIS

@@ -1,0 +1,18 @@
+---
+# Post tasks
+
+- name: "POST | Find removed but configured apt packages"
+  shell: "dpkg --list | grep ^rc | tr -s ' ' | cut -d ' ' -f 2"
+  register: apt_rc_packages
+  changed_when: false
+
+- name: "POST | Perform apt package cleanup"
+  apt:
+    name: "{{ item }}"
+    state: absent
+    purge: true
+  changed_when: false
+  ignore_errors: true
+  with_items: "{{ apt_rc_packages.stdout_lines }}"
+  tags:
+    - skip_ansible_lint
