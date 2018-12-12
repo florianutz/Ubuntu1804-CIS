@@ -2,8 +2,8 @@
 - name: Converge
   hosts: all
   vars:
-    ubuntu1604cis_skip_for_travis: true
-    ubuntu1604cis_selinux_disable: true
+    ubuntu1804cis_skip_for_travis: true
+    ubuntu1804cis_selinux_disable: true
   pre_tasks:
     - name: install packages for testing under docker
       apt:
@@ -28,4 +28,4 @@
       changed_when: false
 
   roles:
-    - role: Ubuntu1604-CIS
+    - role: Ubuntu1804-CIS

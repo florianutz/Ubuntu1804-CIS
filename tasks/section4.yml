@@ -6,7 +6,7 @@
       line: "max_log_file = 10"
       state: present
   when:
-      - ubuntu1604cis_rule_4_1_1_1
+      - ubuntu1804cis_rule_4_1_1_1
   notify:
       - restart auditd
   tags:
@@ -20,10 +20,10 @@
   lineinfile:
       dest: /etc/audit/auditd.conf
       regexp: "^admin_space_left_action"
-      line: "admin_space_left_action = {{ ubuntu1604cis_auditd['admin_space_left_action'] }}"
+      line: "admin_space_left_action = {{ ubuntu1804cis_auditd['admin_space_left_action'] }}"
       state: present
   when:
-      - ubuntu1604cis_rule_4_1_1_2
+      - ubuntu1804cis_rule_4_1_1_2
   notify:
       - restart auditd
   tags:
@@ -40,7 +40,7 @@
       line: "space_left_action = email"
       state: present
   when:
-      - ubuntu1604cis_rule_4_1_1_2
+      - ubuntu1804cis_rule_4_1_1_2
   notify:
       - restart auditd
   tags:
@@ -54,10 +54,10 @@
   lineinfile:
       dest: /etc/audit/auditd.conf
       regexp: "^max_log_file_action"
-      line: "max_log_file_action = {{ ubuntu1604cis_auditd['max_log_file_action'] }}"
+      line: "max_log_file_action = {{ ubuntu1804cis_auditd['max_log_file_action'] }}"
       state: present
   when:
-      - ubuntu1604cis_rule_4_1_1_3
+      - ubuntu1804cis_rule_4_1_1_3
   notify:
       - restart auditd
   tags:
@@ -73,8 +73,8 @@
       state: started
       enabled: true
   when:
-      - ubuntu1604cis_skip_for_travis == false
-      - ubuntu1604cis_rule_4_1_2
+      - ubuntu1804cis_skip_for_travis == false
+      - ubuntu1804cis_rule_4_1_2
   tags:
       - level2
       - scored
@@ -92,7 +92,7 @@
   notify:
       - generate new grub config
   when:
-      - ubuntu1604cis_rule_4_1_3
+      - ubuntu1804cis_rule_4_1_3
   tags:
       - level2
       - scored
@@ -102,13 +102,13 @@
 
 - name: "SCORED | 4.1.4 | PATCH | Ensure events that modify date and time information are collected"
   template:
-      src: audit/ubuntu1604cis_rule_4_1_4.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1604cis_rule_4_1_4.rules
+      src: audit/ubuntu1804cis_rule_4_1_4.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_4.rules
       owner: root
       group: root
       mode: 0600
   when:
-      - ubuntu1604cis_rule_4_1_4
+      - ubuntu1804cis_rule_4_1_4
   notify:
       - load audit rules
       - restart auditd
@@ -121,13 +121,13 @@
 
 - name: "SCORED | 4.1.5 | PATCH | Ensure events that modify user/group information are collected"
   template:
-      src: audit/ubuntu1604cis_rule_4_1_5.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1604cis_rule_4_1_5.rules
+      src: audit/ubuntu1804cis_rule_4_1_5.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_5.rules
       owner: root
       group: root
       mode: 0600
   when:
-      - ubuntu1604cis_rule_4_1_5
+      - ubuntu1804cis_rule_4_1_5
   notify:
       - load audit rules
       - restart auditd
@@ -140,13 +140,13 @@
 
 - name: "SCORED | 4.1.6 | PATCH | Ensure events that modify the system's network environment are collected"
   template:
-      src: audit/ubuntu1604cis_rule_4_1_6.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1604cis_rule_4_1_6.rules
+      src: audit/ubuntu1804cis_rule_4_1_6.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_6.rules
       owner: root
       group: root
       mode: 0600
   when:
-      - ubuntu1604cis_rule_4_1_6
+      - ubuntu1804cis_rule_4_1_6
   notify:
       - load audit rules
       - restart auditd
@@ -159,13 +159,13 @@
 
 - name: "SCORED | 4.1.7 | PATCH | Ensure events that modify the system's Mandatory Access Controls are collected"
   template:
-      src: audit/ubuntu1604cis_rule_4_1_7.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1604cis_rule_4_1_7.rules
+      src: audit/ubuntu1804cis_rule_4_1_7.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_7.rules
       owner: root
       group: root
       mode: 0600
   when:
-      - ubuntu1604cis_rule_4_1_7
+      - ubuntu1804cis_rule_4_1_7
   notify:
       - load audit rules
       - restart auditd
@@ -178,13 +178,13 @@
 
 - name: "SCORED | 4.1.8 | PATCH | Ensure login and logout events are collected"
   template:
-      src: audit/ubuntu1604cis_rule_4_1_8.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1604cis_rule_4_1_8.rules
+      src: audit/ubuntu1804cis_rule_4_1_8.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_8.rules
       owner: root
       group: root
       mode: 0600
   when:
-      - ubuntu1604cis_rule_4_1_8
+      - ubuntu1804cis_rule_4_1_8
   notify:
       - load audit rules
       - restart auditd
@@ -197,13 +197,13 @@
 
 - name: "SCORED | 4.1.9 | PATCH | Ensure session initiation information is collected"
   template:
-      src: audit/ubuntu1604cis_rule_4_1_9.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1604cis_rule_4_1_9.rules
+      src: audit/ubuntu1804cis_rule_4_1_9.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_9.rules
       owner: root
       group: root
       mode: 0600
   when:
-      - ubuntu1604cis_rule_4_1_9
+      - ubuntu1804cis_rule_4_1_9
   notify:
       - load audit rules
       - restart auditd
@@ -216,13 +216,13 @@
 
 - name: "SCORED | 4.1.10 | PATCH | Ensure discretionary access control permission modification events are collected"
   template:
-      src: audit/ubuntu1604cis_rule_4_1_10.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1604cis_rule_4_1_10.rules
+      src: audit/ubuntu1804cis_rule_4_1_10.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_10.rules
       owner: root
       group: root
       mode: 0600
   when:
-      - ubuntu1604cis_rule_4_1_10
+      - ubuntu1804cis_rule_4_1_10
   notify:
       - load audit rules
       - restart auditd
@@ -235,13 +235,13 @@
 
 - name: "SCORED | 4.1.11 | PATCH | Ensure unsuccessful unauthorized file access attempts are collected"
   template:
-      src: audit/ubuntu1604cis_rule_4_1_11.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1604cis_rule_4_1_11.rules
+      src: audit/ubuntu1804cis_rule_4_1_11.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_11.rules
       owner: root
       group: root
       mode: 0600
   when:
-      - ubuntu1604cis_rule_4_1_11
+      - ubuntu1804cis_rule_4_1_11
   notify:
       - load audit rules
       - restart auditd
@@ -263,8 +263,8 @@
 
       - name: "SCORED | 4.1.12 | PATCH | Ensure use of privileged commands is collected"
         template:
-            src: audit/ubuntu1604cis_rule_4_1_12.rules.j2
-            dest: /etc/audit/rules.d/ubuntu1604cis_rule_4_1_12.rules
+            src: audit/ubuntu1804cis_rule_4_1_12.rules.j2
+            dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_12.rules
             owner: root
             group: root
             mode: 0600
@@ -272,7 +272,7 @@
             - load audit rules
             - restart auditd
   when:
-      - ubuntu1604cis_rule_4_1_12
+      - ubuntu1804cis_rule_4_1_12
   tags:
       - level2
       - scored
@@ -282,13 +282,13 @@
 
 - name: "SCORED | 4.1.13 | PATCH | Ensure successful file system mounts are collected"
   template:
-      src: audit/ubuntu1604cis_rule_4_1_13.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1604cis_rule_4_1_13.rules
+      src: audit/ubuntu1804cis_rule_4_1_13.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_13.rules
       owner: root
       group: root
       mode: 0600
   when:
-      - ubuntu1604cis_rule_4_1_13
+      - ubuntu1804cis_rule_4_1_13
   notify:
       - load audit rules
       - restart auditd
@@ -301,13 +301,13 @@
 
 - name: "SCORED | 4.1.14 | PATCH | Ensure file deletion events by users are collected"
   template:
-      src: audit/ubuntu1604cis_rule_4_1_14.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1604cis_rule_4_1_14.rules
+      src: audit/ubuntu1804cis_rule_4_1_14.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_14.rules
       owner: root
       group: root
       mode: 0600
   when:
-      - ubuntu1604cis_rule_4_1_14
+      - ubuntu1804cis_rule_4_1_14
   notify:
       - load audit rules
       - restart auditd
@@ -320,13 +320,13 @@
 
 - name: "SCORED | 4.1.15 | PATCH | Ensure changes to system administration scope (sudoers) is collected"
   template:
-      src: audit/ubuntu1604cis_rule_4_1_15.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1604cis_rule_4_1_15.rules
+      src: audit/ubuntu1804cis_rule_4_1_15.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_15.rules
       owner: root
       group: root
       mode: 0600
   when:
-      - ubuntu1604cis_rule_4_1_15
+      - ubuntu1804cis_rule_4_1_15
   notify:
       - load audit rules
       - restart auditd
@@ -339,13 +339,13 @@
 
 - name: "SCORED | 4.1.16 | PATCH | Ensure system administrator actions (sudolog) are collected"
   template:
-      src: audit/ubuntu1604cis_rule_4_1_16.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1604cis_rule_4_1_16.rules
+      src: audit/ubuntu1804cis_rule_4_1_16.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_16.rules
       owner: root
       group: root
       mode: 0600
   when:
-      - ubuntu1604cis_rule_4_1_16
+      - ubuntu1804cis_rule_4_1_16
   notify:
       - load audit rules
       - restart auditd
@@ -358,13 +358,13 @@
 
 - name: "SCORED | 4.1.17 | PATCH | Ensure kernel module loading and unloading is collected"
   template:
-      src: audit/ubuntu1604cis_rule_4_1_17.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1604cis_rule_4_1_17.rules
+      src: audit/ubuntu1804cis_rule_4_1_17.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_17.rules
       owner: root
       group: root
       mode: 0600
   when:
-      - ubuntu1604cis_rule_4_1_17
+      - ubuntu1804cis_rule_4_1_17
   notify:
       - load audit rules
       - restart auditd
@@ -378,13 +378,13 @@
 
 - name: "SCORED | 4.1.18 | PATCH | Ensure the audit configuration is immutable"
   template:
-      src: audit/ubuntu1604cis_rule_4_1_18.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1604cis_rule_4_1_18.rules
+      src: audit/ubuntu1804cis_rule_4_1_18.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_18.rules
       owner: root
       group: root
       mode: 0600
   when:
-      - ubuntu1604cis_rule_4_1_18
+      - ubuntu1804cis_rule_4_1_18
   notify:
       - load audit rules
       - restart auditd
@@ -397,11 +397,11 @@
 
 - name: "SCORED | 4.2.3 | PATCH | Ensure rsyslog or syslog-ng is installed"
   apt:
-      name: "{{ ubuntu1604cis_syslog }}"
+      name: "{{ ubuntu1804cis_syslog }}"
       state: present
       install_recommends: false
   when:
-      - ubuntu1604cis_rule_4_2_3
+      - ubuntu1804cis_rule_4_2_3
   tags:
       - level1
       - scored
@@ -413,7 +413,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1604cis_rule_4_2_1_1
+      - ubuntu1804cis_rule_4_2_1_1
   tags:
       - level1
       - scored
@@ -426,7 +426,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1604cis_rule_4_2_1_2
+      - ubuntu1804cis_rule_4_2_1_2
   tags:
       - level1
       - notscored
@@ -441,7 +441,7 @@
       regexp: '^\$FileCreateMode'
       line: '$FileCreateMode 0640'
   when:
-      - ubuntu1604cis_rule_4_2_1_3
+      - ubuntu1804cis_rule_4_2_1_3
   tags:
       - level1
       - scored
@@ -453,7 +453,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1604cis_rule_4_2_1_4
+      - ubuntu1804cis_rule_4_2_1_4
   tags:
       - level1
       - scored
@@ -466,7 +466,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1604cis_rule_4_2_1_5
+      - ubuntu1804cis_rule_4_2_1_5
   tags:
       - level1
       - notscored
@@ -479,7 +479,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1604cis_rule_4_2_1_5
+      - ubuntu1804cis_rule_4_2_1_5
   tags:
       - level1
       - notscored
@@ -492,7 +492,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1604cis_rule_4_2_2_1
+      - ubuntu1804cis_rule_4_2_2_1
   tags:
       - level1
       - scored
@@ -505,7 +505,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1604cis_rule_4_2_2_2
+      - ubuntu1804cis_rule_4_2_2_2
   tags:
       - level1
       - notscored
@@ -518,7 +518,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1604cis_rule_4_2_2_3
+      - ubuntu1804cis_rule_4_2_2_3
   tags:
       - level1
       - scored
@@ -531,7 +531,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1604cis_rule_4_2_2_4
+      - ubuntu1804cis_rule_4_2_2_4
   tags:
       - level1
       - notscored
@@ -544,7 +544,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1604cis_rule_4_2_2_5
+      - ubuntu1804cis_rule_4_2_2_5
   tags:
       - level1
       - notscored
@@ -558,7 +558,7 @@
   changed_when: false
   failed_when: false
   when:
-      - ubuntu1604cis_rule_4_2_4
+      - ubuntu1804cis_rule_4_2_4
   tags:
       - level1
       - scored
@@ -583,12 +583,12 @@
         replace:
             path: "{{ item.path }}"
             regexp: '^(\s*)(daily|weekly|monthly|yearly)$'
-            replace: "\\1{{ ubuntu1604cis_logrotate }}"
+            replace: "\\1{{ ubuntu1804cis_logrotate }}"
         with_items:
             - "{{ log_rotates.files }}"
             - { path: "/etc/logrotate.conf" }
   when:
-      - ubuntu1604cis_rule_4_3
+      - ubuntu1804cis_rule_4_3
   tags:
       - level1
       - notscored

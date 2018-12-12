@@ -1,5 +1,5 @@
 ---
-# handlers file for Ubuntu1604-CIS
+# handlers file for Ubuntu1804-CIS
 
 - name: sysctl flush ipv4 route table
   become: true
@@ -68,7 +68,7 @@
       name: auditd
       state: restarted
   when:
-      - ubuntu1604cis_skip_for_travis == false
+      - ubuntu1804cis_skip_for_travis == false
   tags:
       - skip_ansible_lint
 
@@ -76,6 +76,6 @@
   become: true
   command: /sbin/augenrules --load
   when:
-      - ubuntu1604cis_skip_for_travis == false
+      - ubuntu1804cis_skip_for_travis == false
   tags:
       - skip_ansible_lint

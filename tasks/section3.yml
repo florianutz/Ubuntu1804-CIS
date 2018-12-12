@@ -6,7 +6,7 @@
       state: present
       reload: true
       ignoreerrors: true
-  when: ubuntu1604cis_is_router == false
+  when: ubuntu1804cis_is_router == false
   notify:
       - sysctl flush ipv4 route table
   tags:
@@ -27,7 +27,7 @@
   with_items:
       - { name: net.ipv4.conf.all.send_redirects, value: 0 }
       - { name: net.ipv4.conf.default.send_redirects, value: 0 }
-  when: ubuntu1604cis_is_router == false
+  when: ubuntu1804cis_is_router == false
   notify:
       - sysctl flush ipv4 route table
   tags:
@@ -196,7 +196,7 @@
   with_items:
       - { name: net.ipv6.conf.all.accept_ra, value: 0 }
       - { name: net.ipv6.conf.default.accept_ra, value: 0 }
-  when: ubuntu1604cis_ipv6_required == true
+  when: ubuntu1804cis_ipv6_required == true
   notify:
       - sysctl flush ipv6 route table
   tags:
@@ -217,7 +217,7 @@
   with_items:
       - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
       - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
-  when: ubuntu1604cis_ipv6_required == true
+  when: ubuntu1804cis_ipv6_required == true
   notify:
       - sysctl flush ipv6 route table
   tags:
@@ -233,7 +233,7 @@
       regexp: "^(#)?options ipv6 disable="
       line: "options ipv6 disable=1"
       create: true
-  when: ubuntu1604cis_ipv6_required == false
+  when: ubuntu1804cis_ipv6_required == false
   tags:
       - level1
       - notscored
@@ -352,7 +352,7 @@
       name: firewalld
       state: present
       install_recommends: false
-  when: ubuntu1604cis_firewall == "firewalld" and ubuntu1604cis_setup_firewall
+  when: ubuntu1804cis_firewall == "firewalld" and ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -364,7 +364,7 @@
       name: firewalld
       state: started
       enabled: true
-  when: ubuntu1604cis_firewall == "firewalld" and ubuntu1604cis_setup_firewall
+  when: ubuntu1804cis_firewall == "firewalld" and ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -376,7 +376,7 @@
       name: iptables
       state: present
       install_recommends: false
-  when: ubuntu1604cis_firewall == "iptables" and ubuntu1604cis_setup_firewall
+  when: ubuntu1804cis_firewall == "iptables" and ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -388,7 +388,7 @@
       name: iptables
       state: started
       enabled: true
-  when: ubuntu1604cis_firewall == "iptables" and ubuntu1604cis_setup_firewall
+  when: ubuntu1804cis_firewall == "iptables" and ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -400,7 +400,7 @@
       dest: /etc/firewalld/firewalld.conf
       regexp: "^DefaultZone"
       line: "DefaultZone=drop"
-  when: ubuntu1604cis_firewall == "firewalld" and ubuntu1604cis_setup_firewall
+  when: ubuntu1804cis_firewall == "firewalld" and ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -412,7 +412,7 @@
       state: enabled
       zone: drop
       permanent: true
-  when: ubuntu1604cis_firewall == "firewalld" and ubuntu1604cis_setup_firewall
+  when: ubuntu1804cis_firewall == "firewalld" and ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -422,7 +422,7 @@
 - name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
   command: /bin/true
   changed_when: false
-  when: ubuntu1604cis_firewall == "iptables" and ubuntu1604cis_setup_firewall
+  when: ubuntu1804cis_firewall == "iptables" and ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -433,7 +433,7 @@
 - name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
   command: /bin/true
   changed_when: false
-  when: ubuntu1604cis_firewall == "iptables" and ubuntu1604cis_setup_firewall
+  when: ubuntu1804cis_firewall == "iptables" and ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -444,7 +444,7 @@
 - name: "NOTSCORED | 3.6.4 | PATCH | Ensure outbound and established connections are configured"
   command: /bin/true
   changed_when: false
-  when: ubuntu1604cis_firewall == "iptables" and ubuntu1604cis_setup_firewall
+  when: ubuntu1804cis_firewall == "iptables" and ubuntu1804cis_setup_firewall
   tags:
       - level1
       - notscored
@@ -459,9 +459,9 @@
       zone: drop
       permanent: true
       immediate: true
-  when: ubuntu1604cis_firewall == "firewalld" and ubuntu1604cis_setup_firewall
+  when: ubuntu1804cis_firewall == "firewalld" and ubuntu1804cis_setup_firewall
   notify: restart firewalld
-  with_items: "{{ ubuntu1604cis_firewall_services }}"
+  with_items: "{{ ubuntu1804cis_firewall_services }}"
   tags:
       - level1
       - scored
@@ -471,7 +471,7 @@
 - name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
   command: /bin/true
   changed_when: false
-  when: ubuntu1604cis_firewall == "iptables" and ubuntu1604cis_setup_firewall
+  when: ubuntu1804cis_firewall == "iptables" and ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored

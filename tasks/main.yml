@@ -1,5 +1,5 @@
 ---
-# tasks file for Ubuntu1604-CIS
+# tasks file for Ubuntu1804-CIS
 - name: Check OS version and family
   fail:
       msg: "This role can only be run agaist Ubuntu 16.04. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
@@ -24,32 +24,32 @@
 
 - include: section1.yml
   become: true
-  when: ubuntu1604cis_section1
+  when: ubuntu1804cis_section1
   tags: section1
 
 - include: section2.yml
   become: true
-  when: ubuntu1604cis_section2
+  when: ubuntu1804cis_section2
   tags: section2
 
 - include: section3.yml
   become: true
-  when: ubuntu1604cis_section3
+  when: ubuntu1804cis_section3
   tags: section3
 
 - include: section4.yml
   become: true
-  when: ubuntu1604cis_section4
+  when: ubuntu1804cis_section4
   tags: section4
 
 - include: section5.yml
   become: true
-  when: ubuntu1604cis_section5
+  when: ubuntu1804cis_section5
   tags: section5
 
 - include: section6.yml
   become: true
-  when: ubuntu1604cis_section6
+  when: ubuntu1804cis_section6
   tags: section6
 
 - include: post.yml

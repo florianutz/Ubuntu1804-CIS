@@ -17,7 +17,7 @@
 # fails they will be discarded.  Thus under some circumstances it is
 # better to use IP numbers than host names.
 
-{% for server in ubuntu1604cis_time_synchronization_servers -%}
+{% for server in ubuntu1804cis_time_synchronization_servers -%}
 server {{ server }} minpoll 8
 {% endfor %}
 
