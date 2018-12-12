@@ -303,7 +303,7 @@
 
 - name: "SCORED | 2.2.2 | PATCH | Ensure X Window System is not installed"
   apt:
-      name: "{{item}}"
+      name: "{{ item }}"
       state: absent
   with_items:
       - "@X Window System"
