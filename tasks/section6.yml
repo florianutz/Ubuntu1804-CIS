@@ -29,8 +29,8 @@
   file:
       dest: /etc/shadow
       owner: root
-      group: root
-      mode: 0000
+      group: shadow
+      mode: 0640
   when:
       - ubuntu1804cis_rule_6_1_3
   tags:
@@ -57,8 +57,8 @@
   file:
       dest: /etc/gshadow
       owner: root
-      group: root
-      mode: 0000
+      group: shadow
+      mode: 0640
   when:
       - ubuntu1804cis_rule_6_1_5
   tags:
@@ -72,7 +72,7 @@
       dest: /etc/passwd-
       owner: root
       group: root
-      mode: 0600
+      mode: 0644
   when:
       - ubuntu1804cis_rule_6_1_6
   tags:
@@ -85,8 +85,8 @@
   file:
       dest: /etc/shadow-
       owner: root
-      group: root
-      mode: 0000
+      group: shadow
+      mode: 0640
   when:
       - ubuntu1804cis_rule_6_1_7
   tags:
@@ -100,7 +100,7 @@
       dest: /etc/group-
       owner: root
       group: root
-      mode: 0600
+      mode: 0644
   when:
       - ubuntu1804cis_rule_6_1_8
   tags:
@@ -113,8 +113,8 @@
   file:
       dest: /etc/gshadow-
       owner: root
-      group: root
-      mode: 0600
+      group: shadow
+      mode: 0640
   when:
       - ubuntu1804cis_rule_6_1_9
   tags:
