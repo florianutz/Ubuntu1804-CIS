@@ -1,7 +1,7 @@
 Ubuntu 16.04 CIS STIG
 ================
 
-[![Build Status](https://travis-ci.org/florianutz/Ubuntu1804-CIS.svg?branch=master)](https://travis-ci.org/florianutz/Ubuntu1804-CIS)
+[![Build Status](https://travis-ci.com/florianutz/Ubuntu1804-CIS.svg?branch=master)](https://travis-ci.org/florianutz/Ubuntu1804-CIS)
 [![Ansible Role](https://img.shields.io/badge/role-florianutz.Ubuntu1804--CIS-blue.svg)](https://galaxy.ansible.com/florianutz/Ubuntu1804-CIS/)
 
 Configure Ubuntu 16.04 machine to be CIS compliant. Level 1 and 2 findings will be corrected by default.
