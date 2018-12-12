@@ -1,0 +1,3 @@
+molecule==2.16.0
+yamllint==1.11.1
+docker==3.4.1
