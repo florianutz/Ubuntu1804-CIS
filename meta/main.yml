@@ -1,15 +1,15 @@
 ---
 galaxy_info:
   author: ""
-  description: "Ansible role to apply Ubuntu 16.04 CIS Baseline"
+  description: "Ansible role to apply Ubuntu 18.04 CIS Baseline"
   company:
   license: MIT
-  min_ansible_version: 2.4
+  min_ansible_version: 2.6
 
   platforms:
     - name: Ubuntu
       versions:
-        - xenial
+        - bionic
 
   galaxy_tags:
     - system
