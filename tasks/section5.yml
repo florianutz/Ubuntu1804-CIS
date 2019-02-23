@@ -491,7 +491,7 @@
       - patch
       - rule_5.3.4
 
-- name: "SCORED | 5.4.1.1 | PATCH | Ensure password expiration is 90 days or less"
+- name: "SCORED | 5.4.1.1 | PATCH | Ensure password expiration is 365 days or less"
   lineinfile:
       state: present
       dest: /etc/login.defs
@@ -546,15 +546,25 @@
       - notimplemented
 
 - name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login"
-  command: /bin/true
+  command: >
+    for user in `awk -F: '($3 < 1000) {print $1 }' /etc/passwd`; do
+     if [ $user != "root" ]; then
+      usermod -L $user
+      if [ $user != "sync" ] && [ $user != "shutdown" ] && [ $user != "halt" ];
+      then
+        usermod -s /usr/sbin/nologin $user
+      fi
+     fi
+    done
   changed_when: false
   when:
       - ubuntu1804cis_rule_5_4_2
+      - system_accounts_non_login_1.stdout != ''
+      - system_accounts_non_login_2.stdout != ''
   tags:
       - level1
       - patch
       - rule_5.4.2
-      - notimplemented
       - scored
 
 - name: "SCORED | 5.4.3 | PATCH | Ensure default group for the root account is GID 0"

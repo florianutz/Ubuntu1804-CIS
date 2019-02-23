@@ -170,6 +170,15 @@ Example Playbook
     - Ubuntu1804-CIS
 ```
 
+To run the tasks in this repository, first create this file one level above the repository
+(i.e. the playbook .yml and the directory `Ubuntu1804-CIS` should be next to each other),
+then review the file `defaults/main.yml` and disable any rule/section you do not wish to execute.
+
+Assuming you named the file `site.yml`, run it with:
+```bash
+ansible-playbook site.yml
+```
+
 Tags
 ----
 Many tags are available for precise control of what is and is not changed.

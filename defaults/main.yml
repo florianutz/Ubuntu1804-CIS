@@ -23,8 +23,6 @@ ubuntu1804cis_rule_1_1_1_3: true
 ubuntu1804cis_rule_1_1_1_4: true
 ubuntu1804cis_rule_1_1_1_5: true
 ubuntu1804cis_rule_1_1_1_6: true
-ubuntu1804cis_rule_1_1_1_7: true
-ubuntu1804cis_rule_1_1_1_8: true
 ubuntu1804cis_rule_1_1_2: true
 ubuntu1804cis_rule_1_1_3: true
 ubuntu1804cis_rule_1_1_4: true
@@ -45,12 +43,8 @@ ubuntu1804cis_rule_1_1_18: true
 ubuntu1804cis_rule_1_1_19: true
 ubuntu1804cis_rule_1_1_20: true
 ubuntu1804cis_rule_1_1_21: true
-ubuntu1804cis_rule_1_1_22: true
 ubuntu1804cis_rule_1_2_1: true
 ubuntu1804cis_rule_1_2_2: true
-ubuntu1804cis_rule_1_2_3: true
-ubuntu1804cis_rule_1_2_4: true
-ubuntu1804cis_rule_1_2_5: true
 ubuntu1804cis_rule_1_3_1: true
 ubuntu1804cis_rule_1_3_2: true
 ubuntu1804cis_rule_1_4_1: true
@@ -83,6 +77,10 @@ ubuntu1804cis_rule_2_1_4: true
 ubuntu1804cis_rule_2_1_5: true
 ubuntu1804cis_rule_2_1_6: true
 ubuntu1804cis_rule_2_1_7: true
+ubuntu1804cis_rule_2_1_8: true
+ubuntu1804cis_rule_2_1_9: true
+ubuntu1804cis_rule_2_1_10: true
+ubuntu1804cis_rule_2_1_11: true
 ubuntu1804cis_rule_2_2_1_1: true
 ubuntu1804cis_rule_2_2_1_2: true
 ubuntu1804cis_rule_2_2_1_3: true
@@ -102,10 +100,6 @@ ubuntu1804cis_rule_2_2_14: true
 ubuntu1804cis_rule_2_2_15: true
 ubuntu1804cis_rule_2_2_16: true
 ubuntu1804cis_rule_2_2_17: true
-ubuntu1804cis_rule_2_2_18: true
-ubuntu1804cis_rule_2_2_19: true
-ubuntu1804cis_rule_2_2_20: true
-ubuntu1804cis_rule_2_2_21: true
 ubuntu1804cis_rule_2_3_1: true
 ubuntu1804cis_rule_2_3_2: true
 ubuntu1804cis_rule_2_3_3: true
@@ -374,7 +368,7 @@ ubuntu1804cis_sshd:
   # denygroups:
 
 ubuntu1804cis_pass:
-  max_days: 90
+  max_days: 365
   min_days: 7
   warn_age: 7
 
