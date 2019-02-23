@@ -62,8 +62,8 @@
   check_mode: false
 
 - name: "PRELIM | Check for openbsd-inetd service"
-  shell: "dpkg -s openbsd-inetd | grep -o 'ok installed'"
-  register: openbsd-inetd_service_status
+  shell: "dpkg -s openbsd-inetd | grep -o 'ok installed'; true"
+  register: openbsd_inetd_service_status
   changed_when: false
   check_mode: false
 

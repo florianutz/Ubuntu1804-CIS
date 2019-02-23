@@ -290,7 +290,7 @@
     name: openbsd-inetd
     state: absent
   when:
-    - openbsd-inetd_service_status.stdout == "ok installed"
+    - openbsd_inetd_service_status.stdout == "ok installed"
     - ubuntu1804cis_rule_2_1_11
   tags:
     - level1
