@@ -68,7 +68,7 @@
   check_mode: false
 
 - name: "PRELIM | Check for rsyslog service"
-  shell: "systemctl is-enabled rsyslog"
+  shell: "systemctl is-enabled rsyslog; true"
   register: rsyslog_service_status
 
 - name: "PRELIM | Check for ntpd service"
