@@ -21,7 +21,7 @@ restrict ::1
 # Use public servers from the pool.ntp.org project.
 # Please consider joining the pool (http://www.pool.ntp.org/join.html).
 {% for server in ubuntu1804cis_time_synchronization_servers -%}
-server {{ server }} iburst
+server {{ server.uri }} {{ server.config }}
 {% endfor %}
 
 #broadcast 192.168.1.255 autokey        # broadcast server
