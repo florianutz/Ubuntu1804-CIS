@@ -133,10 +133,14 @@ ubuntu1804cis_time_synchronization: chrony
 ubuntu1804cis_time_Synchronization: ntp
 
 ubuntu1804cis_time_synchronization_servers:
-    - 0.pool.ntp.org
-    - 1.pool.ntp.org
-    - 2.pool.ntp.org
-    - 3.pool.ntp.org  
+  - uri: "0.pool.ntp.org"
+    config: "minpoll 8"
+  - uri: "1.pool.ntp.org"
+    config: "minpoll 8"
+  - uri: "2.pool.ntp.org"
+    config: "minpoll 8"
+  - uri: "3.pool.ntp.org"
+    config: "minpoll 8"
 ```  
 
 ##### 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured

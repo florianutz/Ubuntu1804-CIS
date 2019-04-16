@@ -18,7 +18,7 @@
 # better to use IP numbers than host names.
 
 {% for server in ubuntu1804cis_time_synchronization_servers -%}
-server {{ server }} minpoll 8
+server {{ server.uri }} {{ server.config }}
 {% endfor %}
 
 # Look here for the admin password needed for chronyc.  The initial
