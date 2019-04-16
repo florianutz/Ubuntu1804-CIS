@@ -3,12 +3,12 @@
 ubuntu1804cis_skip_for_travis: false
 
 ubuntu1804cis_notauto: false
-ubuntu1804cis_section1: false
+ubuntu1804cis_section1: true
 ubuntu1804cis_section2: true
-ubuntu1804cis_section3: false
-ubuntu1804cis_section4: false
-ubuntu1804cis_section5: false
-ubuntu1804cis_section6: false
+ubuntu1804cis_section3: true
+ubuntu1804cis_section4: true
+ubuntu1804cis_section5: true
+ubuntu1804cis_section6: true
 
 ubuntu1804cis_selinux_disable: false
 
