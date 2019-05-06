@@ -156,6 +156,21 @@ ubuntu1804cis_firewall: firewalld
 ubuntu1804cis_firewall: iptables
 ```
 
+##### 5.3.1 | PATCH | Ensure password creation requirements are configured
+```
+ubuntu1804cis_pwquality:
+  - key: 'minlen'
+    value: '14'
+  - key: 'dcredit'
+    value: '-1'
+  - key: 'ucredit'
+    value: '-1'
+  - key: 'ocredit'
+    value: '-1'
+  - key: 'lcredit'
+    value: '-1'
+```
+
 
 Dependencies
 ------------

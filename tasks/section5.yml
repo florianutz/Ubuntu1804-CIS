@@ -442,11 +442,7 @@
             regexp: '^{{ item.key }}'
             line: '{{ item.key }} = {{ item.value }}'
         with_items:
-            - { key: 'minlen', value: '14' }
-            - { key: 'dcredit', value: '-1' }
-            - { key: 'ucredit', value: '-1' }
-            - { key: 'ocredit', value: '-1' }
-            - { key: 'lcredit', value: '-1' }
+            - "{{ ubuntu1804cis_pwquality }}"
   when:
       - ubuntu1804cis_rule_5_3_1
   tags:
