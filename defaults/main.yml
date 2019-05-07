@@ -377,6 +377,18 @@ ubuntu1804cis_sshd:
   # denyusers:
   # denygroups:
 
+ubuntu1804cis_pwquality:
+  - key: 'minlen'
+    value: '14'
+  - key: 'dcredit'
+    value: '-1'
+  - key: 'ucredit'
+    value: '-1'
+  - key: 'ocredit'
+    value: '-1'
+  - key: 'lcredit'
+    value: '-1'
+
 ubuntu1804cis_pass:
   max_days: 90
   min_days: 7
