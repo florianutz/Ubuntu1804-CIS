@@ -303,11 +303,10 @@
 
 - name: "SCORED | 2.2.2 | PATCH | Ensure X Window System is not installed"
   apt:
-      name: "{{ item }}"
+      name:
+        - "@X Window System"
+        - "x11*"
       state: absent
-  with_items:
-      - "@X Window System"
-      - "x11*"
   when:
       - ubuntu1804cis_xwindows_required == false
       - ubuntu1804cis_rule_2_2_2
