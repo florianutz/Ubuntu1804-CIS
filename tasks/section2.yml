@@ -7,7 +7,9 @@
         register: chargen_dgram_service
 
       - name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-dgram"
-        command: chkconfig chargen-dgram off
+        service:
+            name: chargen-dgram
+            enabled: no
         notify: restart xinetd
         when:
             - chargen_dgram_service.stat.exists
@@ -18,7 +20,9 @@
         register: chargen_stream_service
 
       - name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-stream"
-        command: chkconfig chargen-stream off
+        service:
+            name: chargen-stream
+            enabled: no
         notify: restart xinetd
         when:
             - chargen_stream_service.stat.exists
@@ -40,7 +44,9 @@
         register: daytime_dgram_service
 
       - name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-dgram"
-        command: chkconfig daytime-dgram off
+        service:
+            name: daytime-dgram
+            enabled: no
         notify: restart xinetd
         when:
             - daytime_dgram_service.stat.exists
@@ -51,7 +57,9 @@
         register: daytime_stream_service
 
       - name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-stream"
-        command: chkconfig daytime-stream off
+        service:
+            name: daytime-stream
+            enabled: no
         notify: restart xinetd
         when:
             - daytime_stream_service.stat.exists
@@ -72,7 +80,9 @@
         register: discard_dgram_service
 
       - name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-dgram"
-        command: chkconfig discard-dgram off
+        service:
+            name: discard-dgram
+            enabled: no
         notify: restart xinetd
         when:
             - discard_dgram_service.stat.exists
@@ -83,7 +93,9 @@
         register: discard_stream_service
 
       - name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-stream"
-        command: chkconfig discard-stream off
+        service:
+            name: discard-stream
+            enabled: no
         notify: restart xinetd
         when:
             - discard_stream_service.stat.exists
@@ -104,7 +116,9 @@
         register: echo_dgram_service
 
       - name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-dgram"
-        command: chkconfig echo-dgram off
+        service:
+            name: echo-dgram
+            enabled: no
         notify: restart xinetd
         when:
             - echo_dgram_service.stat.exists
@@ -115,7 +129,9 @@
         register: echo_stream_service
 
       - name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-stream"
-        command: chkconfig echo-stream off
+        service:
+            name: echo-stream
+            enabled: no
         notify: restart xinetd
         when:
             - echo_stream_service.stat.exists
@@ -136,7 +152,9 @@
         register: time_dgram_service
 
       - name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-dgram"
-        command: chkconfig time-dgram off
+        service:
+            name: time-dgram
+            enabled: no
         notify: restart xinetd
         when:
             - time_dgram_service.stat.exists
@@ -147,7 +165,9 @@
         register: time_stream_service
 
       - name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-stream"
-        command: chkconfig time-stream off
+        service:
+            name: time-stream
+            enabled: no
         notify: restart xinetd
         when:
             - time_stream_service.stat.exists
@@ -168,7 +188,9 @@
         register: tftp_service
 
       - name: "SCORED | 2.1.6 | PATCH | Ensure tftp server is not enabled"
-        command: chkconfig tftp off
+        service:
+            name: tftp
+            enabled: no
         notify: restart xinetd
         when:
             - tftp_service.stat.exists
