@@ -341,7 +341,8 @@
       state: stopped
       enabled: false
   when:
-      - ! ubuntu1804cis_cups_server and cups_service_status.stdout == "loaded"
+      - ! ubuntu1804cis_cups_server
+      - cups_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_4
   tags:
       - level1
@@ -374,7 +375,8 @@
       state: stopped
       enabled: false
   when:
-      - ! ubuntu1804cis_ldap_server and slapd_service_status.stdout == "loaded"
+      - ! ubuntu1804cis_ldap_server
+      - slapd_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_6
   tags:
       - level1
@@ -390,7 +392,8 @@
       state: stopped
       enabled: false
   when:
-      - ! ubuntu1804cis_nfs_rpc_server and nfs_service_status.stdout == "loaded"
+      - ! ubuntu1804cis_nfs_rpc_server
+      - nfs_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_7
   tags:
       - level1
@@ -425,7 +428,8 @@
       state: stopped
       enabled: false
   when:
-      - ! ubuntu1804cis_named_server and named_service_status.stdout == "loaded"
+      - ! ubuntu1804cis_named_server
+      - named_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_8
   tags:
       - level1
@@ -484,7 +488,8 @@
       state: stopped
       enabled: false
   when:
-      - ! ubuntu1804cis_smb_server and smb_service_status.stdout == "loaded"
+      - ! ubuntu1804cis_smb_server
+      - smb_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_12
   tags:
       - level1
@@ -543,7 +548,8 @@
       state: stopped
       enabled: false
   when:
-      - ! ubuntu1804cis_nis_server and ypserv_service_status.stdout == "loaded"
+      - ! ubuntu1804cis_nis_server
+      - ypserv_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_16
   tags:
       - level1

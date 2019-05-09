@@ -4,7 +4,8 @@
   fail:
       msg: "This role can only be run agaist Ubuntu 18.04. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
   when:
-      - not ansible_distribution == "Ubuntu" and not ansible_distribution_release == "bionic"
+      - not ansible_distribution == "Ubuntu"
+      - not ansible_distribution_release == "bionic"
   tags:
       - always
 

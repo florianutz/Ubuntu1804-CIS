@@ -495,7 +495,8 @@
       name: autofs
       enabled: false
   when:
-      - ! ubuntu1804cis_allow_autofs and autofs_service_status.stdout == "loaded"
+      - ! ubuntu1804cis_allow_autofs
+      - autofs_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_1_1_21
   tags:
       - level1

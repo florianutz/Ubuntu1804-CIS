@@ -352,7 +352,9 @@
       name: firewalld
       state: present
       install_recommends: false
-  when: ubuntu1804cis_firewall == "firewalld" and ubuntu1804cis_setup_firewall
+  when:
+      - ubuntu1804cis_firewall == "firewalld"
+      - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -364,7 +366,9 @@
       name: firewalld
       state: started
       enabled: true
-  when: ubuntu1804cis_firewall == "firewalld" and ubuntu1804cis_setup_firewall
+  when:
+      - ubuntu1804cis_firewall == "firewalld"
+      - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -376,7 +380,9 @@
       name: iptables
       state: present
       install_recommends: false
-  when: ubuntu1804cis_firewall == "iptables" and ubuntu1804cis_setup_firewall
+  when:
+      - ubuntu1804cis_firewall == "iptables"
+      - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -388,7 +394,9 @@
       name: iptables
       state: started
       enabled: true
-  when: ubuntu1804cis_firewall == "iptables" and ubuntu1804cis_setup_firewall
+  when:
+      - ubuntu1804cis_firewall == "iptables"
+      - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -400,7 +408,9 @@
       dest: /etc/firewalld/firewalld.conf
       regexp: "^DefaultZone"
       line: "DefaultZone=drop"
-  when: ubuntu1804cis_firewall == "firewalld" and ubuntu1804cis_setup_firewall
+  when:
+      - ubuntu1804cis_firewall == "firewalld"
+      - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -412,7 +422,9 @@
       state: enabled
       zone: drop
       permanent: true
-  when: ubuntu1804cis_firewall == "firewalld" and ubuntu1804cis_setup_firewall
+  when:
+      - ubuntu1804cis_firewall == "firewalld"
+      - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -422,7 +434,9 @@
 - name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
   command: /bin/true
   changed_when: false
-  when: ubuntu1804cis_firewall == "iptables" and ubuntu1804cis_setup_firewall
+  when:
+      - ubuntu1804cis_firewall == "iptables"
+      - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -433,7 +447,9 @@
 - name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
   command: /bin/true
   changed_when: false
-  when: ubuntu1804cis_firewall == "iptables" and ubuntu1804cis_setup_firewall
+  when:
+      - ubuntu1804cis_firewall == "iptables"
+      - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
@@ -444,7 +460,9 @@
 - name: "NOTSCORED | 3.6.4 | PATCH | Ensure outbound and established connections are configured"
   command: /bin/true
   changed_when: false
-  when: ubuntu1804cis_firewall == "iptables" and ubuntu1804cis_setup_firewall
+  when:
+      - ubuntu1804cis_firewall == "iptables"
+      - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - notscored
@@ -459,7 +477,9 @@
       zone: drop
       permanent: true
       immediate: true
-  when: ubuntu1804cis_firewall == "firewalld" and ubuntu1804cis_setup_firewall
+  when:
+      - ubuntu1804cis_firewall == "firewalld"
+      - ubuntu1804cis_setup_firewall
   notify: restart firewalld
   with_items: "{{ ubuntu1804cis_firewall_services }}"
   tags:
@@ -471,7 +491,9 @@
 - name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
   command: /bin/true
   changed_when: false
-  when: ubuntu1804cis_firewall == "iptables" and ubuntu1804cis_setup_firewall
+  when:
+      - ubuntu1804cis_firewall == "iptables"
+      - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
