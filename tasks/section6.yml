@@ -199,7 +199,7 @@
 
 - name: "SCORED | 6.2.2 | PATCH | Ensure no legacy '+' entries exist in /etc/passwd"
   lineinfile:
-      regexp: '^+'
+      regexp: '^\+'
       state: absent
       path: /etc/passwd
   when:
@@ -212,7 +212,7 @@
 
 - name: "SCORED | 6.2.3 | PATCH | Ensure no legacy '+' entries exist in /etc/shadow"
   lineinfile:
-      regexp: '^+'
+      regexp: '^\+'
       state: absent
       path: /etc/shadow
   when:
@@ -225,7 +225,7 @@
 
 - name: "SCORED | 6.2.4 | PATCH | Ensure no legacy '+' entries exist in /etc/group"
   lineinfile:
-      regexp: '^+'
+      regexp: '^\+'
       state: absent
       path: /etc/group
   when:
