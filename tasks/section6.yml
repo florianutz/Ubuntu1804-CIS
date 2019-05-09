@@ -202,8 +202,6 @@
       regexp: '^+'
       state: absent
       path: /etc/passwd
-  changed_when: false
-  failed_when: false
   when:
       - ubuntu1804cis_rule_6_2_2
   tags:
@@ -217,8 +215,6 @@
       regexp: '^+'
       state: absent
       path: /etc/shadow
-  changed_when: false
-  failed_when: false
   when:
       - ubuntu1804cis_rule_6_2_3
   tags:
@@ -232,8 +228,6 @@
       regexp: '^+'
       state: absent
       path: /etc/group
-  changed_when: false
-  failed_when: false
   when:
       - ubuntu1804cis_rule_6_2_4
   tags:
