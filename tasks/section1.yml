@@ -263,7 +263,7 @@
       - systemd restart tmp.mount
   when:
       - ubuntu1804cis_rule_1_1_2
-      - ubuntu1804cis_skip_for_travis == false
+      - ! ubuntu1804cis_skip_for_travis
   tags:
       - level2
       - scored
@@ -279,7 +279,7 @@
       state: started
   when:
       - ubuntu1804cis_rule_1_1_2
-      - ubuntu1804cis_skip_for_travis == false
+      - ! ubuntu1804cis_skip_for_travis
   tags:
       - level2
       - scored
@@ -495,7 +495,7 @@
       name: autofs
       enabled: false
   when:
-      - ubuntu1804cis_allow_autofs == false and autofs_service_status.stdout == "loaded"
+      - ! ubuntu1804cis_allow_autofs and autofs_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_1_1_21
   tags:
       - level1
