@@ -369,7 +369,7 @@
         notify:
             - restart sshd
         when:
-            - "ubuntu1804cis_sshd['allowusers']|default('') != ''"
+            - "ubuntu1804cis_sshd['allowusers']|default('')"
 
       - name: "SCORED | 5.2.14 | PATCH | Ensure SSH access is limited - allowgroups"
         lineinfile:
@@ -380,7 +380,7 @@
         notify:
             - restart sshd
         when:
-            - "ubuntu1804cis_sshd['allowgroups']|default('') != ''"
+            - "ubuntu1804cis_sshd['allowgroups']|default('')"
 
       - name: "SCORED | 5.2.14 | PATCH | Ensure SSH access is limited - denyusers"
         lineinfile:
@@ -391,7 +391,7 @@
         notify:
             - restart sshd
         when:
-            - "ubuntu1804cis_sshd['denyusers']|default('') != ''"
+            - "ubuntu1804cis_sshd['denyusers']|default('')"
 
       - name: "SCORED | 5.2.14 | PATCH | Ensure SSH access is limited - denygroups"
         lineinfile:
@@ -402,7 +402,7 @@
         notify:
             - restart sshd
         when:
-            - "ubuntu1804cis_sshd['denygroups']|default('') != ''"
+            - "ubuntu1804cis_sshd['denygroups']|default('')"
   when:
       - ubuntu1804cis_rule_5_2_14
   tags:

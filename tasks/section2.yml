@@ -7,7 +7,9 @@
         register: chargen_dgram_service
 
       - name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-dgram"
-        command: chkconfig chargen-dgram off
+        service:
+            name: chargen-dgram
+            enabled: no
         notify: restart xinetd
         when:
             - chargen_dgram_service.stat.exists
@@ -18,7 +20,9 @@
         register: chargen_stream_service
 
       - name: "SCORED | 2.1.1 | PATCH | Ensure chargen services are not enabled | chargen-stream"
-        command: chkconfig chargen-stream off
+        service:
+            name: chargen-stream
+            enabled: no
         notify: restart xinetd
         when:
             - chargen_stream_service.stat.exists
@@ -40,7 +44,9 @@
         register: daytime_dgram_service
 
       - name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-dgram"
-        command: chkconfig daytime-dgram off
+        service:
+            name: daytime-dgram
+            enabled: no
         notify: restart xinetd
         when:
             - daytime_dgram_service.stat.exists
@@ -51,7 +57,9 @@
         register: daytime_stream_service
 
       - name: "SCORED | 2.1.2 | PATCH | Ensure daytime services are not enabled | daytime-stream"
-        command: chkconfig daytime-stream off
+        service:
+            name: daytime-stream
+            enabled: no
         notify: restart xinetd
         when:
             - daytime_stream_service.stat.exists
@@ -72,7 +80,9 @@
         register: discard_dgram_service
 
       - name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-dgram"
-        command: chkconfig discard-dgram off
+        service:
+            name: discard-dgram
+            enabled: no
         notify: restart xinetd
         when:
             - discard_dgram_service.stat.exists
@@ -83,7 +93,9 @@
         register: discard_stream_service
 
       - name: "SCORED | 2.1.3 | PATCH | Ensure discard services are not enabled | discard-stream"
-        command: chkconfig discard-stream off
+        service:
+            name: discard-stream
+            enabled: no
         notify: restart xinetd
         when:
             - discard_stream_service.stat.exists
@@ -104,7 +116,9 @@
         register: echo_dgram_service
 
       - name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-dgram"
-        command: chkconfig echo-dgram off
+        service:
+            name: echo-dgram
+            enabled: no
         notify: restart xinetd
         when:
             - echo_dgram_service.stat.exists
@@ -115,7 +129,9 @@
         register: echo_stream_service
 
       - name: "SCORED | 2.1.4 | PATCH | Ensure echo services are not enabled | echo-stream"
-        command: chkconfig echo-stream off
+        service:
+            name: echo-stream
+            enabled: no
         notify: restart xinetd
         when:
             - echo_stream_service.stat.exists
@@ -136,7 +152,9 @@
         register: time_dgram_service
 
       - name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-dgram"
-        command: chkconfig time-dgram off
+        service:
+            name: time-dgram
+            enabled: no
         notify: restart xinetd
         when:
             - time_dgram_service.stat.exists
@@ -147,7 +165,9 @@
         register: time_stream_service
 
       - name: "SCORED | 2.1.5 | PATCH | Ensure time services are not enabled | time-stream"
-        command: chkconfig time-stream off
+        service:
+            name: time-stream
+            enabled: no
         notify: restart xinetd
         when:
             - time_stream_service.stat.exists
@@ -168,11 +188,13 @@
         register: tftp_service
 
       - name: "SCORED | 2.1.6 | PATCH | Ensure tftp server is not enabled"
-        command: chkconfig tftp off
+        service:
+            name: tftp
+            enabled: no
         notify: restart xinetd
         when:
             - tftp_service.stat.exists
-            - ubuntu1804cis_tftp_server == false
+            - not ubuntu1804cis_tftp_server
         tags:
             - skip_ansible_lint
   when:
@@ -309,7 +331,7 @@
       - "@X Window System"
       - "x11*"
   when:
-      - ubuntu1804cis_xwindows_required == false
+      - not ubuntu1804cis_xwindows_required
       - ubuntu1804cis_rule_2_2_2
   tags:
       - level1
@@ -324,7 +346,7 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_avahi_server == false
+      - not ubuntu1804cis_avahi_server
       - avahi_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_3
   tags:
@@ -341,7 +363,8 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_cups_server == false and cups_service_status.stdout == "loaded"
+      - not ubuntu1804cis_cups_server
+      - cups_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_4
   tags:
       - level1
@@ -357,7 +380,7 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_dhcp_server == false
+      - not ubuntu1804cis_dhcp_server
       - dhcpd_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_5
   tags:
@@ -374,7 +397,8 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_ldap_server == false and slapd_service_status.stdout == "loaded"
+      - not ubuntu1804cis_ldap_server
+      - slapd_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_6
   tags:
       - level1
@@ -390,7 +414,8 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_nfs_rpc_server == false and nfs_service_status.stdout == "loaded"
+      - not ubuntu1804cis_nfs_rpc_server
+      - nfs_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_7
   tags:
       - level1
@@ -407,7 +432,7 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_nfs_rpc_server == false
+      - not ubuntu1804cis_nfs_rpc_server
       - rpcbind_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_7
   tags:
@@ -425,7 +450,8 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_named_server == false and named_service_status.stdout == "loaded"
+      - not ubuntu1804cis_named_server
+      - named_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_8
   tags:
       - level1
@@ -439,7 +465,7 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_vsftpd_server == false
+      - not ubuntu1804cis_vsftpd_server
       - vsftpd_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_9
   tags:
@@ -454,7 +480,7 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_httpd_server == false
+      - not ubuntu1804cis_httpd_server
       - httpd_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_10
   tags:
@@ -469,7 +495,7 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_dovecot_server == false
+      - not ubuntu1804cis_dovecot_server
       - dovecot_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_11
   tags:
@@ -484,7 +510,8 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_smb_server == false and smb_service_status.stdout == "loaded"
+      - not ubuntu1804cis_smb_server
+      - smb_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_12
   tags:
       - level1
@@ -498,7 +525,7 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_squid_server == false
+      - not ubuntu1804cis_squid_server
       - squid_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_13
   tags:
@@ -513,7 +540,7 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_snmp_server == false
+      - not ubuntu1804cis_snmp_server
       - snmpd_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_14
   tags:
@@ -528,7 +555,7 @@
       regexp: "^(#)?inet_interfaces"
       line: "inet_interfaces = localhost"
   when:
-      - ubuntu1804cis_is_mail_server == false
+      - not ubuntu1804cis_is_mail_server
       - postfix_installed.rc == 0
       - ubuntu1804cis_rule_2_2_15
   tags:
@@ -543,7 +570,8 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_nis_server == false and ypserv_service_status.stdout == "loaded"
+      - not ubuntu1804cis_nis_server
+      - ypserv_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_16
   tags:
       - level1
@@ -557,7 +585,7 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_rsh_server == false
+      - not ubuntu1804cis_rsh_server
       - rsh_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_17
   tags:
@@ -572,7 +600,7 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_rsh_server == false
+      - not ubuntu1804cis_rsh_server
       - rlogin_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_17
   tags:
@@ -587,7 +615,7 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_rsh_server == false
+      - not ubuntu1804cis_rsh_server
       - rexec_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_17
   tags:
@@ -602,7 +630,7 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_telnet_server == false
+      - not ubuntu1804cis_telnet_server
       - telnet_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_18
   tags:
@@ -617,7 +645,7 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_tftp_server == false
+      - not ubuntu1804cis_tftp_server
       - tftp_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_19
   tags:
@@ -635,7 +663,7 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_rsyncd_server == false
+      - not ubuntu1804cis_rsyncd_server
       - rsyncd_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_20
   tags:
@@ -650,7 +678,7 @@
       state: stopped
       enabled: false
   when:
-      - ubuntu1804cis_ntalk_server == false
+      - not ubuntu1804cis_ntalk_server
       - ntalk_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_21
   tags:
@@ -664,7 +692,7 @@
       name: ypbind
       state: absent
   when:
-      - ubuntu1804cis_ypbind_required == false
+      - not ubuntu1804cis_ypbind_required
       - ubuntu1804cis_rule_2_3_1
   tags:
       - level1
@@ -677,7 +705,7 @@
       name: rsh
       state: absent
   when:
-      - ubuntu1804cis_rsh_required == false
+      - not ubuntu1804cis_rsh_required
       - ubuntu1804cis_rule_2_3_2
   tags:
       - level1
@@ -690,7 +718,7 @@
       name: talk
       state: absent
   when:
-      - ubuntu1804cis_talk_required == false
+      - not ubuntu1804cis_talk_required
       - ubuntu1804cis_rule_2_3_3
   tags:
       - level1
@@ -703,7 +731,7 @@
       name: telnet
       state: absent
   when:
-      - ubuntu1804cis_telnet_required == false
+      - not ubuntu1804cis_telnet_required
       - ubuntu1804cis_rule_2_3_4
   tags:
       - level1
@@ -716,7 +744,7 @@
       name: openldap-clients
       state: absent
   when:
-      - ubuntu1804cis_openldap_clients_required == false
+      - not ubuntu1804cis_openldap_clients_required
       - ubuntu1804cis_rule_2_3_5
   tags:
       - level1

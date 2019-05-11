@@ -73,7 +73,7 @@
       state: started
       enabled: true
   when:
-      - ubuntu1804cis_skip_for_travis == false
+      - not ubuntu1804cis_skip_for_travis
       - ubuntu1804cis_rule_4_1_2
   tags:
       - level2
