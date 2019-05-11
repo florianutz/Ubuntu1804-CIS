@@ -12,6 +12,9 @@ ubuntu1804cis_section6: true
 
 ubuntu1804cis_selinux_disable: false
 
+# Ignore remount errors if you're building an image or are going to reboot anyway
+ubuntu1804_cis_ignore_remount_errors: false
+
 # These variables correspond with the CIS rule IDs or paragraph numbers defined in
 # the CIS benchmark documents.
 # PLEASE NOTE: These work in coordination with the section # group variables and tags.
