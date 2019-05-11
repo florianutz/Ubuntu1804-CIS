@@ -1,4 +1,5 @@
 ---
+dist: xenial
 
 sudo: required
 
@@ -7,7 +8,7 @@ services:
 
 language: python
 python:
-  - "2.7"
+  - "3.6"
 
 before_install:
   - docker pull solita/ubuntu-systemd:bionic
