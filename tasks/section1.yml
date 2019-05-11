@@ -567,6 +567,7 @@
 - name: "SCORED | 1.3.1 | PATCH | Stat AIDE DB"
   stat: path=/var/lib/aide/aide.db
   register: aide_db
+  
 - name: "SCORED | 1.3.1 | PATCH | Init AIDE | This may take a LONG time"
   command: /usr/sbin/aideinit
   args:
@@ -575,6 +576,7 @@
       - ubuntu1804cis_config_aide
       - ubuntu1804cis_rule_1_3_1
       - not aide_db.stat.exists
+      - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
       - scored
