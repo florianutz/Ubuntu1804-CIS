@@ -400,6 +400,7 @@
   when:
       - ubuntu1804cis_rule_4_2_1_1
       - rsyslog_service_status.stdout != "enabled"
+      - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
       - scored
