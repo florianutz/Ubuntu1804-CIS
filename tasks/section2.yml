@@ -180,45 +180,37 @@
       - rule_2.1.5
       - skip_ansible_lint
 
-- name: "SCORED | 2.1.6 | PATCH | Ensure rsh server is not enabled | rsh"
-  service:
-    name: rsh.socket
-    state: stopped
-    enabled: false
-  when:
-    - ubuntu1804cis_rsh_server == false
-    - rsh_service_status.stdout == "loaded"
-    - ubuntu1804cis_rule_2_1_6
-  tags:
-    - level1
-    - scored
-    - patch
-    - rule_2.1.6
+- name: "SCORED | 2.1.6 | PATCH | Ensure rsh server is not enabled | rsh, rlogin, rexec"
+  block:
+      - name: "SCORED | 2.1.6 | PATCH | Ensure rsh server is not enabled | rsh"
+        service:
+          name: rsh.socket
+          state: stopped
+          enabled: false
+        when:
+          - ubuntu1804cis_rsh_server == false
+          - rsh_service_status.stdout == "loaded"
+          - ubuntu1804cis_rule_2_1_6
 
-- name: "SCORED | 2.1.6 | PATCH | Ensure rsh server is not enabled | rlogin"
-  service:
-    name: rlogin.socket
-    state: stopped
-    enabled: false
-  when:
-    - ubuntu1804cis_rsh_server == false
-    - rlogin_service_status.stdout == "loaded"
-    - ubuntu1804cis_rule_2_1_6
-  tags:
-    - level1
-    - scored
-    - patch
-    - rule_2.1.6
+      - name: "SCORED | 2.1.6 | PATCH | Ensure rsh server is not enabled | rlogin"
+        service:
+          name: rlogin.socket
+          state: stopped
+          enabled: false
+        when:
+          - ubuntu1804cis_rsh_server == false
+          - rlogin_service_status.stdout == "loaded"
+          - ubuntu1804cis_rule_2_1_6
 
-- name: "SCORED | 2.1.6 | PATCH | Ensure rsh server is not enabled | rexec"
-  service:
-    name: rexec.socket
-    state: stopped
-    enabled: false
-  when:
-    - ubuntu1804cis_rsh_server == false
-    - rexec_service_status.stdout == "loaded"
-    - ubuntu1804cis_rule_2_1_6
+      - name: "SCORED | 2.1.6 | PATCH | Ensure rsh server is not enabled | rexec"
+        service:
+          name: rexec.socket
+          state: stopped
+          enabled: false
+        when:
+          - ubuntu1804cis_rsh_server == false
+          - rexec_service_status.stdout == "loaded"
+          - ubuntu1804cis_rule_2_1_6
   tags:
     - level1
     - scored
