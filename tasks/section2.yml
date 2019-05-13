@@ -257,6 +257,7 @@
       - name: "SCORED | 2.1.9 | PATCH | Ensure tftp server is not enabled"
         service:
             name: tftp
+            state: stopped
             enabled: no
         notify: restart xinetd
         when:
@@ -643,7 +644,22 @@
       - patch
       - rule_2.2.15
 
-- name: "SCORED | 2.2.16 | PATCH | Ensure NIS Server is not enabled"
+- name: "SCORED | 2.2.16 | PATCH | Ensure rsync service is not enabled "
+  service:
+    name: rsyncd
+    state: stopped
+    enabled: false
+  when:
+    - not ubuntu1804cis_rsyncd_server
+    - rsyncd_service_status.stdout == "loaded"
+    - ubuntu1804cis_rule_2_2_16
+  tags:
+    - level1
+    - scored
+    - patch
+    - rule_2.2.16
+
+- name: "SCORED | 2.2.17 | PATCH | Ensure NIS Server is not enabled"
   service:
       name: ypserv
       state: stopped
@@ -651,120 +667,12 @@
   when:
       - not ubuntu1804cis_nis_server
       - ypserv_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_16
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_2.2.16
-
-- name: "SCORED | 2.2.17 | PATCH | Ensure rsh server is not enabled | rsh"
-  service:
-      name: rsh.socket
-      state: stopped
-      enabled: false
-  when:
-      - not ubuntu1804cis_rsh_server
-      - rsh_service_status.stdout == "loaded"
       - ubuntu1804cis_rule_2_2_17
   tags:
       - level1
       - scored
       - patch
       - rule_2.2.17
-
-- name: "SCORED | 2.2.17 | PATCH | Ensure rsh server is not enabled | rlogin"
-  service:
-      name: rlogin.socket
-      state: stopped
-      enabled: false
-  when:
-      - not ubuntu1804cis_rsh_server
-      - rlogin_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_17
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_2.2.17
-
-- name: "SCORED | 2.2.17 | PATCH | Ensure rsh server is not enabled | rexec"
-  service:
-      name: rexec.socket
-      state: stopped
-      enabled: false
-  when:
-      - not ubuntu1804cis_rsh_server
-      - rexec_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_17
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_2.2.17
-
-- name: "SCORED | 2.2.18 | PATCH | Ensure telnet server is not enabled"
-  service:
-      name: telnet
-      state: stopped
-      enabled: false
-  when:
-      - not ubuntu1804cis_telnet_server
-      - telnet_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_18
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_2.2.18
-
-- name: "SCORED | 2.2.19 | PATCH | Ensure tftp server is not enabled"
-  service:
-      name: tftp
-      state: stopped
-      enabled: false
-  when:
-      - not ubuntu1804cis_tftp_server
-      - tftp_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_19
-  tags:
-      - level1
-      - scored
-      - scored
-      - insecure_services
-      - tftp
-      - patch
-      - rule_2.2.19
-
-- name: "SCORED | 2.2.20 | PATCH | Ensure rsync service is not enabled "
-  service:
-      name: rsyncd
-      state: stopped
-      enabled: false
-  when:
-      - not ubuntu1804cis_rsyncd_server
-      - rsyncd_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_20
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_2.2.20
-
-- name: "SCORED | 2.2.21 | PATCH | Ensure talk server is not enabled"
-  service:
-      name: ntalk
-      state: stopped
-      enabled: false
-  when:
-      - not ubuntu1804cis_ntalk_server
-      - ntalk_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_21
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_2.2.21
 
 - name: "SCORED | 2.3.1 | PATCH | Ensure NIS Client is not installed"
   apt:
