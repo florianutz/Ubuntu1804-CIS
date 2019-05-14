@@ -71,14 +71,9 @@
   check_mode: false
 
 - name: "PRELIM | Check for openbsd-inetd service"
-  shell: "dpkg -s openbsd-inetd | grep -o 'ok installed'; true"
+  shell: "set -o pipefail
+      dpkg -s openbsd-inetd | grep -o 'ok installed'; true"
   register: openbsd_inetd_service_status
-  changed_when: false
-  check_mode: false
-
-- name: "PRELIM | Check for rsyslog service"
-  shell: "systemctl is-enabled rsyslog; true"
-  register: rsyslog_service_status
   changed_when: false
   check_mode: false
 
@@ -298,15 +293,6 @@
   changed_when: false
   check_mode: false
 
-- name: "PRELIM | Check for rhnsd service"
-  shell: "set -o pipefail
-      systemctl show rhnsd | grep LoadState | cut -d = -f 2"
-  args:
-      executable: /bin/bash
-  register: rhnsd_service_status
-  changed_when: false
-  check_mode: false
-
 - name: "PRELIM | Check the grub configuration"
   stat:
     path: /boot/grub/grub.cfg
@@ -314,9 +300,12 @@
 
 - name: "PRELIM | Check that system accounts are non-login #1"
   shell: >
+    set -o pipefail &&
     egrep -v "^\+" /etc/passwd | awk -F: '($1!="root" && $1!="sync" &&
     $1!="shutdown" && $1!="halt" && $3<1000 && $7!="/usr/sbin/nologin" &&
     $7!="/bin/false") {print}'
+  args:
+      executable: /bin/bash
   register: system_accounts_non_login_1
   changed_when: false
   check_mode: false
@@ -324,8 +313,11 @@
 
 - name: "PRELIM | Check that system accounts are non-login #2"
   shell: >
+    set -o pipefail &&
     for user in `awk -F: '($1!="root" && $3 < 1000) {print $1 }' /etc/passwd`; do
     passwd -S $user | awk -F ' ' '($2!="L") {print $1}'; done
+  args:
+      executable: /bin/bash
   register: system_accounts_non_login_2
   changed_when: false
   check_mode: false

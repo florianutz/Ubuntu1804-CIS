@@ -555,8 +555,8 @@
   changed_when: false
   when:
       - ubuntu1804cis_rule_5_4_2
-      - system_accounts_non_login_1.stdout != ''
-      - system_accounts_non_login_2.stdout != ''
+      - system_accounts_non_login_1.stdout
+      - system_accounts_non_login_2.stdout
   tags:
       - level1
       - patch

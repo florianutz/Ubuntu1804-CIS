@@ -410,11 +410,13 @@
       - rule_4.2.3
 
 - name: "SCORED | 4.2.1.1 | PATCH | Ensure rsyslog Service is enabled"
-  command: "systemctl enable rsyslog"
+  service:
+      name: rsyslog
+      enabled: yes
   changed_when: false
   when:
       - ubuntu1804cis_rule_4_2_1_1
-      - rsyslog_service_status.stdout != "enabled"
+      - ubuntu1804cis_syslog == "rsyslog"
   tags:
       - level1
       - scored
