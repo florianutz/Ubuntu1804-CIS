@@ -26,7 +26,7 @@
       masked: false
       state: reloaded
   when: ansible_virtualization_type != "docker"
-  ignore_errors: "{{ ubuntu1804cis_cis_ignore_remount_errors }}"
+  ignore_errors: "{{ ubuntu1804cis_ignore_remount_errors }}"
 
 - name: systemd restart var-tmp.mount
   become: true
@@ -36,7 +36,7 @@
       enabled: true
       masked: false
       state: reloaded
-  ignore_errors: "{{ ubuntu1804cis_cis_ignore_remount_errors }}"
+  ignore_errors: "{{ ubuntu1804cis_ignore_remount_errors }}"
 
 - name: generate new grub config
   become: true
