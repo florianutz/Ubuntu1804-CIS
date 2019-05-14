@@ -77,13 +77,6 @@
   changed_when: false
   check_mode: false
 
-#- name: "PRELIM | Check for rsyslog service"
-#  shell: "set -o pipefail
-#      systemctl is-enabled rsyslog; true"
-#  register: rsyslog_service_status
-#  changed_when: false
-#  check_mode: false
-
 - name: "PRELIM | Check for ntpd service"
   shell: "set -o pipefail
       systemctl show {{ ntp_service[ansible_os_family] }} | grep LoadState | cut -d = -f 2"
