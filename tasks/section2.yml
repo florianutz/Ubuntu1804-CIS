@@ -188,7 +188,7 @@
           state: stopped
           enabled: false
         when:
-          - ubuntu1804cis_rsh_server == false
+          - not ubuntu1804cis_rsh_server
           - rsh_service_status.stdout == "loaded"
           - ubuntu1804cis_rule_2_1_6
 
@@ -198,7 +198,7 @@
           state: stopped
           enabled: false
         when:
-          - ubuntu1804cis_rsh_server == false
+          - not ubuntu1804cis_rsh_server
           - rlogin_service_status.stdout == "loaded"
           - ubuntu1804cis_rule_2_1_6
 
@@ -208,7 +208,7 @@
           state: stopped
           enabled: false
         when:
-          - ubuntu1804cis_rsh_server == false
+          - not ubuntu1804cis_rsh_server
           - rexec_service_status.stdout == "loaded"
           - ubuntu1804cis_rule_2_1_6
   tags:
@@ -223,7 +223,7 @@
     state: stopped
     enabled: false
   when:
-    - ubuntu1804cis_ntalk_server == false
+    - not ubuntu1804cis_ntalk_server
     - ntalk_service_status.stdout == "loaded"
     - ubuntu1804cis_rule_2_1_7
   tags:
@@ -238,7 +238,7 @@
     state: stopped
     enabled: false
   when:
-    - ubuntu1804cis_telnet_server == false
+    - not ubuntu1804cis_telnet_server
     - telnet_service_status.stdout == "loaded"
     - ubuntu1804cis_rule_2_1_8
   tags:
