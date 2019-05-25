@@ -175,7 +175,7 @@ ubuntu1804cis_pwquality:
 Dependencies
 ------------
 
-Ansible > 2.2
+Ansible >= 2.4 and <= 2.7 (2.8 is not yet supported)
 
 Example Playbook
 -------------------------
