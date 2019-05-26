@@ -1,4 +1,4 @@
-ansible==2.7.10
+ansible==2.8.0
 molecule==2.20.1
 yamllint==1.15.0
 docker==3.7.2

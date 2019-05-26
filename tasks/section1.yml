@@ -25,6 +25,7 @@
       state: absent
   when:
       - ubuntu1804cis_rule_1_1_1_1
+      - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
       - scored
@@ -56,6 +57,7 @@
       state: absent
   when:
       - ubuntu1804cis_rule_1_1_1_2
+      - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
       - scored
@@ -87,6 +89,7 @@
       state: absent
   when:
       - ubuntu1804cis_rule_1_1_1_3
+      - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
       - scored
@@ -118,6 +121,7 @@
       state: absent
   when:
       - ubuntu1804cis_rule_1_1_1_4
+      - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
       - scored
@@ -149,6 +153,7 @@
       state: absent
   when:
       - ubuntu1804cis_rule_1_1_1_5
+      - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
       - scored
@@ -180,6 +185,7 @@
       state: absent
   when:
       - ubuntu1804cis_rule_1_1_1_6
+      - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
       - scored
@@ -628,6 +634,7 @@
   changed_when: false
   when:
       - ubuntu1804cis_rule_1_5_2
+      - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
       - notscored
