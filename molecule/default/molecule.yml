@@ -24,6 +24,7 @@ provisioner:
       fact_caching_connection: ./cache
       poll_interval: 3
       forks: 100
+      conditional_bare_variables: false
     connection:
       pipelining: true
 scenario:
