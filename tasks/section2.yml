@@ -646,7 +646,7 @@
 
 - name: "SCORED | 2.2.16 | PATCH | Ensure rsync service is not enabled "
   service:
-    name: rsyncd
+    name: rsync
     state: stopped
     enabled: false
   when:
