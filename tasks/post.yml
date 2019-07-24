@@ -2,7 +2,7 @@
 # Post tasks
 
 - name: "POST | Find removed but configured apt packages"
-  shell: "set -o pipefail
+  shell: "set -o pipefail;
       dpkg --list | grep ^rc | tr -s ' ' | cut -d ' ' -f 2"
   args:
       executable: /bin/bash
