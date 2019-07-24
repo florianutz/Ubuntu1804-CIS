@@ -142,6 +142,15 @@ ubuntu1804cis_time_synchronization_servers:
   - uri: "3.pool.ntp.org"
     config: "minpoll 8"
 ```  
+##### 1.4.3 | PATCH | Ensure authentication required for single user mode
+It is disabled by default as it is setting random password for root. To enable it set:
+```yaml
+ubuntu1804cis_rule_1_4_3: true
+```
+To use other than random password:
+```yaml
+ubuntu1804cis_root_password: 'new password'
+```
 
 ##### 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured
 ```
