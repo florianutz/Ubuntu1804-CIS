@@ -314,16 +314,19 @@
       - notimplemented
 
 - name: "SCORED | 6.2.8 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
-  command: /bin/true
-  changed_when: false
+  shell: |
+      for dir in {{ homes_with_perms.stdout }};
+      do
+        chmod g-w,o-rwx $dir;
+      done
   when:
       - ubuntu1804cis_rule_6_2_8
+      - homes_with_perms.stdout | length > 0
   tags:
       - level1
       - scored
       - patch
       - rule_6.2.8
-      - notimplemented
 
 - name: "SCORED | 6.2.9 | PATCH | Ensure users own their home directories"
   command: /bin/true
