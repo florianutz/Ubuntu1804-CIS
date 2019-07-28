@@ -267,8 +267,8 @@
   check_mode: false
 
 - name: "PRELIM | Check for rsyncd service"
-  shell: "set -o pipefail
-      systemctl show rsyncd | grep LoadState | cut -d = -f 2"
+  shell: "set -o pipefail;
+      systemctl show rsync | grep LoadState | cut -d = -f 2"
   args:
       executable: /bin/bash
   register: rsyncd_service_status
