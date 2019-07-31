@@ -24,32 +24,32 @@
 
 - include: section1.yml
   become: true
-  when: ubuntu1804cis_section1
+  when: ubuntu1804cis_section1|bool
   tags: section1
 
 - include: section2.yml
   become: true
-  when: ubuntu1804cis_section2
+  when: ubuntu1804cis_section2|bool
   tags: section2
 
 - include: section3.yml
   become: true
-  when: ubuntu1804cis_section3
+  when: ubuntu1804cis_section3|bool
   tags: section3
 
 - include: section4.yml
   become: true
-  when: ubuntu1804cis_section4
+  when: ubuntu1804cis_section4|bool
   tags: section4
 
 - include: section5.yml
   become: true
-  when: ubuntu1804cis_section5
+  when: ubuntu1804cis_section5|bool
   tags: section5
 
 - include: section6.yml
   become: true
-  when: ubuntu1804cis_section6
+  when: ubuntu1804cis_section6|bool
   tags: section6
 
 - include: post.yml

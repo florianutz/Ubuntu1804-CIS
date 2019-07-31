@@ -6,7 +6,7 @@
       line: "max_log_file = 10"
       state: present
   when:
-      - ubuntu1804cis_rule_4_1_1_1
+      - ubuntu1804cis_rule_4_1_1_1|bool
   notify:
       - restart auditd
   tags:
@@ -23,7 +23,7 @@
       line: "admin_space_left_action = {{ ubuntu1804cis_auditd['admin_space_left_action'] }}"
       state: present
   when:
-      - ubuntu1804cis_rule_4_1_1_2
+      - ubuntu1804cis_rule_4_1_1_2|bool
   notify:
       - restart auditd
   tags:
@@ -40,7 +40,7 @@
       line: "space_left_action = email"
       state: present
   when:
-      - ubuntu1804cis_rule_4_1_1_2
+      - ubuntu1804cis_rule_4_1_1_2|bool
   notify:
       - restart auditd
   tags:
@@ -57,7 +57,7 @@
       line: "max_log_file_action = {{ ubuntu1804cis_auditd['max_log_file_action'] }}"
       state: present
   when:
-      - ubuntu1804cis_rule_4_1_1_3
+      - ubuntu1804cis_rule_4_1_1_3|bool
   notify:
       - restart auditd
   tags:
@@ -74,7 +74,7 @@
       enabled: true
   when:
       - not ubuntu1804cis_skip_for_travis
-      - ubuntu1804cis_rule_4_1_2
+      - ubuntu1804cis_rule_4_1_2|bool
   tags:
       - level2
       - scored
@@ -92,7 +92,7 @@
   notify:
       - generate new grub config
   when:
-      - ubuntu1804cis_rule_4_1_3
+      - ubuntu1804cis_rule_4_1_3|bool
   tags:
       - level2
       - scored
@@ -108,7 +108,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_4_1_4
+      - ubuntu1804cis_rule_4_1_4|bool
   notify:
       - load audit rules
       - restart auditd
@@ -127,7 +127,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_4_1_5
+      - ubuntu1804cis_rule_4_1_5|bool
   notify:
       - load audit rules
       - restart auditd
@@ -146,7 +146,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_4_1_6
+      - ubuntu1804cis_rule_4_1_6|bool
   notify:
       - load audit rules
       - restart auditd
@@ -165,7 +165,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_4_1_7
+      - ubuntu1804cis_rule_4_1_7|bool
   notify:
       - load audit rules
       - restart auditd
@@ -184,7 +184,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_4_1_8
+      - ubuntu1804cis_rule_4_1_8|bool
   notify:
       - load audit rules
       - restart auditd
@@ -203,7 +203,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_4_1_9
+      - ubuntu1804cis_rule_4_1_9|bool
   notify:
       - load audit rules
       - restart auditd
@@ -222,7 +222,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_4_1_10
+      - ubuntu1804cis_rule_4_1_10|bool
   notify:
       - load audit rules
       - restart auditd
@@ -241,7 +241,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_4_1_11
+      - ubuntu1804cis_rule_4_1_11|bool
   notify:
       - load audit rules
       - restart auditd
@@ -272,7 +272,7 @@
             - load audit rules
             - restart auditd
   when:
-      - ubuntu1804cis_rule_4_1_12
+      - ubuntu1804cis_rule_4_1_12|bool
   tags:
       - level2
       - scored
@@ -288,7 +288,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_4_1_13
+      - ubuntu1804cis_rule_4_1_13|bool
   notify:
       - load audit rules
       - restart auditd
@@ -307,7 +307,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_4_1_14
+      - ubuntu1804cis_rule_4_1_14|bool
   notify:
       - load audit rules
       - restart auditd
@@ -326,7 +326,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_4_1_15
+      - ubuntu1804cis_rule_4_1_15|bool
   notify:
       - load audit rules
       - restart auditd
@@ -345,7 +345,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_4_1_16
+      - ubuntu1804cis_rule_4_1_16|bool
   notify:
       - load audit rules
       - restart auditd
@@ -364,7 +364,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_4_1_17
+      - ubuntu1804cis_rule_4_1_17|bool
   notify:
       - load audit rules
       - restart auditd
@@ -383,7 +383,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_4_1_18
+      - ubuntu1804cis_rule_4_1_18|bool
   notify:
       - load audit rules
       - restart auditd
@@ -401,7 +401,7 @@
       state: present
       install_recommends: false
   when:
-      - ubuntu1804cis_rule_4_2_3
+      - ubuntu1804cis_rule_4_2_3|bool
   tags:
       - level1
       - scored
@@ -415,7 +415,7 @@
       enabled: yes
   changed_when: false
   when:
-      - ubuntu1804cis_rule_4_2_1_1
+      - ubuntu1804cis_rule_4_2_1_1|bool
       - ubuntu1804cis_syslog == "rsyslog"
   tags:
       - level1
@@ -428,7 +428,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_4_2_1_2
+      - ubuntu1804cis_rule_4_2_1_2|bool
   tags:
       - level1
       - notscored
@@ -443,7 +443,7 @@
       regexp: '^\$FileCreateMode'
       line: '$FileCreateMode 0640'
   when:
-      - ubuntu1804cis_rule_4_2_1_3
+      - ubuntu1804cis_rule_4_2_1_3|bool
   tags:
       - level1
       - scored
@@ -455,7 +455,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_4_2_1_4
+      - ubuntu1804cis_rule_4_2_1_4|bool
   tags:
       - level1
       - scored
@@ -468,7 +468,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_4_2_1_5
+      - ubuntu1804cis_rule_4_2_1_5|bool
   tags:
       - level1
       - notscored
@@ -481,7 +481,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_4_2_1_5
+      - ubuntu1804cis_rule_4_2_1_5|bool
   tags:
       - level1
       - notscored
@@ -494,7 +494,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_4_2_2_1
+      - ubuntu1804cis_rule_4_2_2_1|bool
   tags:
       - level1
       - scored
@@ -507,7 +507,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_4_2_2_2
+      - ubuntu1804cis_rule_4_2_2_2|bool
   tags:
       - level1
       - notscored
@@ -520,7 +520,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_4_2_2_3
+      - ubuntu1804cis_rule_4_2_2_3|bool
   tags:
       - level1
       - scored
@@ -533,7 +533,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_4_2_2_4
+      - ubuntu1804cis_rule_4_2_2_4|bool
   tags:
       - level1
       - notscored
@@ -546,7 +546,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_4_2_2_5
+      - ubuntu1804cis_rule_4_2_2_5|bool
   tags:
       - level1
       - notscored
@@ -560,7 +560,7 @@
   changed_when: false
   failed_when: false
   when:
-      - ubuntu1804cis_rule_4_2_4
+      - ubuntu1804cis_rule_4_2_4|bool
   tags:
       - level1
       - scored
@@ -590,7 +590,7 @@
             - "{{ log_rotates.files }}"
             - { path: "/etc/logrotate.conf" }
   when:
-      - ubuntu1804cis_rule_4_3
+      - ubuntu1804cis_rule_4_3|bool
   tags:
       - level1
       - notscored

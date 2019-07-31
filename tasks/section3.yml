@@ -196,7 +196,7 @@
   with_items:
       - { name: net.ipv6.conf.all.accept_ra, value: 0 }
       - { name: net.ipv6.conf.default.accept_ra, value: 0 }
-  when: ubuntu1804cis_ipv6_required
+  when: ubuntu1804cis_ipv6_required|bool
   notify:
       - sysctl flush ipv6 route table
   tags:
@@ -217,7 +217,7 @@
   with_items:
       - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
       - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
-  when: ubuntu1804cis_ipv6_required
+  when: ubuntu1804cis_ipv6_required|bool
   notify:
       - sysctl flush ipv6 route table
   tags:
@@ -354,7 +354,7 @@
       install_recommends: false
   when:
       - ubuntu1804cis_firewall == "firewalld"
-      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_setup_firewall|bool
   tags:
       - level1
       - scored
@@ -368,7 +368,7 @@
       enabled: true
   when:
       - ubuntu1804cis_firewall == "firewalld"
-      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_setup_firewall|bool
   tags:
       - level1
       - scored
@@ -382,7 +382,7 @@
       install_recommends: false
   when:
       - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_setup_firewall|bool
   tags:
       - level1
       - scored
@@ -396,7 +396,7 @@
       enabled: true
   when:
       - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_setup_firewall|bool
   tags:
       - level1
       - scored
@@ -410,7 +410,7 @@
       line: "DefaultZone=drop"
   when:
       - ubuntu1804cis_firewall == "firewalld"
-      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_setup_firewall|bool
   tags:
       - level1
       - scored
@@ -424,7 +424,7 @@
       permanent: true
   when:
       - ubuntu1804cis_firewall == "firewalld"
-      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_setup_firewall|bool
   tags:
       - level1
       - scored
@@ -436,7 +436,7 @@
   changed_when: false
   when:
       - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_setup_firewall|bool
   tags:
       - level1
       - scored
@@ -449,7 +449,7 @@
   changed_when: false
   when:
       - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_setup_firewall|bool
   tags:
       - level1
       - scored
@@ -462,7 +462,7 @@
   changed_when: false
   when:
       - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_setup_firewall|bool
   tags:
       - level1
       - notscored
@@ -479,7 +479,7 @@
       immediate: true
   when:
       - ubuntu1804cis_firewall == "firewalld"
-      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_setup_firewall|bool
   notify: restart firewalld
   with_items: "{{ ubuntu1804cis_firewall_services }}"
   tags:
@@ -493,7 +493,7 @@
   changed_when: false
   when:
       - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_setup_firewall|bool
   tags:
       - level1
       - scored

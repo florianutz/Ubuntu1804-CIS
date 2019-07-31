@@ -10,7 +10,7 @@
       mode: 0644
       create: true
   when:
-      - ubuntu1804cis_rule_1_1_1_1
+      - ubuntu1804cis_rule_1_1_1_1|bool
   tags:
       - level1
       - scored
@@ -24,7 +24,7 @@
       name: cramfs
       state: absent
   when:
-      - ubuntu1804cis_rule_1_1_1_1
+      - ubuntu1804cis_rule_1_1_1_1|bool
       - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
@@ -42,7 +42,7 @@
       state: present
       create: true
   when:
-      - ubuntu1804cis_rule_1_1_1_2
+      - ubuntu1804cis_rule_1_1_1_2|bool
   tags:
       - level1
       - scored
@@ -56,7 +56,7 @@
       name: freevxfs
       state: absent
   when:
-      - ubuntu1804cis_rule_1_1_1_2
+      - ubuntu1804cis_rule_1_1_1_2|bool
       - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
@@ -74,7 +74,7 @@
       state: present
       create: true
   when:
-      - ubuntu1804cis_rule_1_1_1_3
+      - ubuntu1804cis_rule_1_1_1_3|bool
   tags:
       - level1
       - scored
@@ -88,7 +88,7 @@
       name: jffs2
       state: absent
   when:
-      - ubuntu1804cis_rule_1_1_1_3
+      - ubuntu1804cis_rule_1_1_1_3|bool
       - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
@@ -106,7 +106,7 @@
       state: present
       create: true
   when:
-      - ubuntu1804cis_rule_1_1_1_4
+      - ubuntu1804cis_rule_1_1_1_4|bool
   tags:
       - level1
       - scored
@@ -120,7 +120,7 @@
       name: hfs
       state: absent
   when:
-      - ubuntu1804cis_rule_1_1_1_4
+      - ubuntu1804cis_rule_1_1_1_4|bool
       - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
@@ -138,7 +138,7 @@
       state: present
       create: true
   when:
-      - ubuntu1804cis_rule_1_1_1_5
+      - ubuntu1804cis_rule_1_1_1_5|bool
   tags:
       - level1
       - scored
@@ -152,7 +152,7 @@
       name: hfsplus
       state: absent
   when:
-      - ubuntu1804cis_rule_1_1_1_5
+      - ubuntu1804cis_rule_1_1_1_5|bool
       - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
@@ -170,7 +170,7 @@
       state: present
       create: true
   when:
-      - ubuntu1804cis_rule_1_1_1_6
+      - ubuntu1804cis_rule_1_1_1_6|bool
   tags:
       - level1
       - scored
@@ -184,7 +184,7 @@
       name: udf
       state: absent
   when:
-      - ubuntu1804cis_rule_1_1_1_6
+      - ubuntu1804cis_rule_1_1_1_6|bool
       - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
@@ -206,7 +206,7 @@
   notify:
       - systemd restart tmp.mount
   when:
-      - ubuntu1804cis_rule_1_1_2
+      - ubuntu1804cis_rule_1_1_2|bool
       - not ubuntu1804cis_skip_for_travis
   tags:
       - level2
@@ -222,7 +222,7 @@
       masked: no
       state: started
   when:
-      - ubuntu1804cis_rule_1_1_2
+      - ubuntu1804cis_rule_1_1_2|bool
       - not ubuntu1804cis_skip_for_travis
   tags:
       - level2
@@ -245,8 +245,8 @@
   notify:
       - systemd restart tmp.mount
   when:
-      - ubuntu1804cis_rule_1_1_3
-      - ubuntu1804cis_rule_1_1_4
+      - ubuntu1804cis_rule_1_1_3|bool
+      - ubuntu1804cis_rule_1_1_4|bool
   tags:
       - level1
       - scored
@@ -260,7 +260,7 @@
   changed_when: false
   failed_when: false
   when:
-      - ubuntu1804cis_rule_1_1_5
+      - ubuntu1804cis_rule_1_1_5|bool
   tags:
       - level2
       - scored
@@ -274,7 +274,7 @@
   changed_when: false
   failed_when: false
   when:
-      - ubuntu1804cis_rule_1_1_6
+      - ubuntu1804cis_rule_1_1_6|bool
   tags:
       - level2
       - scored
@@ -293,9 +293,9 @@
       opts: "{{ ubuntu1804cis_vartmp['opts'] }}"
   when:
       - ubuntu1804cis_vartmp['enabled'] == 'yes'
-      - ubuntu1804cis_rule_1_1_7
-      - ubuntu1804cis_rule_1_1_8
-      - ubuntu1804cis_rule_1_1_9
+      - ubuntu1804cis_rule_1_1_7|bool
+      - ubuntu1804cis_rule_1_1_8|bool
+      - ubuntu1804cis_rule_1_1_9|bool
   tags:
       - level1
       - scored
@@ -310,7 +310,7 @@
   changed_when: false
   failed_when: false
   when:
-      - ubuntu1804cis_rule_1_1_10
+      - ubuntu1804cis_rule_1_1_10|bool
   tags:
       - level2
       - scored
@@ -324,7 +324,7 @@
   changed_when: false
   failed_when: false
   when:
-      - ubuntu1804cis_rule_1_1_11
+      - ubuntu1804cis_rule_1_1_11|bool
   tags:
       - level2
       - scored
@@ -338,7 +338,7 @@
   changed_when: false
   failed_when: false
   when:
-      - ubuntu1804cis_rule_1_1_12
+      - ubuntu1804cis_rule_1_1_12|bool
   tags:
       - level2
       - scored
@@ -354,7 +354,7 @@
       fstype: "{{ item.fstype }}"
       opts: "nodev"
   when:
-      - ubuntu1804cis_rule_1_1_13
+      - ubuntu1804cis_rule_1_1_13|bool
       - item.mount == "/home"
   with_items:
       - "{{ ansible_mounts }}"
@@ -374,9 +374,9 @@
       fstype: tmpfs
       opts: "defaults,nodev,nosuid,noexec"
   when:
-      - ubuntu1804cis_rule_1_1_14
-      - ubuntu1804cis_rule_1_1_15
-      - ubuntu1804cis_rule_1_1_16
+      - ubuntu1804cis_rule_1_1_14|bool
+      - ubuntu1804cis_rule_1_1_15|bool
+      - ubuntu1804cis_rule_1_1_16|bool
   tags:
       - level1
       - scored
@@ -389,7 +389,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_1_1_17
+      - ubuntu1804cis_rule_1_1_17|bool
   tags:
       - level1
       - notscored
@@ -401,7 +401,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_1_1_18
+      - ubuntu1804cis_rule_1_1_18|bool
   tags:
       - level1
       - notscored
@@ -413,7 +413,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_1_1_19
+      - ubuntu1804cis_rule_1_1_19|bool
   tags:
       - level1
       - notscored
@@ -430,7 +430,7 @@
   changed_when: false
   failed_when: false
   when:
-      - ubuntu1804cis_rule_1_1_20
+      - ubuntu1804cis_rule_1_1_20|bool
       # - sticky_bit_on_worldwritable_dirs_audit.rc == '0'
   tags:
       - level1
@@ -445,7 +445,7 @@
   when:
       - not ubuntu1804cis_allow_autofs
       - autofs_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_1_1_21
+      - ubuntu1804cis_rule_1_1_21|bool
   tags:
       - level1
       - scored
@@ -456,7 +456,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_1_2_1
+      - ubuntu1804cis_rule_1_2_1|bool
   tags:
       - level1
       - notscored
@@ -468,7 +468,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_1_2_2
+      - ubuntu1804cis_rule_1_2_2|bool
   tags:
       - level1
       - notscored
@@ -483,7 +483,7 @@
       state: present
       install_recommends: false
   when:
-      - ubuntu1804cis_rule_1_3_1
+      - ubuntu1804cis_rule_1_3_1|bool
       - not postfix_installed.rc == 0
   tags:
       - level1
@@ -500,7 +500,7 @@
       state: present
       install_recommends: false
   when:
-      - ubuntu1804cis_rule_1_3_1
+      - ubuntu1804cis_rule_1_3_1|bool
   tags:
       - level1
       - scored
@@ -517,8 +517,8 @@
   args:
       creates: /var/lib/aide/aide.db
   when:
-      - ubuntu1804cis_config_aide
-      - ubuntu1804cis_rule_1_3_1
+      - ubuntu1804cis_config_aide|bool
+      - ubuntu1804cis_rule_1_3_1|bool
       - not aide_db.stat.exists
       - not ubuntu1804cis_skip_for_travis
   tags:
@@ -540,7 +540,7 @@
       weekday: "{{ ubuntu1804cis_aide_cron['aide_weekday'] | default('*') }}"
       job: "{{ ubuntu1804cis_aide_cron['aide_job'] }}"
   when:
-      - ubuntu1804cis_rule_1_3_2
+      - ubuntu1804cis_rule_1_3_2|bool
   tags:
       - level1
       - scored
@@ -557,7 +557,7 @@
       mode: 0600
   when:
       - ansible_os_family == "Debian"
-      - ubuntu1804cis_rule_1_4_1
+      - ubuntu1804cis_rule_1_4_1|bool
   tags:
       - level1
       - scored
@@ -570,8 +570,8 @@
       password: "{{ ubuntu1804cis_bootloader_password }}"
   register: grub_pass
   when:
-      - ubuntu1804cis_set_boot_pass
-      - ubuntu1804cis_rule_1_4_2
+      - ubuntu1804cis_set_boot_pass|bool
+      - ubuntu1804cis_rule_1_4_2|bool
   tags:
       - level1
       - scored
@@ -584,7 +584,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_1_4_3
+      - ubuntu1804cis_rule_1_4_3|bool
   tags:
       - level1
       - notscored
@@ -600,7 +600,7 @@
       line: '*                hard    core            0'
       insertbefore: '^# End of file'
   when:
-      - ubuntu1804cis_rule_1_5_1
+      - ubuntu1804cis_rule_1_5_1|bool
   tags:
       - level1
       - scored
@@ -617,7 +617,7 @@
       sysctl_set: true
       ignoreerrors: true
   when:
-      - ubuntu1804cis_rule_1_5_1
+      - ubuntu1804cis_rule_1_5_1|bool
   tags:
       - level1
       - scored
@@ -633,7 +633,7 @@
       executable: /bin/bash
   changed_when: false
   when:
-      - ubuntu1804cis_rule_1_5_2
+      - ubuntu1804cis_rule_1_5_2|bool
       - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
@@ -651,7 +651,7 @@
       sysctl_set: true
       ignoreerrors: true
   when:
-      - ubuntu1804cis_rule_1_5_3
+      - ubuntu1804cis_rule_1_5_3|bool
   tags:
       - level1
       - scored
@@ -663,7 +663,7 @@
   command: prelink -ua
   when:
       - prelink_installed.rc == 0
-      - ubuntu1804cis_rule_1_5_4
+      - ubuntu1804cis_rule_1_5_4|bool
   tags:
       - level1
       - scored
@@ -675,7 +675,7 @@
       name: prelink
       state: absent
   when:
-      - ubuntu1804cis_rule_1_5_4
+      - ubuntu1804cis_rule_1_5_4|bool
   tags:
       - level1
       - scored
@@ -691,7 +691,7 @@
   ignore_errors: true
   notify: generate new grub config
   when:
-      - ubuntu1804cis_rule_1_6_1_1
+      - ubuntu1804cis_rule_1_6_1_1|bool
   tags:
       - level2
       - scored
@@ -702,7 +702,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_1_6_1_2
+      - ubuntu1804cis_rule_1_6_1_2|bool
   tags:
       - level1
       - scored
@@ -714,7 +714,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_1_6_1_3
+      - ubuntu1804cis_rule_1_6_1_3|bool
   tags:
       - level1
       - scored
@@ -726,7 +726,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_1_6_1_4
+      - ubuntu1804cis_rule_1_6_1_4|bool
   tags:
       - level1
       - scored
@@ -738,7 +738,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_1_6_2_1
+      - ubuntu1804cis_rule_1_6_2_1|bool
   tags:
       - level1
       - scored
@@ -750,7 +750,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_1_6_2_2
+      - ubuntu1804cis_rule_1_6_2_2|bool
   tags:
       - level1
       - scored
@@ -762,7 +762,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_1_6_3
+      - ubuntu1804cis_rule_1_6_3|bool
   tags:
       - level1
       - scored
@@ -776,7 +776,7 @@
       src: etc/motd.j2
       dest: /etc/motd
   when:
-      - ubuntu1804cis_rule_1_7_1_1
+      - ubuntu1804cis_rule_1_7_1_1|bool
   tags:
       - level1
       - scored
@@ -789,7 +789,7 @@
       src: etc/issue.j2
       dest: /etc/issue
   when:
-      - ubuntu1804cis_rule_1_7_1_2
+      - ubuntu1804cis_rule_1_7_1_2|bool
   tags:
       - level1
       - notscored
@@ -802,7 +802,7 @@
       src: etc/issue.net.j2
       dest: /etc/issue.net
   when:
-      - ubuntu1804cis_rule_1_7_1_3
+      - ubuntu1804cis_rule_1_7_1_3|bool
   tags:
       - level1
       - notscored
@@ -818,7 +818,7 @@
       group: root
       mode: 0644
   when:
-      - ubuntu1804cis_rule_1_7_1_4
+      - ubuntu1804cis_rule_1_7_1_4|bool
   tags:
       - level1
       - notscored
@@ -834,7 +834,7 @@
       group: root
       mode: 0644
   when:
-      - ubuntu1804cis_rule_1_7_1_5
+      - ubuntu1804cis_rule_1_7_1_5|bool
   tags:
       - level1
       - scored
@@ -850,7 +850,7 @@
       group: root
       mode: 0644
   when:
-      - ubuntu1804cis_rule_1_7_1_6
+      - ubuntu1804cis_rule_1_7_1_6|bool
   tags:
       - level1
       - notscored
@@ -876,8 +876,8 @@
       - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp: 'banner-message-enable', line: 'banner-message-enable=true' }
       - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp: 'banner-message-text', line: "banner-message-text='{{ ubuntu1804cis_warning_banner }}' " }
   when:
-      - ubuntu1804cis_gui
-      - ubuntu1804cis_rule_1_7_2
+      - ubuntu1804cis_gui|bool
+      - ubuntu1804cis_rule_1_7_2|bool
   tags:
       - level1
       - scored

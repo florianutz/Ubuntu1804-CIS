@@ -4,7 +4,7 @@
       name: "{{ cron_service[ansible_os_family] }}"
       enabled: true
   when:
-      - ubuntu1804cis_rule_5_1_1
+      - ubuntu1804cis_rule_5_1_1|bool
   tags:
       - level1
       - scored
@@ -19,7 +19,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_5_1_2
+      - ubuntu1804cis_rule_5_1_2|bool
   tags:
       - level1
       - scored
@@ -35,7 +35,7 @@
       group: root
       mode: 0700
   when:
-      - ubuntu1804cis_rule_5_1_3
+      - ubuntu1804cis_rule_5_1_3|bool
   tags:
       - level1
       - scored
@@ -51,7 +51,7 @@
       group: root
       mode: 0700
   when:
-      - ubuntu1804cis_rule_5_1_4
+      - ubuntu1804cis_rule_5_1_4|bool
   tags:
       - level1
       - scored
@@ -67,7 +67,7 @@
       group: root
       mode: 0700
   when:
-      - ubuntu1804cis_rule_5_1_5
+      - ubuntu1804cis_rule_5_1_5|bool
   tags:
       - level1
       - scored
@@ -83,7 +83,7 @@
       group: root
       mode: 0700
   when:
-      - ubuntu1804cis_rule_5_1_6
+      - ubuntu1804cis_rule_5_1_6|bool
   tags:
       - level1
       - scored
@@ -99,7 +99,7 @@
       group: root
       mode: 0700
   when:
-      - ubuntu1804cis_rule_5_1_7
+      - ubuntu1804cis_rule_5_1_7|bool
   tags:
       - level1
       - scored
@@ -145,7 +145,7 @@
             group: root
             mode: 0600
   when:
-      - ubuntu1804cis_rule_5_1_8
+      - ubuntu1804cis_rule_5_1_8|bool
   tags:
       - level1
       - scored
@@ -161,7 +161,7 @@
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_5_2_1
+      - ubuntu1804cis_rule_5_2_1|bool
   tags:
       - level1
       - scored
@@ -176,7 +176,7 @@
       regexp: '^Protocol'
       line: 'Protocol 2'
   when:
-      - ubuntu1804cis_rule_5_2_2
+      - ubuntu1804cis_rule_5_2_2|bool
   tags:
       - level1
       - scored
@@ -191,7 +191,7 @@
       regexp: '^LogLevel'
       line: 'LogLevel INFO'
   when:
-      - ubuntu1804cis_rule_5_2_3
+      - ubuntu1804cis_rule_5_2_3|bool
   tags:
       - level1
       - scored
@@ -206,7 +206,7 @@
       regexp: '^X11Forwarding'
       line: 'X11Forwarding no'
   when:
-      - ubuntu1804cis_rule_5_2_4
+      - ubuntu1804cis_rule_5_2_4|bool
   tags:
       - level1
       - scored
@@ -221,7 +221,7 @@
       regexp: '^(#)?MaxAuthTries \d'
       line: 'MaxAuthTries 4'
   when:
-      - ubuntu1804cis_rule_5_2_5
+      - ubuntu1804cis_rule_5_2_5|bool
   tags:
       - level1
       - scored
@@ -236,7 +236,7 @@
       regexp: '^IgnoreRhosts'
       line: 'IgnoreRhosts yes'
   when:
-      - ubuntu1804cis_rule_5_2_6
+      - ubuntu1804cis_rule_5_2_6|bool
   tags:
       - level1
       - scored
@@ -251,7 +251,7 @@
       regexp: '^HostbasedAuthentication'
       line: 'HostbasedAuthentication no'
   when:
-      - ubuntu1804cis_rule_5_2_7
+      - ubuntu1804cis_rule_5_2_7|bool
   tags:
       - level1
       - scored
@@ -266,7 +266,7 @@
       regexp: '^PermitRootLogin'
       line: 'PermitRootLogin no'
   when:
-      - ubuntu1804cis_rule_5_2_8
+      - ubuntu1804cis_rule_5_2_8|bool
   tags:
       - level1
       - scored
@@ -281,7 +281,7 @@
       regexp: '^PermitEmptyPasswords'
       line: 'PermitEmptyPasswords no'
   when:
-      - ubuntu1804cis_rule_5_2_9
+      - ubuntu1804cis_rule_5_2_9|bool
   tags:
       - level1
       - scored
@@ -296,7 +296,7 @@
       regexp: '^PermitUserEnvironment'
       line: 'PermitUserEnvironment no'
   when:
-      - ubuntu1804cis_rule_5_2_10
+      - ubuntu1804cis_rule_5_2_10|bool
   tags:
       - level1
       - scored
@@ -311,7 +311,7 @@
       regexp: '^MACs'
       line: 'MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com'
   when:
-      - ubuntu1804cis_rule_5_2_11
+      - ubuntu1804cis_rule_5_2_11|bool
   tags:
       - level1
       - scored
@@ -335,7 +335,7 @@
             regexp: '^ClientAliveCountMax'
             line: "ClientAliveCountMax {{ ubuntu1804cis_sshd['clientalivecountmax'] }}"
   when:
-      - ubuntu1804cis_rule_5_2_12
+      - ubuntu1804cis_rule_5_2_12|bool
   tags:
       - level1
       - scored
@@ -350,7 +350,7 @@
       regexp: '^LoginGraceTime'
       line: "LoginGraceTime 60"
   when:
-      - ubuntu1804cis_rule_5_2_13
+      - ubuntu1804cis_rule_5_2_13|bool
   tags:
       - level1
       - scored
@@ -404,7 +404,7 @@
         when:
             - "ubuntu1804cis_sshd['denygroups']|default('')"
   when:
-      - ubuntu1804cis_rule_5_2_14
+      - ubuntu1804cis_rule_5_2_14|bool
   tags:
       - level1
       - scored
@@ -419,7 +419,7 @@
       regexp: '^Banner'
       line: 'Banner /etc/issue.net'
   when:
-      - ubuntu1804cis_rule_5_2_15
+      - ubuntu1804cis_rule_5_2_15|bool
   tags:
       - level1
       - scored
@@ -444,7 +444,7 @@
         with_items:
             - "{{ ubuntu1804cis_pwquality }}"
   when:
-      - ubuntu1804cis_rule_5_3_1
+      - ubuntu1804cis_rule_5_3_1|bool
   tags:
       - level1
       - scored
@@ -455,7 +455,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_5_3_2
+      - ubuntu1804cis_rule_5_3_2|bool
   tags:
       - level1
       - scored
@@ -467,7 +467,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_5_3_3
+      - ubuntu1804cis_rule_5_3_3|bool
   tags:
       - level1
       - scored
@@ -480,7 +480,7 @@
   changed_when: false
   failed_when: false
   when:
-      - ubuntu1804cis_rule_5_3_4
+      - ubuntu1804cis_rule_5_3_4|bool
   tags:
       - level1
       - scored
@@ -494,7 +494,7 @@
       regexp: '^PASS_MAX_DAYS'
       line: "PASS_MAX_DAYS {{ ubuntu1804cis_pass['max_days'] }}"
   when:
-      - ubuntu1804cis_rule_5_4_1_1
+      - ubuntu1804cis_rule_5_4_1_1|bool
   tags:
       - level1
       - scored
@@ -508,7 +508,7 @@
       regexp: '^PASS_MIN_DAYS'
       line: "PASS_MIN_DAYS {{ ubuntu1804cis_pass['min_days'] }}"
   when:
-      - ubuntu1804cis_rule_5_4_1_2
+      - ubuntu1804cis_rule_5_4_1_2|bool
   tags:
       - level1
       - scored
@@ -522,7 +522,7 @@
       regexp: '^PASS_WARN_AGE'
       line: "PASS_WARN_AGE {{ ubuntu1804cis_pass['warn_age'] }}"
   when:
-      - ubuntu1804cis_rule_5_4_1_3
+      - ubuntu1804cis_rule_5_4_1_3|bool
   tags:
       - level1
       - scored
@@ -533,7 +533,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_5_4_1_4
+      - ubuntu1804cis_rule_5_4_1_4|bool
   tags:
       - level1
       - scored
@@ -554,7 +554,7 @@
     done
   changed_when: false
   when:
-      - ubuntu1804cis_rule_5_4_2
+      - ubuntu1804cis_rule_5_4_2|bool
       - system_accounts_non_login_1.stdout
       - system_accounts_non_login_2.stdout
   tags:
@@ -568,7 +568,7 @@
   changed_when: false
   failed_when: false
   when:
-      - ubuntu1804cis_rule_5_4_3
+      - ubuntu1804cis_rule_5_4_3|bool
   tags:
       - level1
       - patch
@@ -596,7 +596,7 @@
             regexp: '(^\s+umask) 002'
             replace: '\1 027'
   when:
-      - ubuntu1804cis_rule_5_4_4
+      - ubuntu1804cis_rule_5_4_4|bool
   tags:
       - level1
       - patch
@@ -607,7 +607,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_5_5
+      - ubuntu1804cis_rule_5_5|bool
   tags:
       - level1
       - patch
@@ -622,7 +622,7 @@
       regexp: '^(#)?auth\s+required\s+pam_wheel\.so'
       line: "auth           required        pam_wheel.so use_uid"
   when:
-      - ubuntu1804cis_rule_5_6
+      - ubuntu1804cis_rule_5_6|bool
   tags:
       - level1
       - patch
@@ -634,7 +634,7 @@
       name: root
       groups: sudo
   when:
-      - ubuntu1804cis_rule_5_6
+      - ubuntu1804cis_rule_5_6|bool
   tags:
       - level1
       - patch

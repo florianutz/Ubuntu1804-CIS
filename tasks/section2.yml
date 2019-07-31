@@ -27,7 +27,7 @@
         when:
             - chargen_stream_service.stat.exists
   when:
-      - ubuntu1804cis_rule_2_1_1
+      - ubuntu1804cis_rule_2_1_1|bool
   tags:
       - level1
       - scored
@@ -64,7 +64,7 @@
         when:
             - daytime_stream_service.stat.exists
   when:
-      - ubuntu1804cis_rule_2_1_2
+      - ubuntu1804cis_rule_2_1_2|bool
   tags:
       - level1
       - scored
@@ -100,7 +100,7 @@
         when:
             - discard_stream_service.stat.exists
   when:
-      - ubuntu1804cis_rule_2_1_3
+      - ubuntu1804cis_rule_2_1_3|bool
   tags:
       - level1
       - scored
@@ -136,7 +136,7 @@
         when:
             - echo_stream_service.stat.exists
   when:
-      - ubuntu1804cis_rule_2_1_4
+      - ubuntu1804cis_rule_2_1_4|bool
   tags:
       - level1
       - scored
@@ -172,7 +172,7 @@
         when:
             - time_stream_service.stat.exists
   when:
-      - ubuntu1804cis_rule_2_1_5
+      - ubuntu1804cis_rule_2_1_5|bool
   tags:
       - level1
       - scored
@@ -190,7 +190,7 @@
         when:
           - not ubuntu1804cis_rsh_server
           - rsh_service_status.stdout == "loaded"
-          - ubuntu1804cis_rule_2_1_6
+          - ubuntu1804cis_rule_2_1_6|bool
 
       - name: "SCORED | 2.1.6 | PATCH | Ensure rsh server is not enabled | rlogin"
         service:
@@ -200,7 +200,7 @@
         when:
           - not ubuntu1804cis_rsh_server
           - rlogin_service_status.stdout == "loaded"
-          - ubuntu1804cis_rule_2_1_6
+          - ubuntu1804cis_rule_2_1_6|bool
 
       - name: "SCORED | 2.1.6 | PATCH | Ensure rsh server is not enabled | rexec"
         service:
@@ -210,7 +210,7 @@
         when:
           - not ubuntu1804cis_rsh_server
           - rexec_service_status.stdout == "loaded"
-          - ubuntu1804cis_rule_2_1_6
+          - ubuntu1804cis_rule_2_1_6|bool
   tags:
     - level1
     - scored
@@ -225,7 +225,7 @@
   when:
     - not ubuntu1804cis_ntalk_server
     - ntalk_service_status.stdout == "loaded"
-    - ubuntu1804cis_rule_2_1_7
+    - ubuntu1804cis_rule_2_1_7|bool
   tags:
     - level1
     - scored
@@ -240,7 +240,7 @@
   when:
     - not ubuntu1804cis_telnet_server
     - telnet_service_status.stdout == "loaded"
-    - ubuntu1804cis_rule_2_1_8
+    - ubuntu1804cis_rule_2_1_8|bool
   tags:
     - level1
     - scored
@@ -266,7 +266,7 @@
         tags:
             - skip_ansible_lint
   when:
-      - ubuntu1804cis_rule_2_1_9
+      - ubuntu1804cis_rule_2_1_9|bool
   tags:
       - level1
       - scored
@@ -281,7 +281,7 @@
   when:
       - xinetd_service_status.stdout == "loaded"
       - not ubuntu1804cis_xinetd_required
-      - ubuntu1804cis_rule_2_1_10
+      - ubuntu1804cis_rule_2_1_10|bool
   tags:
       - level1
       - patch
@@ -294,7 +294,7 @@
     state: absent
   when:
     - openbsd_inetd_service_status.stdout == "ok installed"
-    - ubuntu1804cis_rule_2_1_11
+    - ubuntu1804cis_rule_2_1_11|bool
   tags:
     - level1
     - patch
@@ -335,7 +335,7 @@
             - chronyd_service_status.stdout == "loaded"
 
   when:
-      - ubuntu1804cis_rule_2_2_1_1
+      - ubuntu1804cis_rule_2_2_1_1|bool
   tags:
       - level1
       - notscored
@@ -360,7 +360,7 @@
             line: "RUNASUSER=ntp"
   when:
       - ubuntu1804cis_time_synchronization == "ntp"
-      - ubuntu1804cis_rule_2_2_1_2
+      - ubuntu1804cis_rule_2_2_1_2|bool
   tags:
       - level1
       - scored
@@ -377,7 +377,7 @@
       mode: 0644
   when:
       - ubuntu1804cis_time_synchronization == "chrony"
-      - ubuntu1804cis_rule_2_2_1_3
+      - ubuntu1804cis_rule_2_2_1_3|bool
   tags:
       - level1
       - scored
@@ -395,7 +395,7 @@
       create: true
   when:
       - ubuntu1804cis_time_synchronization == "chrony"
-      - ubuntu1804cis_rule_2_2_1_3
+      - ubuntu1804cis_rule_2_2_1_3|bool
   tags:
       - level1
       - scored
@@ -412,7 +412,7 @@
       state: absent
   when:
       - not ubuntu1804cis_xwindows_required
-      - ubuntu1804cis_rule_2_2_2
+      - ubuntu1804cis_rule_2_2_2|bool
   tags:
       - level1
       - scored
@@ -428,7 +428,7 @@
   when:
       - not ubuntu1804cis_avahi_server
       - avahi_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_3
+      - ubuntu1804cis_rule_2_2_3|bool
   tags:
       - level1
       - scored
@@ -445,7 +445,7 @@
   when:
       - not ubuntu1804cis_cups_server
       - cups_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_4
+      - ubuntu1804cis_rule_2_2_4|bool
   tags:
       - level1
       - scored
@@ -462,7 +462,7 @@
   when:
       - not ubuntu1804cis_dhcp_server
       - dhcpd_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_5
+      - ubuntu1804cis_rule_2_2_5|bool
   tags:
       - level1
       - scored
@@ -479,7 +479,7 @@
   when:
       - not ubuntu1804cis_ldap_server
       - slapd_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_6
+      - ubuntu1804cis_rule_2_2_6|bool
   tags:
       - level1
       - scored
@@ -496,7 +496,7 @@
   when:
       - not ubuntu1804cis_nfs_rpc_server
       - nfs_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_7
+      - ubuntu1804cis_rule_2_2_7|bool
   tags:
       - level1
       - scored
@@ -514,7 +514,7 @@
   when:
       - not ubuntu1804cis_nfs_rpc_server
       - rpcbind_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_7
+      - ubuntu1804cis_rule_2_2_7|bool
   tags:
       - level1
       - scored
@@ -532,7 +532,7 @@
   when:
       - not ubuntu1804cis_named_server
       - named_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_8
+      - ubuntu1804cis_rule_2_2_8|bool
   tags:
       - level1
       - scored
@@ -547,7 +547,7 @@
   when:
       - not ubuntu1804cis_vsftpd_server
       - vsftpd_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_9
+      - ubuntu1804cis_rule_2_2_9|bool
   tags:
       - level1
       - scored
@@ -562,7 +562,7 @@
   when:
       - not ubuntu1804cis_httpd_server
       - httpd_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_10
+      - ubuntu1804cis_rule_2_2_10|bool
   tags:
       - level1
       - scored
@@ -577,7 +577,7 @@
   when:
       - not ubuntu1804cis_dovecot_server
       - dovecot_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_11
+      - ubuntu1804cis_rule_2_2_11|bool
   tags:
       - level1
       - scored
@@ -592,7 +592,7 @@
   when:
       - not ubuntu1804cis_smb_server
       - smb_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_12
+      - ubuntu1804cis_rule_2_2_12|bool
   tags:
       - level1
       - scored
@@ -607,7 +607,7 @@
   when:
       - not ubuntu1804cis_squid_server
       - squid_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_13
+      - ubuntu1804cis_rule_2_2_13|bool
   tags:
       - level1
       - scored
@@ -622,7 +622,7 @@
   when:
       - not ubuntu1804cis_snmp_server
       - snmpd_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_14
+      - ubuntu1804cis_rule_2_2_14|bool
   tags:
       - level1
       - scored
@@ -637,7 +637,7 @@
   when:
       - not ubuntu1804cis_is_mail_server
       - postfix_installed.rc == 0
-      - ubuntu1804cis_rule_2_2_15
+      - ubuntu1804cis_rule_2_2_15|bool
   tags:
       - level1
       - scored
@@ -652,7 +652,7 @@
   when:
     - not ubuntu1804cis_rsyncd_server
     - rsyncd_service_status.stdout == "loaded"
-    - ubuntu1804cis_rule_2_2_16
+    - ubuntu1804cis_rule_2_2_16|bool
   tags:
     - level1
     - scored
@@ -667,7 +667,7 @@
   when:
       - not ubuntu1804cis_nis_server
       - ypserv_service_status.stdout == "loaded"
-      - ubuntu1804cis_rule_2_2_17
+      - ubuntu1804cis_rule_2_2_17|bool
   tags:
       - level1
       - scored
@@ -680,7 +680,7 @@
       state: absent
   when:
       - not ubuntu1804cis_ypbind_required
-      - ubuntu1804cis_rule_2_3_1
+      - ubuntu1804cis_rule_2_3_1|bool
   tags:
       - level1
       - scored
@@ -693,7 +693,7 @@
       state: absent
   when:
       - not ubuntu1804cis_rsh_required
-      - ubuntu1804cis_rule_2_3_2
+      - ubuntu1804cis_rule_2_3_2|bool
   tags:
       - level1
       - scored
@@ -706,7 +706,7 @@
       state: absent
   when:
       - not ubuntu1804cis_talk_required
-      - ubuntu1804cis_rule_2_3_3
+      - ubuntu1804cis_rule_2_3_3|bool
   tags:
       - level1
       - scored
@@ -719,7 +719,7 @@
       state: absent
   when:
       - not ubuntu1804cis_telnet_required
-      - ubuntu1804cis_rule_2_3_4
+      - ubuntu1804cis_rule_2_3_4|bool
   tags:
       - level1
       - scored
@@ -732,7 +732,7 @@
       state: absent
   when:
       - not ubuntu1804cis_openldap_clients_required
-      - ubuntu1804cis_rule_2_3_5
+      - ubuntu1804cis_rule_2_3_5|bool
   tags:
       - level1
       - scored

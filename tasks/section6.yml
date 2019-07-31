@@ -3,7 +3,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_1_1
+      - ubuntu1804cis_rule_6_1_1|bool
   tags:
       - level2
       - notscored
@@ -18,7 +18,7 @@
       group: root
       mode: 0644
   when:
-      - ubuntu1804cis_rule_6_1_2
+      - ubuntu1804cis_rule_6_1_2|bool
   tags:
       - level1
       - scored
@@ -32,7 +32,7 @@
       group: shadow
       mode: 0640
   when:
-      - ubuntu1804cis_rule_6_1_3
+      - ubuntu1804cis_rule_6_1_3|bool
   tags:
       - level1
       - scored
@@ -46,7 +46,7 @@
       group: root
       mode: 0644
   when:
-      - ubuntu1804cis_rule_6_1_4
+      - ubuntu1804cis_rule_6_1_4|bool
   tags:
       - level1
       - scored
@@ -60,7 +60,7 @@
       group: shadow
       mode: 0640
   when:
-      - ubuntu1804cis_rule_6_1_5
+      - ubuntu1804cis_rule_6_1_5|bool
   tags:
       - level1
       - scored
@@ -74,7 +74,7 @@
       group: root
       mode: 0644
   when:
-      - ubuntu1804cis_rule_6_1_6
+      - ubuntu1804cis_rule_6_1_6|bool
   tags:
       - level1
       - scored
@@ -88,7 +88,7 @@
       group: shadow
       mode: 0640
   when:
-      - ubuntu1804cis_rule_6_1_7
+      - ubuntu1804cis_rule_6_1_7|bool
   tags:
       - level1
       - scored
@@ -102,7 +102,7 @@
       group: root
       mode: 0644
   when:
-      - ubuntu1804cis_rule_6_1_8
+      - ubuntu1804cis_rule_6_1_8|bool
   tags:
       - level1
       - scored
@@ -116,7 +116,7 @@
       group: shadow
       mode: 0640
   when:
-      - ubuntu1804cis_rule_6_1_9
+      - ubuntu1804cis_rule_6_1_9|bool
   tags:
       - level1
       - scored
@@ -127,7 +127,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_1_10
+      - ubuntu1804cis_rule_6_1_10|bool
   tags:
       - level1
       - scored
@@ -139,7 +139,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_1_11
+      - ubuntu1804cis_rule_6_1_11|bool
   tags:
       - level1
       - scored
@@ -151,7 +151,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_1_12
+      - ubuntu1804cis_rule_6_1_12|bool
   tags:
       - level1
       - scored
@@ -163,7 +163,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_1_13
+      - ubuntu1804cis_rule_6_1_13|bool
   tags:
       - level1
       - notscored
@@ -175,7 +175,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_1_14
+      - ubuntu1804cis_rule_6_1_14|bool
   tags:
       - level1
       - notscored
@@ -190,7 +190,7 @@
   with_items: "{{ empty_password_accounts.stdout_lines }}"
   when:
       - empty_password_accounts.rc
-      - ubuntu1804cis_rule_6_2_1
+      - ubuntu1804cis_rule_6_2_1|bool
   tags:
       - level1
       - scored
@@ -203,7 +203,7 @@
       state: absent
       path: /etc/passwd
   when:
-      - ubuntu1804cis_rule_6_2_2
+      - ubuntu1804cis_rule_6_2_2|bool
   tags:
       - level1
       - scored
@@ -216,7 +216,7 @@
       state: absent
       path: /etc/shadow
   when:
-      - ubuntu1804cis_rule_6_2_3
+      - ubuntu1804cis_rule_6_2_3|bool
   tags:
       - level1
       - scored
@@ -229,7 +229,7 @@
       state: absent
       path: /etc/group
   when:
-      - ubuntu1804cis_rule_6_2_4
+      - ubuntu1804cis_rule_6_2_4|bool
   tags:
       - level1
       - scored
@@ -243,7 +243,7 @@
   with_items: "{{ uid_zero_accounts_except_root.stdout_lines }}"
   when:
       - uid_zero_accounts_except_root.rc
-      - ubuntu1804cis_rule_6_2_5
+      - ubuntu1804cis_rule_6_2_5|bool
   tags:
       - level1
       - scored
@@ -254,7 +254,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_2_6
+      - ubuntu1804cis_rule_6_2_6|bool
   tags:
       - level1
       - scored
@@ -280,7 +280,7 @@
   changed_when: false
   check_mode: false
   when:
-      - ubuntu1804cis_rule_6_2_6
+      - ubuntu1804cis_rule_6_2_6|bool
   tags:
       - level1
       - scored
@@ -305,7 +305,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_2_7
+      - ubuntu1804cis_rule_6_2_7|bool
   tags:
       - level1
       - scored
@@ -317,7 +317,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_2_8
+      - ubuntu1804cis_rule_6_2_8|bool
   tags:
       - level1
       - scored
@@ -329,7 +329,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_2_9
+      - ubuntu1804cis_rule_6_2_9|bool
   tags:
       - level1
       - scored
@@ -341,7 +341,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_2_10
+      - ubuntu1804cis_rule_6_2_10|bool
   tags:
       - level1
       - scored
@@ -355,7 +355,7 @@
       dest: "~{{ item }}/.forward"
   with_items: "{{ users.stdout_lines }}"
   when:
-      - ubuntu1804cis_rule_6_2_11
+      - ubuntu1804cis_rule_6_2_11|bool
   tags:
       - level1
       - scored
@@ -368,7 +368,7 @@
       dest: "~{{ item }}/.netrc"
   with_items: "{{ users.stdout_lines }}"
   when:
-      - ubuntu1804cis_rule_6_2_12
+      - ubuntu1804cis_rule_6_2_12|bool
   tags:
       - level1
       - scored
@@ -381,7 +381,7 @@
       dest: "~{{ item }}/.rhosts"
   with_items: "{{ users.stdout_lines }}"
   when:
-      - ubuntu1804cis_rule_6_2_14
+      - ubuntu1804cis_rule_6_2_14|bool
   tags:
       - level1
       - scored
@@ -392,7 +392,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_2_15
+      - ubuntu1804cis_rule_6_2_15|bool
   tags:
       - level1
       - scored
@@ -404,7 +404,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_2_16
+      - ubuntu1804cis_rule_6_2_16|bool
   tags:
       - level1
       - scored
@@ -416,7 +416,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_2_17
+      - ubuntu1804cis_rule_6_2_17|bool
   tags:
       - level1
       - scored
@@ -428,7 +428,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_2_18
+      - ubuntu1804cis_rule_6_2_18|bool
   tags:
       - level1
       - scored
@@ -440,7 +440,7 @@
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_6_2_19
+      - ubuntu1804cis_rule_6_2_19|bool
   tags:
       - level1
       - scored
