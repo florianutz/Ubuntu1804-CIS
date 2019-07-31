@@ -621,10 +621,16 @@
     - rule_1.4.2
 
 - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode"
-  command: /bin/true
-  changed_when: false
+  shell: "set -o pipefail;
+          if [ '{{ ubuntu1804cis_root_password }}' == 'random' ];
+          then PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c24); else PASSWORD='{{ ubuntu1804cis_root_password }}';
+          fi;
+          echo \"root:$PASSWORD\" | chpasswd"
+  args:
+    executable: /bin/bash
   when:
       - ubuntu1804cis_rule_1_4_3
+      - current_root_password.stdout | length > 0
   tags:
       - level1
       - notscored

@@ -32,6 +32,15 @@
   changed_when: false
   check_mode: false
 
+- name: "PRELIM | Check if root has password"
+  shell: 'set -o pipefail;
+       getent shadow | grep root | awk -F: ''($2 == "*" || $2 == "!" ) { printf $2; }'''
+  args:
+    executable: /bin/bash
+  register: current_root_password
+  changed_when: false
+  check_mode: false
+
 - name: "PRELIM | Gather UID 0 accounts other than root"
   shell: "set -o pipefail
       cat /etc/passwd | awk -F: '($3 == 0 && $1 != \"root\") {i++;print $1 } END {exit i}'"
