@@ -611,7 +611,7 @@
 - name: "SCORED | 1.5.1 | PATCH | Ensure core dumps are restricted"
   sysctl:
       name: fs.suid_dumpable
-      value: 0
+      value: "0"
       state: present
       reload: true
       sysctl_set: true
@@ -645,7 +645,7 @@
 - name: "SCORED | 1.5.3 | PATCH | Ensure address space layout randomization (ASLR) is enabled"
   sysctl:
       name: kernel.randomize_va_space
-      value: 2
+      value: "2"
       state: present
       reload: true
       sysctl_set: true

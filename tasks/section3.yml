@@ -120,7 +120,7 @@
 - name: "SCORED | 3.2.5 | PATCH | Ensure broadcast ICMP requests are ignored"
   sysctl:
       name: net.ipv4.icmp_echo_ignore_broadcasts
-      value: 1
+      value: "1"
       state: present
       reload: true
       ignoreerrors: true
