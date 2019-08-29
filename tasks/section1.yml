@@ -423,7 +423,7 @@
 
 - name: "SCORED | 1.1.20 | PATCH | Ensure sticky bit is set on all world-writable directories"
   shell: |
-      set -o pipefail
+      set -o pipefail;
       df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
   args:
       executable: /bin/bash
@@ -565,10 +565,15 @@
       - patch
       - rule_1.4.1
 
-- name: "SCORED | 1.4.2 | PATCH | Ensure bootloader password is set"
-  grub_crypt:
-      password: "{{ ubuntu1804cis_bootloader_password }}"
+- name: "SCORED | 1.4.2 | PATCH | Ensure bootloader password is set - generate password"
+  shell: "set -o pipefail;
+        if [ '{{ ubuntu1804cis_bootloader_password }}' == 'random' ];
+        then PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c12); else PASSWORD='{{ ubuntu1804cis_bootloader_password }}';
+        fi;
+        echo -e \"$PASSWORD\n$PASSWORD\" | grub-mkpasswd-pbkdf2 | awk '/grub.pbkdf/{print$NF}'"
   register: grub_pass
+  args:
+    executable: /bin/bash
   when:
       - ubuntu1804cis_set_boot_pass
       - ubuntu1804cis_rule_1_4_2
@@ -580,11 +585,52 @@
       - rule_1.4.2
       - notimplemented
 
+- name: "SCORED | 1.4.2 | PATCH | Ensure bootloader password is set - generate config"
+  copy:
+    dest:  /etc/grub.d/00_password
+    content: "cat << EOF\nset superusers=\"root\"\npassword_pbkdf2 root {{ grub_pass.stdout }}\nEOF"
+    owner: root
+    group: root
+    mode: 0755
+  notify: generate new grub config
+  when:
+    - ubuntu1804cis_set_boot_pass and grub_pass is defined and grub_pass.stdout is defined and grub_pass.stdout | length >0
+    - ubuntu1804cis_rule_1_4_2
+  tags:
+    - level1
+    - scored
+    - grub
+    - patch
+    - rule_1.4.2
+
+- name: "SCORED | 1.4.2 | PATCH | Ensure bootloader password is set - disable password for system boot"
+  replace:
+    path:  /etc/grub.d/10_linux
+    regexp: '--class os"'
+    replace: '--class os --unrestricted"'
+  notify: generate new grub config
+  when:
+    - ubuntu1804cis_set_boot_pass
+    - ubuntu1804cis_rule_1_4_2
+    - ubuntu1804cis_rule_1_4_2_disable_password
+  tags:
+    - level1
+    - scored
+    - grub
+    - patch
+    - rule_1.4.2
+
 - name: "NOTSCORED | 1.4.3 | PATCH | Ensure authentication required for single user mode"
-  command: /bin/true
-  changed_when: false
+  shell: "set -o pipefail;
+          if [ '{{ ubuntu1804cis_root_password }}' == 'random' ];
+          then PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c24); else PASSWORD='{{ ubuntu1804cis_root_password }}';
+          fi;
+          echo \"root:$PASSWORD\" | chpasswd"
+  args:
+    executable: /bin/bash
   when:
       - ubuntu1804cis_rule_1_4_3
+      - current_root_password.stdout | length > 0
   tags:
       - level1
       - notscored
@@ -611,7 +657,7 @@
 - name: "SCORED | 1.5.1 | PATCH | Ensure core dumps are restricted"
   sysctl:
       name: fs.suid_dumpable
-      value: 0
+      value: "0"
       state: present
       reload: true
       sysctl_set: true
@@ -627,7 +673,7 @@
 
 - name: "NOTSCORED | 1.5.2 | PATCH | Ensure XD/NX support is enabled"
   shell: |
-      set -o pipefail
+      set -o pipefail;
       dmesg | grep -E "NX|XD" | grep " active"
   args:
       executable: /bin/bash
@@ -645,7 +691,7 @@
 - name: "SCORED | 1.5.3 | PATCH | Ensure address space layout randomization (ASLR) is enabled"
   sysctl:
       name: kernel.randomize_va_space
-      value: 2
+      value: "2"
       state: present
       reload: true
       sysctl_set: true
