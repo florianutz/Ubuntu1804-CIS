@@ -172,7 +172,7 @@
 - name: "SCORED | 3.2.8 | PATCH | Ensure TCP SYN Cookies is enabled"
   sysctl:
       name: net.ipv4.tcp_syncookies
-      value: 1
+      value: '1'
       state: present
       reload: true
       ignoreerrors: true
