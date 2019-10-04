@@ -530,8 +530,11 @@
       - rule_5.4.1.3
 
 - name: "SCORED | 5.4.1.4 | PATCH | Ensure inactive password lock is 30 days or less"
-  command: /bin/true
-  changed_when: false
+  lineinfile:
+    state: present
+    dest: /etc/default/useradd
+    regexp: '^INACTIVE'
+    line: "INACTIVE={{ ubuntu1804cis_pass['inactive'] }}"
   when:
       - ubuntu1804cis_rule_5_4_1_4
   tags:
@@ -602,6 +605,39 @@
       - patch
       - rule_5.4.4
       - scored
+
+- name: "SCORED | 5.4.5 | PATCH | Ensure default user shell timeout is 900 seconds or less"
+  block:
+    - name: "SCORED | 5.4.5 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/bash.bashrc"
+      lineinfile:
+        state: present
+        dest: /etc/bash.bashrc
+        create: true
+        regexp: '^TMOUT='
+        line: "TMOUT={{ ubuntu1804cis_shell_timeout }}"
+
+    - name: "SCORED | 5.4.5 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/profile"
+      lineinfile:
+        state: present
+        dest: /etc/profile
+        create: true
+        regexp: '^TMOUT='
+        line: "TMOUT={{ ubuntu1804cis_shell_timeout }}"
+
+    - name: "SCORED | 5.4.5 | PATCH | Ensure default user shell timeout is 900 seconds or less - /etc/profile.d/99-tmout.sh"
+      lineinfile:
+        state: present
+        dest: /etc/profile.d/99-tmout.sh
+        create: true
+        regexp: '^TMOUT='
+        line: "TMOUT={{ ubuntu1804cis_shell_timeout }}"
+  when:
+    - ubuntu1804cis_rule_5_4_5
+  tags:
+    - level1
+    - patch
+    - rule_5.4.5
+    - scored
 
 - name: "NOTSCORED | 5.5 | PATCH | Ensure root login is restricted to system console"
   command: /bin/true
