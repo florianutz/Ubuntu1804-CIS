@@ -26,7 +26,7 @@ ubuntu1804cis_rule_1_1_1_3: true
 ubuntu1804cis_rule_1_1_1_4: true
 ubuntu1804cis_rule_1_1_1_5: true
 ubuntu1804cis_rule_1_1_1_6: true
-ubuntu1804cis_rule_1_1_2: true
+ubuntu1804cis_rule_1_1_2: false 
 ubuntu1804cis_rule_1_1_3: true
 ubuntu1804cis_rule_1_1_4: true
 ubuntu1804cis_rule_1_1_5: true
