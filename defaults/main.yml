@@ -360,6 +360,7 @@ ubuntu1804cis_warning_banner: |
 ubuntu1804cis_auditd:
   admin_space_left_action: halt
   max_log_file_action: keep_logs
+  max_audit_log_file_size: 10
 
 ubuntu1804cis_logrotate: "daily"
 
