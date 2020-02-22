@@ -3,7 +3,7 @@
   lineinfile:
       dest: /etc/audit/auditd.conf
       regexp: "^max_log_file( |=)"
-      line: "max_log_file = 10"
+      line: "max_log_file = {{ ubuntu1804cis_auditd.max_audit_log_file_size }}"
       state: present
   when:
       - ubuntu1804cis_rule_4_1_1_1
