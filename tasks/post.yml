@@ -16,5 +16,6 @@
     purge: true
   changed_when: false
   ignore_errors: true
+  when: not ansible_check_mode
   tags:
     - skip_ansible_lint
