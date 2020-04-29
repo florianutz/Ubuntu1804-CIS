@@ -438,6 +438,7 @@
       - name: "SCORED | 5.3.1 | PATCH | Ensure password creation requirements are configured"
         lineinfile:
             state: present
+            create: yes
             dest: /etc/security/pwquality.conf
             regexp: '^{{ item.key }}'
             line: '{{ item.key }} = {{ item.value }}'
