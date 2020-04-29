@@ -728,7 +728,7 @@
 
 - name: "SCORED | 2.3.5 | PATCH | Ensure LDAP client is not installed"
   apt:
-      name: openldap-clients
+      name: ldap-utils
       state: absent
   when:
       - not ubuntu1804cis_openldap_clients_required
