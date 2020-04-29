@@ -556,7 +556,7 @@
 
 - name: "SCORED | 2.2.10 | PATCH | Ensure HTTP server is not enabled"
   service:
-      name: httpd
+      name: apache2
       state: stopped
       enabled: false
   when:
