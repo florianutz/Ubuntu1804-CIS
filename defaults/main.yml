@@ -394,6 +394,7 @@ ubuntu1804cis_pass:
   min_days: 7
   warn_age: 7
   inactive: 30
+  history: 5
 
 ubuntu1804cis_shell_timeout: 900
 # Syslog system
