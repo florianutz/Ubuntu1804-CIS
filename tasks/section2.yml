@@ -396,7 +396,7 @@
 - name: "SCORED | 2.2.2 | PATCH | Ensure X Window System is not installed"
   apt:
       name:
-        - "@X Window System"
+        - "xorg"
         - "x11*"
       state: absent
   when:
