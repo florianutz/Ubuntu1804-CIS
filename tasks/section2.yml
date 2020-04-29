@@ -234,7 +234,7 @@
 
 - name: "SCORED | 2.1.8 | PATCH | Ensure telnet server is not enabled"
   service:
-    name: telnet
+    name: telnetd
     state: stopped
     enabled: false
   when:
