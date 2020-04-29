@@ -650,7 +650,7 @@
 
 - name: "SCORED | 2.2.17 | PATCH | Ensure NIS Server is not enabled"
   service:
-      name: ypserv
+      name: nis
       state: stopped
       enabled: false
   when:

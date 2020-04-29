@@ -241,7 +241,7 @@
 
 - name: "PRELIM | Check for ypserv service"
   shell: "set -o pipefail;
-      systemctl show ypserv | grep LoadState | cut -d = -f 2"
+      systemctl show nis | grep LoadState | cut -d = -f 2"
   args:
       executable: /bin/bash
   register: ypserv_service_status
