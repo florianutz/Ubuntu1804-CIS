@@ -248,25 +248,14 @@
     - rule_2.1.8
 
 - name: "SCORED | 2.1.9 | PATCH | Ensure tftp server is not enabled"
-  block:
-      - name: "SCORED | 2.1.9 | PATCH | Ensure tftp server is not enabled"
-        stat:
-            path: /etc/xinetd.d/tftp
-        register: tftp_service
-
-      - name: "SCORED | 2.1.9 | PATCH | Ensure tftp server is not enabled"
-        service:
-            name: tftp
-            state: stopped
-            enabled: no
-        notify: restart xinetd
-        when:
-            - tftp_service.stat.exists
-            - not ubuntu1804cis_tftp_server
-        tags:
-            - skip_ansible_lint
+  service:
+    name: tftpd-hpa
+    state: stopped
+    enabled: no
   when:
+      - not ubuntu1804cis_tftp_server
       - ubuntu1804cis_rule_2_1_9
+      - tftp_service_status.stdout == "loaded"
   tags:
       - level1
       - scored

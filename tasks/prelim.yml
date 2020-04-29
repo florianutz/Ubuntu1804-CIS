@@ -286,7 +286,7 @@
 
 - name: "PRELIM | Check for tftp service"
   shell: "set -o pipefail;
-      systemctl show tftp | grep LoadState | cut -d = -f 2"
+      systemctl show tftpd-hpa | grep LoadState | cut -d = -f 2"
   args:
       executable: /bin/bash
   register: tftp_service_status
