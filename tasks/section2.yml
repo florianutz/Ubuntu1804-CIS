@@ -586,7 +586,7 @@
 
 - name: "SCORED | 2.2.12 | PATCH | Ensure Samba is not enabled"
   service:
-      name: smb
+      name: smbd
       state: stopped
       enabled: false
   when:

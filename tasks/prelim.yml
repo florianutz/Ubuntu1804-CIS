@@ -214,7 +214,7 @@
 
 - name: "PRELIM | Check for smb service"
   shell: "set -o pipefail;
-      systemctl show smb | grep LoadState | cut -d = -f 2"
+      systemctl show smbd | grep LoadState | cut -d = -f 2"
   args:
       executable: /bin/bash
   register: smb_service_status
