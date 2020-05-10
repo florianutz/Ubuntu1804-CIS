@@ -196,7 +196,7 @@
 
 - name: "PRELIM | Check for httpd service"
   shell: "set -o pipefail;
-      systemctl show httpd | grep LoadState | cut -d = -f 2"
+      systemctl show apache2 | grep LoadState | cut -d = -f 2"
   args:
       executable: /bin/bash
   register: httpd_service_status
@@ -214,7 +214,7 @@
 
 - name: "PRELIM | Check for smb service"
   shell: "set -o pipefail;
-      systemctl show smb | grep LoadState | cut -d = -f 2"
+      systemctl show smbd | grep LoadState | cut -d = -f 2"
   args:
       executable: /bin/bash
   register: smb_service_status
@@ -241,7 +241,7 @@
 
 - name: "PRELIM | Check for ypserv service"
   shell: "set -o pipefail;
-      systemctl show ypserv | grep LoadState | cut -d = -f 2"
+      systemctl show nis | grep LoadState | cut -d = -f 2"
   args:
       executable: /bin/bash
   register: ypserv_service_status
@@ -277,7 +277,7 @@
 
 - name: "PRELIM | Check for telnet service"
   shell: "set -o pipefail;
-      systemctl show telnet | grep LoadState | cut -d = -f 2"
+      systemctl show telnetd | grep LoadState | cut -d = -f 2"
   args:
       executable: /bin/bash
   register: telnet_service_status
@@ -286,7 +286,7 @@
 
 - name: "PRELIM | Check for tftp service"
   shell: "set -o pipefail;
-      systemctl show tftp | grep LoadState | cut -d = -f 2"
+      systemctl show tftpd-hpa | grep LoadState | cut -d = -f 2"
   args:
       executable: /bin/bash
   register: tftp_service_status

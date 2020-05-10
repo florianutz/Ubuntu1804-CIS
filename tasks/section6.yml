@@ -251,55 +251,55 @@
       - rule_6.2.5
 
 - name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity"
-  command: /bin/true
-  changed_when: false
+  block:
+      - name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity (unimplemented)"
+        command: /bin/true
+        changed_when: false
+        tags:
+            - level1
+            - scored
+            - patch
+            - rule_6.2.6
+            - notimplemented
+
+      - name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity (collect paths)"
+        shell: |
+          set -o pipefail;
+          sudopath=($(grep secure_path /etc/sudoers | cut -f2 -d= |cut -f2 -d\"))
+          IFS=:
+          for i in ${sudopath[*]}
+          do
+            if [ -d "$i" ]
+              then newsudopath+=($i)
+            fi
+           done
+          echo "${newsudopath[*]}"
+        args:
+            executable: /bin/bash
+        register: fixsudo
+        changed_when: false
+        check_mode: false
+        tags:
+            - level1
+            - scored
+            - patch
+            - rule_6.2.6
+
+      - name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity (fix paths)"
+        lineinfile:
+            dest: /etc/sudoers
+            regexp: "(.*secure_path=).*"
+            line: '\1"{{ fixsudo.stdout_lines[0] }}"'
+            backrefs: true
+        when:
+            - fixsudo.stdout_lines[0]
+        tags:
+            - level1
+            - scored
+            - patch
+            - rule_6.2.6
   when:
       - ubuntu1804cis_rule_6_2_6
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_6.2.6
-      - notimplemented
-
-- name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity"
-  shell: |
-    set -o pipefail;
-    sudopath=($(grep secure_path /etc/sudoers | cut -f2 -d= |cut -f2 -d\"))
-    IFS=:
-    for i in ${sudopath[*]}
-    do
-      if [ -d "$i" ]
-        then newsudopath+=($i)
-      fi
-     done
-    echo "${newsudopath[*]}"
-  args:
-      executable: /bin/bash
-  register: fixsudo
-  changed_when: false
-  check_mode: false
-  when:
-      - ubuntu1804cis_rule_6_2_6
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_6.2.6
-
-- name: "SCORED | 6.2.6 | PATCH | Ensure root PATH Integrity"
-  lineinfile:
-      dest: /etc/sudoers
-      regexp: "(.*secure_path=).*"
-      line: '\1"{{ fixsudo.stdout_lines[0] }}"'
-      backrefs: true
-  when:
-      - fixsudo.stdout_lines[0]
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_6.2.6
 
 - name: "SCORED | 6.2.7 | PATCH | Ensure all users' home directories exist"
   command: /bin/true

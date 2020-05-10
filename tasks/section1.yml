@@ -1048,6 +1048,8 @@
 - name: "NOTSCORED | 1.9 | PATCH | Ensure updates, patches, and additional security software are installed"
   apt:
       upgrade: dist
+  when:
+      - ubuntu1804cis_apply_upgrades
   tags:
       - level1
       - notscored

@@ -234,7 +234,7 @@
 
 - name: "SCORED | 2.1.8 | PATCH | Ensure telnet server is not enabled"
   service:
-    name: telnet
+    name: telnetd
     state: stopped
     enabled: false
   when:
@@ -248,25 +248,14 @@
     - rule_2.1.8
 
 - name: "SCORED | 2.1.9 | PATCH | Ensure tftp server is not enabled"
-  block:
-      - name: "SCORED | 2.1.9 | PATCH | Ensure tftp server is not enabled"
-        stat:
-            path: /etc/xinetd.d/tftp
-        register: tftp_service
-
-      - name: "SCORED | 2.1.9 | PATCH | Ensure tftp server is not enabled"
-        service:
-            name: tftp
-            state: stopped
-            enabled: no
-        notify: restart xinetd
-        when:
-            - tftp_service.stat.exists
-            - not ubuntu1804cis_tftp_server
-        tags:
-            - skip_ansible_lint
+  service:
+    name: tftpd-hpa
+    state: stopped
+    enabled: no
   when:
+      - not ubuntu1804cis_tftp_server
       - ubuntu1804cis_rule_2_1_9
+      - tftp_service_status.stdout == "loaded"
   tags:
       - level1
       - scored
@@ -407,7 +396,7 @@
 - name: "SCORED | 2.2.2 | PATCH | Ensure X Window System is not installed"
   apt:
       name:
-        - "@X Window System"
+        - "xorg"
         - "x11*"
       state: absent
   when:
@@ -556,7 +545,7 @@
 
 - name: "SCORED | 2.2.10 | PATCH | Ensure HTTP server is not enabled"
   service:
-      name: httpd
+      name: apache2
       state: stopped
       enabled: false
   when:
@@ -586,7 +575,7 @@
 
 - name: "SCORED | 2.2.12 | PATCH | Ensure Samba is not enabled"
   service:
-      name: smb
+      name: smbd
       state: stopped
       enabled: false
   when:
@@ -661,7 +650,7 @@
 
 - name: "SCORED | 2.2.17 | PATCH | Ensure NIS Server is not enabled"
   service:
-      name: ypserv
+      name: nis
       state: stopped
       enabled: false
   when:
@@ -676,7 +665,7 @@
 
 - name: "SCORED | 2.3.1 | PATCH | Ensure NIS Client is not installed"
   apt:
-      name: ypbind
+      name: yp-tools
       state: absent
   when:
       - not ubuntu1804cis_ypbind_required
@@ -728,7 +717,7 @@
 
 - name: "SCORED | 2.3.5 | PATCH | Ensure LDAP client is not installed"
   apt:
-      name: openldap-clients
+      name: ldap-utils
       state: absent
   when:
       - not ubuntu1804cis_openldap_clients_required

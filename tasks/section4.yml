@@ -5,6 +5,7 @@
       regexp: "^max_log_file( |=)"
       line: "max_log_file = {{ ubuntu1804cis_auditd.max_audit_log_file_size }}"
       state: present
+      create: yes
   when:
       - ubuntu1804cis_rule_4_1_1_1
   notify:
@@ -22,6 +23,7 @@
       regexp: "^admin_space_left_action"
       line: "admin_space_left_action = {{ ubuntu1804cis_auditd['admin_space_left_action'] }}"
       state: present
+      create: yes
   when:
       - ubuntu1804cis_rule_4_1_1_2
   notify:
@@ -39,6 +41,7 @@
       regexp: "^space_left_action"
       line: "space_left_action = email"
       state: present
+      create: yes
   when:
       - ubuntu1804cis_rule_4_1_1_2
   notify:
@@ -56,6 +59,7 @@
       regexp: "^max_log_file_action"
       line: "max_log_file_action = {{ ubuntu1804cis_auditd['max_log_file_action'] }}"
       state: present
+      create: yes
   when:
       - ubuntu1804cis_rule_4_1_1_3
   notify:
