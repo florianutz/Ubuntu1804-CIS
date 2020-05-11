@@ -1,22 +1,5 @@
 ---
-- name: "SCORED | 3.1.1 | PATCH | Ensure IP forwarding is disabled"
-  sysctl:
-      name: net.ipv4.ip_forward
-      value: "0"
-      state: present
-      reload: true
-      ignoreerrors: true
-  when: not ubuntu1804cis_is_router
-  notify:
-      - sysctl flush ipv4 route table
-  tags:
-      - level1
-      - scored
-      - patch
-      - sysctl
-      - rule_3.1.1
-
-- name: "SCORED | 3.1.2 | PATCH | Ensure packet redirect sending is disabled"
+- name: "SCORED | 3.1.1 | PATCH | Ensure packet redirect sending is disabled"
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
@@ -27,6 +10,25 @@
   with_items:
       - { name: net.ipv4.conf.all.send_redirects, value: 0 }
       - { name: net.ipv4.conf.default.send_redirects, value: 0 }
+  when: not ubuntu1804cis_is_router
+  notify:
+      - sysctl flush ipv4 route table
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.1.1
+
+- name: "SCORED | 3.1.2 | PATCH | Ensure IP forwarding is disabled"
+  sysctl:
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      state: present
+      reload: true
+      ignoreerrors: true
+  with_items:
+      - { name: net.ipv4.ip_forward, value: 0 }
   when: not ubuntu1804cis_is_router
   notify:
       - sysctl flush ipv4 route table
@@ -50,6 +52,30 @@
       - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
   notify:
       - sysctl flush ipv4 route table
+  when: ubuntu1804cis_rule_3_2_1
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.2.1
+
+- name: "SCORED | 3.2.1 | PATCH | Ensure source routed packets are not accepted - IPV6"
+  sysctl:
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      sysctl_set: true
+      state: present
+      reload: true
+      ignoreerrors: true
+  with_items:
+      - { name: net.ipv6.conf.all.accept_source_route, value: 0 }
+      - { name: net.ipv6.conf.default.accept_source_route, value: 0 }
+  notify:
+      - sysctl flush ipv6 route table
+  when:
+    - ubuntu1804cis_ipv6_required
+    - ubuntu1804cis_rule_3_2_1
   tags:
       - level1
       - scored
@@ -184,12 +210,10 @@
       - patch
       - sysctl
       - rule_3.2.8
-
-- name: "SCORED | 3.3.1 | PATCH | Ensure IPv6 router advertisements are not accepted"
+- name: "SCORED | 3.2.9 | PATCH | Ensure IPv6 router advertisements are not accepted"
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
-      sysctl_set: true
       state: present
       reload: true
       ignoreerrors: true
@@ -204,9 +228,134 @@
       - scored
       - patch
       - sysctl
+      - rule_3.2.9
+
+- name: "SCORED | 3.3.1 | PATCH | Ensure TCP Wrappers is installed"
+  apt:
+      name: "{{ tcp_wrapper_package[ansible_os_family] }}"
+      state: present
+      install_recommends: false
+  when:
+      - ubuntu1804cis_rule_3_3_1
+  tags:
+      - level1
+      - scored
+      - patch
       - rule_3.3.1
 
-- name: "SCORED | 3.3.2 | PATCH | Ensure IPv6 redirects are not accepted"
+- name: "SCORED | 3.3.2 | PATCH | Ensure /etc/hosts.allow is configured"
+  template:
+      src: hosts.allow.j2
+      dest: /etc/hosts.allow
+      owner: root
+      group: root
+      mode: 0644
+  when:
+      - ubuntu1804cis_rule_3_3_2
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.3.2
+
+- name: "SCORED | 3.3.3 | PATCH | Ensure /etc/hosts.deny is configured"
+  lineinfile:
+      dest: /etc/hosts.deny
+      regexp: "^(#)?ALL"
+      line: "ALL: ALL"
+  when:
+      - ubuntu1804cis_rule_3_3_3
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.3.3
+
+- name: "SCORED | 3.3.4 | PATCH | Ensure permissions on /etc/hosts.allow are configured"
+  file:
+      dest: /etc/hosts.allow
+      owner: root
+      group: root
+      mode: 0644
+  when:
+      - ubuntu1804cis_rule_3_3_4
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.3.4
+
+- name: "SCORED | 3.3.5 | PATCH | Ensure permissions on /etc/hosts.deny are configured"
+  file:
+      dest: /etc/hosts.deny
+      owner: root
+      group: root
+      mode: 0644
+  when:
+      - ubuntu1804cis_rule_3_3_5
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.3.5
+
+- name: "NOTSCORED | 3.4.1 | PATCH | Ensure DCCP is disabled"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install dccp(\\s|$)"
+      line: "install dccp /bin/true"
+      create: true
+  when:
+      - ubuntu1804cis_rule_3_4_1
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.4.1
+
+- name: "NOTSCORED | 3.4.2 | PATCH | Ensure SCTP is disabled"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install sctp(\\s|$)"
+      line: "install sctp /bin/true"
+      create: true
+  when:
+      - ubuntu1804cis_rule_3_4_2
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.4.2
+
+- name: "NOTSCORED | 3.4.3 | PATCH | Ensure RDS is disabled"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install rds(\\s|$)"
+      line: "install rds /bin/true"
+      create: true
+  when:
+      - ubuntu1804cis_rule_3_4_3
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.4.3
+
+- name: "NOTSCORED | 3.4.4 | PATCH | Ensure TIPC is disabled"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install tipc(\\s|$)"
+      line: "install tipc /bin/true"
+      create: true
+  when:
+      - ubuntu1804cis_rule_3_4_4
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.4.4
+
+- name: "SCORED | 3.4.5 | PATCH | Ensure IPv6 redirects are not accepted"
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
@@ -225,9 +374,9 @@
       - scored
       - patch
       - sysctl
-      - rule_3.3.2
+      - rule_3.4.5
 
-- name: "NOTSCORED | 3.3.3 | PATCH | Ensure IPv6 is disabled"
+- name: "NOTSCORED | 3.4.6 | PATCH | Ensure IPv6 is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?options ipv6 disable="
@@ -238,114 +387,7 @@
       - level1
       - notscored
       - patch
-      - rule_3.3.3
-
-- name: "SCORED | 3.4.1 | PATCH | Ensure TCP Wrappers is installed"
-  apt:
-      name: "{{ tcp_wrapper_package[ansible_os_family] }}"
-      state: present
-      install_recommends: false
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.4.1
-
-- name: "SCORED | 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured"
-  template:
-      src: hosts.allow.j2
-      dest: /etc/hosts.allow
-      owner: root
-      group: root
-      mode: 0644
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.4.2
-
-- name: "SCORED | 3.4.3 | PATCH | Ensure /etc/hosts.deny is configured"
-  lineinfile:
-      dest: /etc/hosts.deny
-      regexp: "^(#)?ALL"
-      line: "ALL: ALL"
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.4.3
-
-- name: "SCORED | 3.4.4 | PATCH | Ensure permissions on /etc/hosts.allow are configured"
-  file:
-      dest: /etc/hosts.allow
-      owner: root
-      group: root
-      mode: 0644
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.4.4
-
-- name: "SCORED | 3.4.5 | PATCH | Ensure permissions on /etc/hosts.deny are configured"
-  file:
-      dest: /etc/hosts.deny
-      owner: root
-      group: root
-      mode: 0644
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.4.5
-
-- name: "NOTSCORED | 3.5.1 | PATCH | Ensure DCCP is disabled"
-  lineinfile:
-      dest: /etc/modprobe.d/CIS.conf
-      regexp: "^(#)?install dccp(\\s|$)"
-      line: "install dccp /bin/true"
-      create: true
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_3.5.1
-
-- name: "NOTSCORED | 3.5.2 | PATCH | Ensure SCTP is disabled"
-  lineinfile:
-      dest: /etc/modprobe.d/CIS.conf
-      regexp: "^(#)?install sctp(\\s|$)"
-      line: "install sctp /bin/true"
-      create: true
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_3.5.2
-
-- name: "NOTSCORED | 3.5.3 | PATCH | Ensure RDS is disabled"
-  lineinfile:
-      dest: /etc/modprobe.d/CIS.conf
-      regexp: "^(#)?install rds(\\s|$)"
-      line: "install rds /bin/true"
-      create: true
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_3.5.3
-
-- name: "NOTSCORED | 3.5.4 | PATCH | Ensure TIPC is disabled"
-  lineinfile:
-      dest: /etc/modprobe.d/CIS.conf
-      regexp: "^(#)?install tipc(\\s|$)"
-      line: "install tipc /bin/true"
-      create: true
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_3.5.4
+      - rule_3.4.6
 
 - name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
   apt:
@@ -455,7 +497,25 @@
       - scored
       - patch
       - rule_3.6.3
-      - notimplemented
+
+- name: "SCORED | 3.5.2.3 | PATCH | Ensure loopback traffic is configured"
+  replace:
+      dest: /etc/default/grub
+      regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!ipv6.disable=1)(?:")'
+      replace: '\1"\2 ipv6.disable=1"'
+      follow: true
+  ignore_errors: true
+  notify:
+      - generate new grub config
+  when:
+      - ubuntu1804cis_firewall == "iptables"
+      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_ipv6_required
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.2.3
 
 - name: "NOTSCORED | 3.6.4 | PATCH | Ensure outbound and established connections are configured"
   command: /bin/true
@@ -487,6 +547,7 @@
       - scored
       - patch
       - rule_3.6.5
+      - notimplemented
 
 - name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
   command: /bin/true
@@ -509,4 +570,3 @@
       - notscored
       - patch
       - rule_3.7
-      - notimplemented
