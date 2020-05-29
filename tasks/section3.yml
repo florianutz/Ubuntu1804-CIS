@@ -343,64 +343,61 @@
       - patch
       - rule_3.3.5
 
-- name: "SCORED | 3.4.1 | PATCH | Ensure TCP Wrappers is installed"
-  apt:
-      name: "{{ tcp_wrapper_package[ansible_os_family] }}"
-      state: present
-      install_recommends: false
+- name: "SCORED | 3.4.1 | PATCH | Ensure DCCP is disabled"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install dccp(\\s|$)"
+      line: "install dccp /bin/true"
+      create: true
+  when:
+      - ubuntu1804cis_rule_3_4_1
   tags:
-      - level1
+      - level2
       - scored
       - patch
       - rule_3.4.1
 
-- name: "SCORED | 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured"
-  template:
-      src: hosts.allow.j2
-      dest: /etc/hosts.allow
-      owner: root
-      group: root
-      mode: 0644
+- name: "SCORED | 3.4.2 | PATCH | Ensure SCTP is disabled"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install sctp(\\s|$)"
+      line: "install sctp /bin/true"
+      create: true
+  when:
+      - ubuntu1804cis_rule_3_4_2
   tags:
-      - level1
+      - level2
       - scored
       - patch
       - rule_3.4.2
 
-- name: "SCORED | 3.4.3 | PATCH | Ensure /etc/hosts.deny is configured"
+- name: "SCORED | 3.4.3 | PATCH | Ensure RDS is disabled"
   lineinfile:
-      dest: /etc/hosts.deny
-      regexp: "^(#)?ALL"
-      line: "ALL: ALL"
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install rds(\\s|$)"
+      line: "install rds /bin/true"
+      create: true
+  when:
+      - ubuntu1804cis_rule_3_4_3
   tags:
-      - level1
+      - level2
       - scored
       - patch
       - rule_3.4.3
 
-- name: "SCORED | 3.4.4 | PATCH | Ensure permissions on /etc/hosts.allow are configured"
-  file:
-      dest: /etc/hosts.allow
-      owner: root
-      group: root
-      mode: 0644
+- name: "SCORED | 3.4.4 | PATCH | Ensure TIPC is disabled"
+  lineinfile:
+      dest: /etc/modprobe.d/CIS.conf
+      regexp: "^(#)?install tipc(\\s|$)"
+      line: "install tipc /bin/true"
+      create: true
+  when:
+      - ubuntu1804cis_rule_3_4_4
   tags:
-      - level1
+      - level2
       - scored
       - patch
       - rule_3.4.4
-
-- name: "SCORED | 3.4.5 | PATCH | Ensure permissions on /etc/hosts.deny are configured"
-  file:
-      dest: /etc/hosts.deny
-      owner: root
-      group: root
-      mode: 0644
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.4.5
 
 - name: "NOTSCORED | 3.5.1 | PATCH | Ensure DCCP is disabled"
   lineinfile:
