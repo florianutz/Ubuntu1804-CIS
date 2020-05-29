@@ -56,18 +56,38 @@
       - rule_3.1.2
 
 - name: "SCORED | 3.2.1 | PATCH | Ensure source routed packets are not accepted"
-  sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
-      sysctl_set: true
-      state: present
-      reload: true
-      ignoreerrors: true
-  with_items:
-      - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
-      - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
-  notify:
-      - sysctl flush ipv4 route table
+  block:
+      - name: "SCORED | 3.2.1 | PATCH | Ensure source routed packets are not accepted | ipv4"
+        sysctl:
+            name: '{{ item.name }}'
+            value: '{{ item.value }}'
+            sysctl_set: true
+            state: present
+            reload: true
+            ignoreerrors: true
+        with_items:
+            - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
+            - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
+        notify:
+            - sysctl flush ipv4 route table
+
+      - name: "SCORED | 3.2.1 | PATCH | Ensure source routed packets are not accepted | ipv6"
+        sysctl:
+            name: '{{ item.name }}'
+            value: '{{ item.value }}'
+            sysctl_set: true
+            state: present
+            reload: true
+            ignoreerrors: true
+        with_items:
+            - { name: net.ipv6.conf.all.accept_source_route, value: 0 }
+            - { name: net.ipv6.conf.default.accept_source_route, value: 0 }
+        when:
+            - ubuntu1804cis_ipv6_required
+        notify:
+            - sysctl flush ipv6 route table
+  when:
+    - ubuntu1804cis_rule_3_2_1
   tags:
       - level1
       - scored
@@ -75,19 +95,39 @@
       - sysctl
       - rule_3.2.1
 
-- name: "SCORED | 3.2.2 | PATCH | Ensure ICMP redirects are not accepted"
-  sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
-      sysctl_set: true
-      state: present
-      reload: true
-      ignoreerrors: true
-  with_items:
-      - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
-      - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
-  notify:
-      - sysctl flush ipv4 route table
+- name: "SCORED | 3.2.2 | PATCH | Ensure ICMP redirects are not accepted | ipv4,ipv6"
+  block:
+      - name: "SCORED | 3.2.2 | PATCH | Ensure ICMP redirects are not accepted | ipv4"
+        sysctl:
+            name: '{{ item.name }}'
+            value: '{{ item.value }}'
+            sysctl_set: true
+            state: present
+            reload: true
+            ignoreerrors: true
+        with_items:
+            - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
+            - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
+        notify:
+            - sysctl flush ipv4 route table
+
+      - name: "SCORED | 3.2.2 | PATCH | Ensure ICMP redirects are not accepted | ipv6"
+        sysctl:
+            name: '{{ item.name }}'
+            value: '{{ item.value }}'
+            sysctl_set: true
+            state: present
+            reload: true
+            ignoreerrors: true
+        with_items:
+            - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
+            - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
+        when:
+            - ubuntu1804cis_ipv6_required
+        notify:
+            - sysctl flush ipv6 route table
+  when:
+    - ubuntu1804cis_rule_3_2_2
   tags:
       - level1
       - scored
@@ -106,6 +146,8 @@
   with_items:
       - { name: net.ipv4.conf.all.secure_redirects, value: 0 }
       - { name: net.ipv4.conf.default.secure_redirects, value: 0 }
+  when:
+    - ubuntu1804cis_rule_3_2_3
   notify:
       - sysctl flush ipv4 route table
   tags:
@@ -126,6 +168,8 @@
   with_items:
       - { name: net.ipv4.conf.all.log_martians, value: 1 }
       - { name: net.ipv4.conf.default.log_martians, value: 1 }
+  when:
+    - ubuntu1804cis_rule_3_2_4
   notify:
       - sysctl flush ipv4 route table
   tags:
@@ -142,6 +186,8 @@
       state: present
       reload: true
       ignoreerrors: true
+  when:
+    - ubuntu1804cis_rule_3_2_5
   notify:
       - sysctl flush ipv4 route table
   tags:
@@ -158,6 +204,8 @@
       state: present
       reload: true
       ignoreerrors: true
+  when:
+    - ubuntu1804cis_rule_3_2_6
   notify:
       - sysctl flush ipv4 route table
   tags:
@@ -178,6 +226,8 @@
   with_items:
       - { name: net.ipv4.conf.all.rp_filter, value: 1 }
       - { name: net.ipv4.conf.default.rp_filter, value: 1 }
+  when:
+    - ubuntu1804cis_rule_3_2_7
   notify:
       - sysctl flush ipv4 route table
   tags:
@@ -194,6 +244,8 @@
       state: present
       reload: true
       ignoreerrors: true
+  when:
+    - ubuntu1804cis_rule_3_2_8
   notify:
       - sysctl flush ipv4 route table
   tags:
@@ -202,6 +254,28 @@
       - patch
       - sysctl
       - rule_3.2.8
+
+- name: "SCORED | 3.2.9 | PATCH | Ensure IPv6 router advertisements are not accepted"
+  sysctl:
+      name: '{{ item.name }}'
+      value: '{{ item.value }}'
+      state: present
+      reload: true
+      ignoreerrors: true
+  with_items:
+    - { name: net.ipv6.conf.all.accept_ra, value: 0 }
+    - { name: net.ipv6.conf.default.accept_ra, value: 0 }
+  when:
+    - ubuntu1804cis_ipv6_required
+    - ubuntu1804cis_rule_3_2_9
+  notify:
+      - sysctl flush ipv6 route table
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.2.9
 
 - name: "SCORED | 3.3.1 | PATCH | Ensure IPv6 router advertisements are not accepted"
   sysctl:
