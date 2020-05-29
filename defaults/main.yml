@@ -131,6 +131,8 @@ ubuntu1804cis_rule_3_2_9: true
 ubuntu1804cis_rule_3_3_1: true
 ubuntu1804cis_rule_3_3_2: true
 ubuntu1804cis_rule_3_3_3: true
+ubuntu1804cis_rule_3_3_4: true
+ubuntu1804cis_rule_3_3_5: true
 ubuntu1804cis_rule_3_4_1: true
 ubuntu1804cis_rule_3_4_2: true
 ubuntu1804cis_rule_3_4_3: true

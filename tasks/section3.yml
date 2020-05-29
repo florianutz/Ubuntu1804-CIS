@@ -277,60 +277,71 @@
       - sysctl
       - rule_3.2.9
 
-- name: "SCORED | 3.3.1 | PATCH | Ensure IPv6 router advertisements are not accepted"
-  sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
-      sysctl_set: true
+- name: "NOTSCORED | 3.3.1 | PATCH | Ensure TCP Wrappers is installed"
+  apt:
+      name: "{{ tcp_wrapper_package[ansible_os_family] }}"
       state: present
-      reload: true
-      ignoreerrors: true
-  with_items:
-      - { name: net.ipv6.conf.all.accept_ra, value: 0 }
-      - { name: net.ipv6.conf.default.accept_ra, value: 0 }
-  when: ubuntu1804cis_ipv6_required
-  notify:
-      - sysctl flush ipv6 route table
+      install_recommends: false
+  when:
+      - ubuntu1804cis_rule_3_3_1
   tags:
       - level1
-      - scored
+      - notscored
       - patch
-      - sysctl
       - rule_3.3.1
 
-- name: "SCORED | 3.3.2 | PATCH | Ensure IPv6 redirects are not accepted"
-  sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
-      sysctl_set: true
-      state: present
-      reload: true
-      ignoreerrors: true
-  with_items:
-      - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
-      - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
-  when: ubuntu1804cis_ipv6_required
-  notify:
-      - sysctl flush ipv6 route table
+- name: "NOTSCORED | 3.3.2 | PATCH | Ensure /etc/hosts.allow is configured"
+  template:
+      src: hosts.allow.j2
+      dest: /etc/hosts.allow
+  when:
+      - ubuntu1804cis_rule_3_3_1
   tags:
       - level1
-      - scored
+      - notscored
       - patch
-      - sysctl
       - rule_3.3.2
 
-- name: "NOTSCORED | 3.3.3 | PATCH | Ensure IPv6 is disabled"
+- name: "NOTSCORED | 3.3.3 | PATCH | Ensure /etc/hosts.deny is configured"
   lineinfile:
-      dest: /etc/modprobe.d/CIS.conf
-      regexp: "^(#)?options ipv6 disable="
-      line: "options ipv6 disable=1"
-      create: true
-  when: not ubuntu1804cis_ipv6_required
+      dest: /etc/hosts.deny
+      regexp: "^(#)?ALL"
+      line: "ALL: ALL"
+  when:
+      - ubuntu1804cis_rule_3_3_3
   tags:
       - level1
       - notscored
       - patch
       - rule_3.3.3
+
+- name: "SCORED | 3.3.4 | PATCH | Ensure permissions on /etc/hosts.allow are configured"
+  file:
+      dest: /etc/hosts.allow
+      owner: root
+      group: root
+      mode: 0644
+  when:
+      - ubuntu1804cis_rule_3_3_4
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.3.4
+
+- name: "SCORED | 3.3.5 | PATCH | Ensure permissions on /etc/hosts.deny are configured"
+  file:
+      dest: /etc/hosts.deny
+      owner: root
+      group: root
+      mode: 0644
+  when:
+      - ubuntu1804cis_rule_3_3_5
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.3.5
 
 - name: "SCORED | 3.4.1 | PATCH | Ensure TCP Wrappers is installed"
   apt:
