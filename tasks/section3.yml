@@ -1,22 +1,5 @@
 ---
-- name: "SCORED | 3.1.1 | PATCH | Ensure IP forwarding is disabled"
-  sysctl:
-      name: net.ipv4.ip_forward
-      value: "0"
-      state: present
-      reload: true
-      ignoreerrors: true
-  when: not ubuntu1804cis_is_router
-  notify:
-      - sysctl flush ipv4 route table
-  tags:
-      - level1
-      - scored
-      - patch
-      - sysctl
-      - rule_3.1.1
-
-- name: "SCORED | 3.1.2 | PATCH | Ensure packet redirect sending is disabled"
+- name: "SCORED | 3.1.1 | PATCH | Ensure packet redirect sending is disabled"
   sysctl:
       name: '{{ item.name }}'
       value: '{{ item.value }}'
@@ -27,9 +10,44 @@
   with_items:
       - { name: net.ipv4.conf.all.send_redirects, value: 0 }
       - { name: net.ipv4.conf.default.send_redirects, value: 0 }
-  when: not ubuntu1804cis_is_router
+  when:
+    - not ubuntu1804cis_is_router
+    - ubuntu1804cis_rule_3_1_1
   notify:
       - sysctl flush ipv4 route table
+  tags:
+      - level1
+      - scored
+      - patch
+      - sysctl
+      - rule_3.1.1
+
+- name: "SCORED | 3.1.2 | PATCH | Ensure IP forwarding is disabled"
+  block:
+      - name: "SCORED | 3.1.2 | PATCH | Ensure IP forwarding is disabled | ipv4"
+        sysctl:
+            name: net.ipv4.ip_forward
+            value: "0"
+            state: present
+            reload: true
+            ignoreerrors: true
+        notify:
+            - sysctl flush ipv4 route table
+
+    - name: "SCORED | 3.1.2 | PATCH | Ensure IP forwarding is disabled | ipv6"
+      sysctl:
+          name: net.ipv6.conf.all.forwarding
+          value: "0"
+          state: present
+          reload: true
+          ignoreerrors: true
+      when: ubuntu1804cis_ipv6_required
+      notify:
+          - sysctl flush ipv6 route table
+  when:
+    - not ubuntu1804cis_is_router
+    - ubuntu1804cis_rule_3_1_2
+
   tags:
       - level1
       - scored
