@@ -159,11 +159,13 @@ ubuntu1804cis_rule_3_5_4_2_1: true
 ubuntu1804cis_rule_3_5_4_2_2: true
 ubuntu1804cis_rule_3_5_4_2_3: true
 ubuntu1804cis_rule_3_5_4_2_4: true
-ubuntu1804cis_rule_3_6_1: true
-ubuntu1804cis_rule_3_6_2: true
-ubuntu1804cis_rule_3_6_3: true
-ubuntu1804cis_rule_3_6_4: true
-ubuntu1804cis_rule_3_6_5: true
+ubuntu1804cis_rule_3_5_4_3_1: true
+ubuntu1804cis_rule_3_5_4_3_2: true
+ubuntu1804cis_rule_3_5_4_3_3: true
+ubuntu1804cis_rule_3_5_4_3_4: true
+ubuntu1804cis_rule_3_5_4_3_5: true
+ubuntu1804cis_rule_3_6: true
+ubuntu1804cis_rule_3_7: true
 
 # Section 4 rules
 ubuntu1804cis_rule_4_1_1_1: true

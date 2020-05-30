@@ -946,130 +946,67 @@
       - patch
       - rule_3.5.4.2.4
 
-- name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+- name: "SCORED | 3.5.4.3.1 | PATCH | Ensure firewalld is installed and started | CUSTOM"
   apt:
       name: firewalld
       state: present
       install_recommends: false
   when:
+      - ubuntu1804cis_rule_3_5_4_3_1
       - ubuntu1804cis_firewall == "firewalld"
       - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
       - patch
-      - rule_3.6
+      - rule_3.5.4.3.1
 
-- name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+- name: "SCORED | 3.5.4.3.2 | PATCH | Ensure firewalld is installed and started | CUSTOM"
   service:
       name: firewalld
       state: started
       enabled: true
   when:
+      - ubuntu1804cis_rule_3_5_4_3_2
       - ubuntu1804cis_firewall == "firewalld"
       - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
       - patch
-      - rule_3.6
+      - rule_3.5.4.3.2
 
-- name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed"
-  apt:
-      name: iptables
-      state: present
-      install_recommends: false
-  when:
-      - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.6.1
-
-- name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed and started"
-  service:
-      name: iptables
-      state: started
-      enabled: true
-  when:
-      - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.6.1
-
-- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
+- name: "SCORED | 3.5.4.3.3 | PATCH | Ensure default deny firewall policy | CUSTOM"
   lineinfile:
       dest: /etc/firewalld/firewalld.conf
       regexp: "^DefaultZone"
       line: "DefaultZone=drop"
   when:
+      - ubuntu1804cis_rule_3_5_4_3_3
       - ubuntu1804cis_firewall == "firewalld"
       - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
       - patch
-      - rule_3.6.2
+      - rule_3.5.4.3.3
 
-- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
+- name: "SCORED | 3.5.4.3.4 | PATCH | Ensure default deny firewall policy | CUSTOM"
   firewalld:
       state: enabled
       zone: drop
       permanent: true
   when:
+      - ubuntu1804cis_rule_3_5_4_3_4
       - ubuntu1804cis_firewall == "firewalld"
       - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
       - patch
-      - rule_3.6.2
+      - rule_3.5.4.3.4
 
-- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
-  command: /bin/true
-  changed_when: false
-  when:
-      - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.6.2
-      - notimplemented
-
-- name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
-  command: /bin/true
-  changed_when: false
-  when:
-      - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.6.3
-      - notimplemented
-
-- name: "NOTSCORED | 3.6.4 | PATCH | Ensure outbound and established connections are configured"
-  command: /bin/true
-  changed_when: false
-  when:
-      - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_3.6.4
-      - notimplemented
-
-- name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
+- name: "SCORED | 3.5.4.3.5 | PATCH | Ensure firewall rules exist for all open ports | CUSTOM"
   firewalld:
       service: "{{ item }}"
       state: enabled
@@ -1077,6 +1014,7 @@
       permanent: true
       immediate: true
   when:
+      - ubuntu1804cis_rule_3_5_4_3_5
       - ubuntu1804cis_firewall == "firewalld"
       - ubuntu1804cis_setup_firewall
   notify: restart firewalld
@@ -1085,27 +1023,19 @@
       - level1
       - scored
       - patch
-      - rule_3.6.5
+      - rule_3.5.4.3.5
 
-- name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
-  command: /bin/true
-  changed_when: false
+- name: "NOTSCORED | 3.7 | Disable IPv6"
+  lineinfile:
+      dest: /etc/default/grub
+      regexp: "^GRUB_CMDLINE_LINUX"
+      line: 'GRUB_CMDLINE_LINUX="ipv6.disable=1"'
+      state: present
+      create: yes
   when:
-      - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_rule_3_7
   tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.6.5
-      - notimplemented
-
-- name: "NOTSCORED | 3.7 | PATCH | Ensure wireless interfaces are disabled"
-  command: /bin/true
-  changed_when: false
-  tags:
-      - level1
+      - level2
       - notscored
       - patch
       - rule_3.7
-      - notimplemented
