@@ -34,20 +34,19 @@
         notify:
             - sysctl flush ipv4 route table
 
-    - name: "SCORED | 3.1.2 | PATCH | Ensure IP forwarding is disabled | ipv6"
-      sysctl:
-          name: net.ipv6.conf.all.forwarding
-          value: "0"
-          state: present
-          reload: true
-          ignoreerrors: true
-      when: ubuntu1804cis_ipv6_required
-      notify:
-          - sysctl flush ipv6 route table
+      - name: "SCORED | 3.1.2 | PATCH | Ensure IP forwarding is disabled | ipv6"
+        sysctl:
+            name: net.ipv6.conf.all.forwarding
+            value: "0"
+            state: present
+            reload: true
+            ignoreerrors: true
+        when: ubuntu1804cis_ipv6_required
+        notify:
+            - sysctl flush ipv6 route table
   when:
     - not ubuntu1804cis_is_router
     - ubuntu1804cis_rule_3_1_2
-
   tags:
       - level1
       - scored
@@ -460,7 +459,7 @@
   ufw:
       rule: "{{ item.rule }}"
       direction: "{{ item.direction }}"
-  with_item:
+  with_items:
       - { rule: deny, direction: incoming }
       - { rule: deny, direction: outgoing }
       - { rule: deny, direction: routed }
