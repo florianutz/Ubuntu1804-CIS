@@ -538,7 +538,6 @@
       - ubuntu1804cis_rule_3_5_2_5
       - ubuntu1804cis_firewall == "ufw"
       - ubuntu1804cis_setup_firewall
-  with_items: "{{ ubuntu1804cis_firewall_services }}"
   tags:
       - level1
       - notscored
@@ -557,6 +556,7 @@
             ip_version: ipv6
         when: ubuntu1804cis_ipv6_required
   when:
+      - ubuntu1804cis_rule_3_5_3_1
       - ubuntu1804cis_firewall == "nftables"
       - ubuntu1804cis_setup_firewall
   tags:
