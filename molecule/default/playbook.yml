@@ -14,13 +14,16 @@
       file:
         name: /boot/grub
         state: directory
+      changed_when: false
     - name: pretask3
       file:
         name: /boot/grub/grub.cfg
         state: touch
+      changed_when: false
     - name: pretask4
       file:
         name: /etc/default/grub
         state: touch
+      changed_when: false
   roles:
     - role: Ubuntu1804-CIS
