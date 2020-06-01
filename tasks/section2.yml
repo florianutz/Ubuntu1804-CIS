@@ -544,6 +544,8 @@
   tags:
       - level1
       - scored
+      - dns
+      - services
       - patch
       - rule_2.2.8
 
@@ -559,6 +561,8 @@
   tags:
       - level1
       - scored
+      - ftp
+      - services
       - patch
       - rule_2.2.9
 
@@ -574,6 +578,8 @@
   tags:
       - level1
       - scored
+      - http
+      - services
       - patch
       - rule_2.2.10
 
@@ -589,6 +595,9 @@
   tags:
       - level1
       - scored
+      - imap
+      - pop3
+      - services
       - patch
       - rule_2.2.11
 
@@ -604,6 +613,8 @@
   tags:
       - level1
       - scored
+      - samba
+      - services
       - patch
       - rule_2.2.12
 
@@ -619,6 +630,8 @@
   tags:
       - level1
       - scored
+      - http_proxy
+      - services
       - patch
       - rule_2.2.13
 
@@ -634,6 +647,8 @@
   tags:
       - level1
       - scored
+      - snmp
+      - services
       - patch
       - rule_2.2.14
 
@@ -664,6 +679,8 @@
   tags:
     - level1
     - scored
+    - rsync
+    - services
     - patch
     - rule_2.2.16
 
@@ -679,6 +696,8 @@
   tags:
       - level1
       - scored
+      - nis
+      - services
       - patch
       - rule_2.2.17
 
