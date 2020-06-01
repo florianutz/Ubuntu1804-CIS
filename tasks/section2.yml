@@ -290,21 +290,21 @@
     - scored
     - rule_2.1.11
 
-- name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use"
+- name: "SCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use"
   block:
-      - name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service install"
+      - name: "SCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service install"
         apt:
             name: "{{ ubuntu1804cis_time_synchronization }}"
             state: present
             install_recommends: false
 
-      - name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service start"
+      - name: "SCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service start"
         service:
             name: "{{ ubuntu1804cis_time_synchronization }}"
             state: started
             enabled: true
 
-      - name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop ntp"
+      - name: "SCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop ntp"
         service:
             name: "{{ ntp_service[ansible_os_family] }}"
             state: stopped
@@ -313,7 +313,7 @@
             - ubuntu1804cis_time_synchronization == "chrony"
             - ntpd_service_status.stdout == "loaded"
 
-      - name: "NOTSCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop chrony"
+      - name: "SCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - service stop chrony"
         service:
             name: chronyd
             state: stopped
@@ -322,19 +322,74 @@
         when:
             - ubuntu1804cis_time_synchronization == "ntp"
             - chronyd_service_status.stdout == "loaded"
-
   when:
       - ubuntu1804cis_rule_2_2_1_1
   tags:
       - level1
-      - notscored
+      - scored
       - ntp
+      - chrony
       - patch
       - rule_2.2.1.1
 
-- name: "SCORED | 2.2.1.2 | PATCH | Ensure ntp is configured"
+- name: "NOTSCORED | 2.2.1.2 | PATCH | Ensure systemd-timesyncd is configured"
   block:
-      - name: "SCORED | 2.2.1.2 | PATCH | Ensure ntp is configured | modify /etc/ntp.conf"
+      - name: "NOTSCORED | 2.2.1.2 | PATCH | Ensure systemd-timesyncd is configured | configure service"
+        lineinfile:
+            dest: /etc/audit/auditd.conf
+            regexp: "{{ item.regexp }}"
+            line: "{{ item.line }}"
+            backrefs: yes
+            state: present
+            create: yes
+        with_items:
+            - { regexp: "^#NTP=", line: "NTP=0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org 2.ubuntu.pool.ntp.org" }
+            - { regexp: "^#FallbackNTP=", line: "FallbackNTP=ntp.ubuntu.com 3.ubuntu.pool.ntp.org" }
+            - { regexp: "^#RootDistanceMaxSec=", line: "RootDistanceMaxSec=1" }
+
+      - name: "NOTSCORED | 2.2.1.2 | PATCH | Ensure systemd-timesyncd is configured | start and enable service"
+        systemd:
+            name: systemd-timesyncd
+            state: started
+            enabled: yes
+  when:
+      - ubuntu1804cis_rule_2_2_1_2
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_2.2.1.2
+
+- name: "SCORED | 2.2.1.3 | PATCH | Ensure chrony is configured"
+  block:
+      - name: "SCORED | 2.2.1.3 | PATCH | Ensure chrony is configured | create chrony.conf"
+        template:
+            src: chrony.conf.j2
+            dest: "{{ chrony_config_file[ansible_os_family] }}"
+            owner: root
+            group: root
+            mode: 0644
+
+      - name: "SCORED | 2.2.1.3 | PATCH | Ensure chrony is configured | modify /etc/sysconfig/chronyd"
+        lineinfile:
+            dest: /etc/sysconfig/chronyd
+            regexp: "^(#)?OPTIONS"
+            line: "OPTIONS=\"-u chrony\""
+            state: present
+            create: true
+  when:
+      - ubuntu1804cis_time_synchronization == "chrony"
+      - ubuntu1804cis_rule_2_2_1_3
+  tags:
+      - level1
+      - scored
+      - chrony
+      - patch
+      - rule_2.2.1.3
+
+- name: "SCORED | 2.2.1.4 | PATCH | Ensure ntp is configured"
+  block:
+      - name: "SCORED | 2.2.1.4 | PATCH | Ensure ntp is configured | modify /etc/ntp.conf"
         template:
             src: ntp.conf.j2
             dest: /etc/ntp.conf
@@ -342,56 +397,20 @@
             group: root
             mode: 0644
 
-      - name: "SCORED | 2.2.1.2 | PATCH | Ensure ntp is configured | modify /etc/init.d/ntp"
+      - name: "SCORED | 2.2.1.4 | PATCH | Ensure ntp is configured | modify /etc/init.d/ntp"
         lineinfile:
             dest: /etc/init.d/ntp
             regexp: "^RUNASUSER"
             line: "RUNASUSER=ntp"
   when:
       - ubuntu1804cis_time_synchronization == "ntp"
-      - ubuntu1804cis_rule_2_2_1_2
+      - ubuntu1804cis_rule_2_2_1_4
   tags:
       - level1
       - scored
       - ntp
       - patch
-      - rule_2.2.1.2
-
-- name: "SCORED | 2.2.1.3 | PATCH | Ensure chrony is configured"
-  template:
-      src: chrony.conf.j2
-      dest: "{{ chrony_config_file[ansible_os_family] }}"
-      owner: root
-      group: root
-      mode: 0644
-  when:
-      - ubuntu1804cis_time_synchronization == "chrony"
-      - ubuntu1804cis_rule_2_2_1_3
-  tags:
-      - level1
-      - scored
-      - ntp
-      - chrony
-      - patch
-      - rule_2.2.1.3
-
-- name: "SCORED | 2.2.1.3 | PATCH | Ensure chrony is configured | modify /etc/sysconfig/chronyd | 1"
-  lineinfile:
-      dest: /etc/sysconfig/chronyd
-      regexp: "^(#)?OPTIONS"
-      line: "OPTIONS=\"-u chrony\""
-      state: present
-      create: true
-  when:
-      - ubuntu1804cis_time_synchronization == "chrony"
-      - ubuntu1804cis_rule_2_2_1_3
-  tags:
-      - level1
-      - scored
-      - ntp
-      - chrony
-      - patch
-      - rule_2.2.1.3
+      - rule_2.2.1.4
 
 - name: "SCORED | 2.2.2 | PATCH | Ensure X Window System is not installed"
   apt:
