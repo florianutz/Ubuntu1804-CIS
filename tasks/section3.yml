@@ -1025,14 +1025,16 @@
       - rule_3.5.4.3.5
 
 - name: "NOTSCORED | 3.7 | Disable IPv6"
-  lineinfile:
+  replace:
       dest: /etc/default/grub
-      regexp: "^GRUB_CMDLINE_LINUX"
-      line: 'GRUB_CMDLINE_LINUX="ipv6.disable=1"'
-      state: present
-      create: yes
+      regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!ipv6.disable=1)(?:")'
+      replace: '\1"\2 ipv6.disable=1"'
+      follow: true
+  ignore_errors: true
   when:
       - ubuntu1804cis_rule_3_7
+  notify:
+      - generate new grub config
   tags:
       - level2
       - notscored
