@@ -348,7 +348,7 @@
             - { regexp: "^#RootDistanceMaxSec=", line: "RootDistanceMaxSec=1" }
 
       - name: "NOTSCORED | 2.2.1.2 | PATCH | Ensure systemd-timesyncd is configured | start and enable service"
-        systemd:
+        service:
             name: systemd-timesyncd
             state: started
             enabled: yes
