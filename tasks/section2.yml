@@ -347,16 +347,12 @@
             - { regexp: "^#FallbackNTP=", line: "FallbackNTP=ntp.ubuntu.com 3.ubuntu.pool.ntp.org" }
             - { regexp: "^#RootDistanceMaxSec=", line: "RootDistanceMaxSec=1" }
 
-      - name: "NOTSCORED | 2.2.1.2 | PATCH | Ensure systemd-timesyncd is configured | unmask service"
-        systemd:
-            name: systemd-timesyncd
-            masked: no
-
       - name: "NOTSCORED | 2.2.1.2 | PATCH | Ensure systemd-timesyncd is configured | start and enable service"
-        service:
+        systemd:
             name: systemd-timesyncd
             state: started
             enabled: yes
+            masked: no
   when:
       - ubuntu1804cis_rule_2_2_1_2
   tags:
