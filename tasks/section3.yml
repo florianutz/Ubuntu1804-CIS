@@ -282,6 +282,7 @@
       state: present
       install_recommends: false
   when:
+      - ubuntu1804cis_setup_tcp_wrappers
       - ubuntu1804cis_rule_3_3_1
   tags:
       - level1
@@ -294,7 +295,8 @@
       src: hosts.allow.j2
       dest: /etc/hosts.allow
   when:
-      - ubuntu1804cis_rule_3_3_1
+      - ubuntu1804cis_setup_tcp_wrappers
+      - ubuntu1804cis_rule_3_3_2
   tags:
       - level1
       - notscored
@@ -307,6 +309,7 @@
       regexp: "^(#)?ALL"
       line: "ALL: ALL"
   when:
+      - ubuntu1804cis_setup_tcp_wrappers
       - ubuntu1804cis_rule_3_3_3
   tags:
       - level1
@@ -315,12 +318,14 @@
       - rule_3.3.3
 
 - name: "SCORED | 3.3.4 | PATCH | Ensure permissions on /etc/hosts.allow are configured"
-  file:
+  template:
+      src: hosts.allow.j2
       dest: /etc/hosts.allow
       owner: root
       group: root
       mode: 0644
   when:
+      - ubuntu1804cis_setup_tcp_wrappers
       - ubuntu1804cis_rule_3_3_4
   tags:
       - level1
@@ -335,6 +340,7 @@
       group: root
       mode: 0644
   when:
+      - ubuntu1804cis_setup_tcp_wrappers
       - ubuntu1804cis_rule_3_3_5
   tags:
       - level1
