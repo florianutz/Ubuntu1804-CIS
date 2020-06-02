@@ -284,6 +284,7 @@ ubuntu1804cis_rule_6_2_16: true
 ubuntu1804cis_rule_6_2_17: true
 ubuntu1804cis_rule_6_2_18: true
 ubuntu1804cis_rule_6_2_19: true
+ubuntu1804cis_rule_6_2_20: true
 
 # Service configuration booleans set true to keep service
 ubuntu1804cis_avahi_server: false

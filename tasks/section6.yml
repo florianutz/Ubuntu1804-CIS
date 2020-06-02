@@ -450,3 +450,15 @@
       - patch
       - rule_6.2.19
       - notimplemented
+
+- name: "SCORED | 6.2.20 | PATCH | Ensure shadow group is empty"
+  command: /bin/true
+  changed_when: false
+  when:
+      - ubuntu1804cis_rule_6_2_20
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.2.20
+      - notimplemented
