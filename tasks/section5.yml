@@ -169,12 +169,22 @@
       - sshd
       - rule_5.2.1
 
-- name: "SCORED | 5.2.2 | PATCH | Ensure SSH Protocol is set to 2"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^Protocol'
-      line: 'Protocol 2'
+- name: "SCORED | 5.2.2 | PATCH | 5.2.2 Ensure permissions on SSH private host key files are configured"
+  block:
+      - name: "SCORED | 5.2.2 | PATCH | 5.2.2 Ensure permissions on SSH private host key files are configured | find keys"
+        find:
+            paths: /etc/ssh
+            patterns: "ssh_host_*_key"
+        register: ssh_private_host_keys
+
+      - name: "SCORED | 5.2.2 | PATCH | 5.2.2 Ensure permissions on SSH private host key files are configured | change permissions"
+        file:
+            dest: "{{ item.path }}"
+            state: file
+            owner: root
+            group: root
+            mode: 0600
+        with_items: "{{ ssh_private_host_keys.files }}"
   when:
       - ubuntu1804cis_rule_5_2_2
   tags:
@@ -184,12 +194,22 @@
       - sshd
       - rule_5.2.2
 
-- name: "SCORED | 5.2.3 | PATCH | Ensure SSH LogLevel is set to INFO"
-  lineinfile:
-      state: present
-      dest: /etc/ssh/sshd_config
-      regexp: '^LogLevel'
-      line: 'LogLevel INFO'
+- name: "SCORED | 5.2.3 | PATCH | 5.2.3 Ensure permissions on SSH public host key files are configured"
+  block:
+      - name: "SCORED | 5.2.3 | PATCH | 5.2.3 Ensure permissions on SSH public host key files are configured | find keys"
+        find:
+            paths: /etc/ssh
+            patterns: "ssh_host_*_key.pub"
+        register: ssh_public_host_keys
+
+      - name: "SCORED | 5.2.3 | PATCH | 5.2.3 Ensure permissions on SSH public host key files are configured | change permissions"
+        file:
+            dest: "{{ item.path }}"
+            state: file
+            owner: root
+            group: root
+            mode: 0644
+        with_items: "{{ ssh_public_host_keys.files }}"
   when:
       - ubuntu1804cis_rule_5_2_3
   tags:
@@ -199,12 +219,12 @@
       - sshd
       - rule_5.2.3
 
-- name: "SCORED | 5.2.4 | PATCH | Ensure SSH X11 forwarding is disabled"
+- name: "SCORED | 5.2.4 | PATCH | Ensure SSH Protocol is not set to 1"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^X11Forwarding'
-      line: 'X11Forwarding no'
+      regexp: '^Protocol'
+      line: 'Protocol 2'
   when:
       - ubuntu1804cis_rule_5_2_4
   tags:
@@ -214,12 +234,12 @@
       - sshd
       - rule_5.2.4
 
-- name: "SCORED | 5.2.5 | PATCH | Ensure SSH MaxAuthTries is set to 4 or less"
+- name: "SCORED | 5.2.5 | PATCH | Ensure SSH LogLevel is set to INFO"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^(#)?MaxAuthTries \d'
-      line: 'MaxAuthTries 4'
+      regexp: '^LogLevel'
+      line: 'LogLevel INFO'
   when:
       - ubuntu1804cis_rule_5_2_5
   tags:
@@ -229,12 +249,12 @@
       - sshd
       - rule_5.2.5
 
-- name: "SCORED | 5.2.6 | PATCH | Ensure SSH IgnoreRhosts is enabled"
+- name: "SCORED | 5.2.6 | PATCH | Ensure SSH X11 forwarding is disabled"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^IgnoreRhosts'
-      line: 'IgnoreRhosts yes'
+      regexp: '^X11Forwarding'
+      line: 'X11Forwarding no'
   when:
       - ubuntu1804cis_rule_5_2_6
   tags:
@@ -244,12 +264,12 @@
       - sshd
       - rule_5.2.6
 
-- name: "SCORED | 5.2.7 | PATCH | Ensure SSH HostbasedAuthentication is disabled"
+- name: "SCORED | 5.2.7 | PATCH | Ensure SSH MaxAuthTries is set to 4 or less"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^HostbasedAuthentication'
-      line: 'HostbasedAuthentication no'
+      regexp: '^(#)?MaxAuthTries \d'
+      line: 'MaxAuthTries 4'
   when:
       - ubuntu1804cis_rule_5_2_7
   tags:
@@ -259,12 +279,12 @@
       - sshd
       - rule_5.2.7
 
-- name: "SCORED | 5.2.8 | PATCH | Ensure SSH root login is disabled"
+- name: "SCORED | 5.2.8 | PATCH | Ensure SSH IgnoreRhosts is enabled"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^PermitRootLogin'
-      line: 'PermitRootLogin no'
+      regexp: '^IgnoreRhosts'
+      line: 'IgnoreRhosts yes'
   when:
       - ubuntu1804cis_rule_5_2_8
   tags:
@@ -274,12 +294,12 @@
       - sshd
       - rule_5.2.8
 
-- name: "SCORED | 5.2.9 | PATCH | Ensure SSH PermitEmptyPasswords is disabled"
+- name: "SCORED | 5.2.9 | PATCH | Ensure SSH HostbasedAuthentication is disabled"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^PermitEmptyPasswords'
-      line: 'PermitEmptyPasswords no'
+      regexp: '^HostbasedAuthentication'
+      line: 'HostbasedAuthentication no'
   when:
       - ubuntu1804cis_rule_5_2_9
   tags:
@@ -289,12 +309,12 @@
       - sshd
       - rule_5.2.9
 
-- name: "SCORED | 5.2.10 | PATCH | Ensure SSH PermitUserEnvironment is disabled"
+- name: "SCORED | 5.2.10 | PATCH | Ensure SSH root login is disabled"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^PermitUserEnvironment'
-      line: 'PermitUserEnvironment no'
+      regexp: '^PermitRootLogin'
+      line: 'PermitRootLogin no'
   when:
       - ubuntu1804cis_rule_5_2_10
   tags:
@@ -304,12 +324,12 @@
       - sshd
       - rule_5.2.10
 
-- name: "SCORED | 5.2.11 | PATCH | Ensure only approved MAC algorithms are used"
+- name: "SCORED | 5.2.11 | PATCH | Ensure SSH PermitEmptyPasswords is disabled"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^MACs'
-      line: 'MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com'
+      regexp: '^PermitEmptyPasswords'
+      line: 'PermitEmptyPasswords no'
   when:
       - ubuntu1804cis_rule_5_2_11
   tags:
@@ -319,21 +339,12 @@
       - sshd
       - rule_5.2.11
 
-- name: "SCORED | 5.2.12 | PATCH | Ensure SSH Idle Timeout Interval is configured"
-  block:
-      - name: "SCORED | 5.2.12 | PATCH | Ensure SSH Idle Timeout Interval is configured"
-        lineinfile:
-            state: present
-            dest: /etc/ssh/sshd_config
-            regexp: '^ClientAliveInterval'
-            line: "ClientAliveInterval {{ ubuntu1804cis_sshd['clientaliveinterval'] }}"
-
-      - name: "SCORED | 5.2.12 | PATCH | Ensure SSH ClientAliveCountMax set to <= 3"
-        lineinfile:
-            state: present
-            dest: /etc/ssh/sshd_config
-            regexp: '^ClientAliveCountMax'
-            line: "ClientAliveCountMax {{ ubuntu1804cis_sshd['clientalivecountmax'] }}"
+- name: "SCORED | 5.2.12 | PATCH | Ensure SSH PermitUserEnvironment is disabled"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^PermitUserEnvironment'
+      line: 'PermitUserEnvironment no'
   when:
       - ubuntu1804cis_rule_5_2_12
   tags:
@@ -343,12 +354,12 @@
       - sshd
       - rule_5.2.12
 
-- name: "SCORED | 5.2.13 | PATCH | Ensure SSH LoginGraceTime is set to one minute or less"
+- name: "SCORED | 5.2.13 | PATCH | Ensure only strong Ciphers are used"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^LoginGraceTime'
-      line: "LoginGraceTime 60"
+      regexp: '^Ciphers'
+      line: "Ciphers {{ ubuntu1804cis_sshd['ciphers'] }}"
   when:
       - ubuntu1804cis_rule_5_2_13
   tags:
@@ -358,51 +369,12 @@
       - sshd
       - rule_5.2.13
 
-- name: "SCORED | 5.2.14 | PATCH | Ensure SSH access is limited"
-  block:
-      - name: "SCORED | 5.2.14 | PATCH | Ensure SSH access is limited - allowusers"
-        lineinfile:
-            state: present
-            dest: /etc/ssh/sshd_config
-            regexp: '^AllowUsers'
-            line: "AllowUsers {{ ubuntu1804cis_sshd['allowusers'] }}"
-        notify:
-            - restart sshd
-        when:
-            - "ubuntu1804cis_sshd['allowusers']|default('')"
-
-      - name: "SCORED | 5.2.14 | PATCH | Ensure SSH access is limited - allowgroups"
-        lineinfile:
-            state: present
-            dest: /etc/ssh/sshd_config
-            regexp: '^AllowGroups'
-            line: "AllowGroups {{ ubuntu1804cis_sshd['allowgroups'] }}"
-        notify:
-            - restart sshd
-        when:
-            - "ubuntu1804cis_sshd['allowgroups']|default('')"
-
-      - name: "SCORED | 5.2.14 | PATCH | Ensure SSH access is limited - denyusers"
-        lineinfile:
-            state: present
-            dest: /etc/ssh/sshd_config
-            regexp: '^DenyUsers'
-            line: "DenyUsers {{ ubuntu1804cis_sshd['denyusers'] }}"
-        notify:
-            - restart sshd
-        when:
-            - "ubuntu1804cis_sshd['denyusers']|default('')"
-
-      - name: "SCORED | 5.2.14 | PATCH | Ensure SSH access is limited - denygroups"
-        lineinfile:
-            state: present
-            dest: /etc/ssh/sshd_config
-            regexp: '^DenyGroups'
-            line: "DenyGroups {{ ubuntu1804cis_sshd['denygroups'] }}"
-        notify:
-            - restart sshd
-        when:
-            - "ubuntu1804cis_sshd['denygroups']|default('')"
+- name: "SCORED | 5.2.14 | PATCH | Ensure only approved MAC algorithms are used"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^MACs'
+      line: "MACs {{ ubuntu1804cis_sshd['macs'] }}"
   when:
       - ubuntu1804cis_rule_5_2_14
   tags:
@@ -412,12 +384,12 @@
       - sshd
       - rule_5.2.14
 
-- name: "SCORED | 5.2.15 | PATCH | Ensure SSH warning banner is configured"
+- name: "SCORED | 5.2.15 | PATCH | Ensure only strong Key Exchange algorithms are used"
   lineinfile:
       state: present
       dest: /etc/ssh/sshd_config
-      regexp: '^Banner'
-      line: 'Banner /etc/issue.net'
+      regexp: '^KexAlgorithms'
+      line: "KexAlgorithms {{ ubuntu1804cis_sshd['kexalgorithms'] }}"
   when:
       - ubuntu1804cis_rule_5_2_15
   tags:
@@ -426,6 +398,168 @@
       - patch
       - sshd
       - rule_5.2.15
+
+- name: "SCORED | 5.2.16 | PATCH | Ensure SSH Idle Timeout Interval is configured"
+  block:
+      - name: "SCORED | 5.2.16 | PATCH | Ensure SSH Idle Timeout Interval is configured"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: '^ClientAliveInterval'
+            line: "ClientAliveInterval {{ ubuntu1804cis_sshd['clientaliveinterval'] }}"
+
+      - name: "SCORED | 5.2.16 | PATCH | Ensure SSH ClientAliveCountMax set to <= 3"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: '^ClientAliveCountMax'
+            line: "ClientAliveCountMax {{ ubuntu1804cis_sshd['clientalivecountmax'] }}"
+  when:
+      - ubuntu1804cis_rule_5_2_16
+  tags:
+      - level1
+      - scored
+      - patch
+      - sshd
+      - rule_5.2.16
+
+- name: "SCORED | 5.2.17 | PATCH | Ensure SSH LoginGraceTime is set to one minute or less"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^LoginGraceTime'
+      line: "LoginGraceTime 60"
+  when:
+      - ubuntu1804cis_rule_5_2_17
+  tags:
+      - level1
+      - scored
+      - patch
+      - sshd
+      - rule_5.2.17
+
+- name: "SCORED | 5.2.18 | PATCH | Ensure SSH access is limited"
+  block:
+      - name: "SCORED | 5.2.18 | PATCH | Ensure SSH access is limited | allowusers"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: '^AllowUsers'
+            line: "AllowUsers {{ ubuntu1804cis_sshd['allowusers'] }}"
+        when:
+            - "ubuntu1804cis_sshd['allowusers']|default('')"
+
+      - name: "SCORED | 5.2.18 | PATCH | Ensure SSH access is limited | allowgroups"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: '^AllowGroups'
+            line: "AllowGroups {{ ubuntu1804cis_sshd['allowgroups'] }}"
+        when:
+            - "ubuntu1804cis_sshd['allowgroups']|default('')"
+
+      - name: "SCORED | 5.2.18 | PATCH | Ensure SSH access is limited | denyusers"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: '^DenyUsers'
+            line: "DenyUsers {{ ubuntu1804cis_sshd['denyusers'] }}"
+        when:
+            - "ubuntu1804cis_sshd['denyusers']|default('')"
+
+      - name: "SCORED | 5.2.18 | PATCH | Ensure SSH access is limited | denygroups"
+        lineinfile:
+            state: present
+            dest: /etc/ssh/sshd_config
+            regexp: '^DenyGroups'
+            line: "DenyGroups {{ ubuntu1804cis_sshd['denygroups'] }}"
+        when:
+            - "ubuntu1804cis_sshd['denygroups']|default('')"
+  when:
+      - ubuntu1804cis_rule_5_2_18
+  tags:
+      - level1
+      - scored
+      - patch
+      - sshd
+      - rule_5.2.18
+
+- name: "SCORED | 5.2.19 | PATCH | Ensure SSH warning banner is configured"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^Banner'
+      line: 'Banner /etc/issue.net'
+  when:
+      - ubuntu1804cis_rule_5_2_19
+  tags:
+      - level1
+      - scored
+      - patch
+      - sshd
+      - rule_5.2.19
+
+- name: "SCORED | 5.2.20 | PATCH | Ensure SSH PAM is enabled"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^UsePAM'
+      line: 'UsePAM yes'
+  when:
+      - ubuntu1804cis_rule_5_2_20
+  tags:
+      - level1
+      - scored
+      - patch
+      - sshd
+      - rule_5.2.20
+
+- name: "SCORED | 5.2.21 | PATCH | Ensure SSH AllowTcpForwarding is disabled"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^AllowTcpForwarding'
+      line: 'AllowTcpForwarding no'
+  when:
+      - ubuntu1804cis_rule_5_2_21
+  tags:
+      - level2
+      - scored
+      - patch
+      - sshd
+      - rule_5.2.21
+
+- name: "SCORED | 5.2.22 | PATCH | Ensure SSH MaxStartups is configured"
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^MaxStartups'
+      line: 'MaxStartups 10:30:60'
+  when:
+      - ubuntu1804cis_rule_5_2_22
+  tags:
+      - level1
+      - scored
+      - patch
+      - sshd
+      - rule_5.2.22
+
+- name: "SCORED | 5.2.23 | PATCH | Ensure SSH MaxSessions is set to 4 or less "
+  lineinfile:
+      state: present
+      dest: /etc/ssh/sshd_config
+      regexp: '^MaxSessions'
+      line: 'MaxSessions 4'
+  notify:
+      - restart sshd
+  when:
+      - ubuntu1804cis_rule_5_2_23
+  tags:
+      - level1
+      - scored
+      - patch
+      - sshd
+      - rule_5.2.23
 
 - name: "SCORED | 5.3.1 | PATCH | Ensure password creation requirements are configured"
   block:

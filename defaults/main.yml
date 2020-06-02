@@ -228,6 +228,13 @@ ubuntu1804cis_rule_5_2_13: true
 ubuntu1804cis_rule_5_2_14: true
 ubuntu1804cis_rule_5_2_15: true
 ubuntu1804cis_rule_5_2_16: true
+ubuntu1804cis_rule_5_2_17: true
+ubuntu1804cis_rule_5_2_18: true
+ubuntu1804cis_rule_5_2_19: true
+ubuntu1804cis_rule_5_2_20: true
+ubuntu1804cis_rule_5_2_21: true
+ubuntu1804cis_rule_5_2_22: true
+ubuntu1804cis_rule_5_2_23: true
 ubuntu1804cis_rule_5_3_1: true
 ubuntu1804cis_rule_5_3_2: true
 ubuntu1804cis_rule_5_3_3: true
@@ -405,8 +412,9 @@ ubuntu1804cis_logrotate: "daily"
 ubuntu1804cis_sshd:
   clientalivecountmax: 3
   clientaliveinterval: 300
-  ciphers: "aes256-ctr,aes192-ctr,aes128-ctr"
+  ciphers: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
   macs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com"
+  kexalgorithms: "curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256"
   logingracetime: 60
   ### Make sure you understand the precedence when working with these values!!
   # allowusers:
