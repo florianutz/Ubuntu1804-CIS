@@ -436,10 +436,12 @@ ubuntu1804cis_pwquality:
 
 ubuntu1804cis_pass:
   max_days: 365
-  min_days: 7
+  min_days: 1
   warn_age: 7
   inactive: 30
   history: 5
+
+ubuntu1804cis_password_change_date_in_future_action: expire # lock
 
 ubuntu1804cis_shell_timeout: 900
 # Syslog system

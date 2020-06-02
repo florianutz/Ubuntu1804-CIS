@@ -636,7 +636,7 @@
       - patch
       - rule_5.4.1.1
 
-- name: "SCORED | 5.4.1.2 | PATCH | Ensure minimum days between password changes is 7 or more"
+- name: "SCORED | 5.4.1.2 | PATCH | Ensure minimum days between password changes is configured"
   lineinfile:
       state: present
       dest: /etc/login.defs
@@ -678,6 +678,32 @@
       - patch
       - rule_5.4.1.4
       - notimplemented
+
+- name: "SCORED | 5.4.1.5 | PATCH | Ensure all users last password change date is in the past"
+  block:
+      - name: "SCORED | 5.4.1.5 | PATCH | Ensure all users last password change date is in the past| lock users"
+        user:
+            name: "{{ item }}"
+            password_lock: yes"
+        loop: "{{ users_password_change_date_in_future.stdout_lines }}"
+        when:
+            - ubuntu1804cis_password_change_date_in_future_action == 'lock'
+
+      - name: "SCORED | 5.4.1.5 | PATCH | Ensure all users last password change date is in the past| expire users"
+        user:
+            name: "{{ item }}"
+            expires: 1422403387
+        loop: "{{ users_password_change_date_in_future.stdout_lines }}"
+        when:
+            - ubuntu1804cis_password_change_date_in_future_action == 'expire'
+  when:
+      - ubuntu1804cis_rule_5_4_1_5
+      - users_password_change_date_in_future.stdout_lines | length > 0
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_5.4.1.5
 
 - name: "SCORED | 5.4.2 | PATCH | Ensure system accounts are non-login"
   command: >

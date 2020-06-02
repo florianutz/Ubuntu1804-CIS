@@ -348,3 +348,18 @@
   register: system_accounts_non_login_2
   changed_when: false
   check_mode: false
+
+- name: "PRELIM | Check that users last password change date are in the future"
+  shell: |
+      set -o pipefail;
+      awk -F: '{print $1}' /etc/shadow | while read -r usr
+      do
+        if [[ $(date --date="$(chage --list "$usr" | grep '^Last password change' | cut -d: -f2)" +%s) > $(date +%s) ]];then
+          echo "$usr"
+        fi
+      done
+  args:
+      executable: /bin/bash
+  register: users_password_change_date_in_future
+  changed_when: False
+  check_mode: false
