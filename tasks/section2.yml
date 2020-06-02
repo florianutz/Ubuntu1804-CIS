@@ -333,26 +333,8 @@
       - rule_2.2.1.1
 
 - name: "NOTSCORED | 2.2.1.2 | PATCH | Ensure systemd-timesyncd is configured"
-  block:
-      - name: "NOTSCORED | 2.2.1.2 | PATCH | Ensure systemd-timesyncd is configured | configure service"
-        lineinfile:
-            dest: /etc/audit/auditd.conf
-            regexp: "{{ item.regexp }}"
-            line: "{{ item.line }}"
-            backrefs: yes
-            state: present
-            create: yes
-        with_items:
-            - { regexp: "^#NTP=", line: "NTP=0.ubuntu.pool.ntp.org 1.ubuntu.pool.ntp.org 2.ubuntu.pool.ntp.org" }
-            - { regexp: "^#FallbackNTP=", line: "FallbackNTP=ntp.ubuntu.com 3.ubuntu.pool.ntp.org" }
-            - { regexp: "^#RootDistanceMaxSec=", line: "RootDistanceMaxSec=1" }
-
-      - name: "NOTSCORED | 2.2.1.2 | PATCH | Ensure systemd-timesyncd is configured | start and enable service"
-        systemd:
-            name: systemd-timesyncd
-            state: started
-            enabled: yes
-            masked: no
+  command: /bin/true
+  changed_when: false
   when:
       - ubuntu1804cis_rule_2_2_1_2
   tags:
@@ -360,6 +342,7 @@
       - notscored
       - patch
       - rule_2.2.1.2
+      - notimplemented
 
 - name: "SCORED | 2.2.1.3 | PATCH | Ensure chrony is configured"
   block:
