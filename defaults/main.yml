@@ -388,7 +388,7 @@ ubuntu1804cis_host_allow:
 ubuntu1804cis_firewall: firewalld
 # ubuntu1804cis_firewall: iptables
 # ubuntu1804cis_firewall: ufw
-# ubuntu1804cis_firewall: iptables
+# ubuntu1804cis_firewall: nftables
 
 # 3.5.3.2 | PATCH | Ensure a table exists"
 ubuntu1804cis_nftables_table: filter
