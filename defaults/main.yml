@@ -11,6 +11,7 @@ ubuntu1804cis_section5: true
 ubuntu1804cis_section6: true
 
 ubuntu1804cis_selinux_disable: false
+ubuntu1804cis_auditd_disable: false
 
 # Ignore remount errors if you're building an image or are going to reboot anyway
 ubuntu1804cis_ignore_remount_errors: false
@@ -31,7 +32,7 @@ ubuntu1804cis_rule_1_1_1_8: false
 ubuntu1804cis_rule_1_1_2: true
 ubuntu1804cis_rule_1_1_3: true
 ubuntu1804cis_rule_1_1_4: true
-ubuntu1804cis_rule_1_1_5: true
+ubuntu1804cis_rule_1_1_5: false
 ubuntu1804cis_rule_1_1_6: true
 ubuntu1804cis_rule_1_1_7: true
 ubuntu1804cis_rule_1_1_8: true
@@ -172,6 +173,10 @@ ubuntu1804cis_rule_3_7: true
 ubuntu1804cis_rule_4_1_1_1: true
 ubuntu1804cis_rule_4_1_1_2: true
 ubuntu1804cis_rule_4_1_1_3: true
+ubuntu1804cis_rule_4_1_1_4: true
+ubuntu1804cis_rule_4_1_2_1: true
+ubuntu1804cis_rule_4_1_2_2: true
+ubuntu1804cis_rule_4_1_2_3: true
 ubuntu1804cis_rule_4_1_2: true
 ubuntu1804cis_rule_4_1_3: true
 ubuntu1804cis_rule_4_1_4: true
