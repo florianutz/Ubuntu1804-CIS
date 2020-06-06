@@ -344,7 +344,7 @@ ubuntu1804cis_config_aide: true
 ubuntu1804cis_aide_cron:
   cron_user: root
   cron_file: /etc/crontab
-  aide_job: '/usr/bin/aide.wrapper --check'
+  aide_job: '/usr/bin/aide.wrapper --config /etc/aide/aide.conf --check'
   aide_minute: 0
   aide_hour: 5
   aide_day: '*'
