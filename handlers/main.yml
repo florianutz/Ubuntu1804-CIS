@@ -60,6 +60,12 @@
       name: firewalld
       state: restarted
 
+- name: reload nftables
+  become: true
+  service:
+      name: nftables
+      state: reloaded
+
 - name: restart xinetd
   become: true
   service:

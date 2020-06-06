@@ -226,7 +226,7 @@
       - filesystems
       - rule_1.1.1.7
 
-- name: "SCORED | 1.1.1.8 | PATCH | Ensure mounting of FAT filesystems is limited"
+- name: "NOTSCORED | 1.1.1.8 | PATCH | Ensure mounting of FAT filesystems is limited"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install vfat(\\s|$)"
@@ -243,7 +243,7 @@
       - filesystems
       - rule_1.1.1.8
 
-- name: "SCORED | 1.1.1.8 | PATCH | Remove FAT module"
+- name: "NOTSCORED | 1.1.1.8 | PATCH | Remove FAT module"
   modprobe:
       name: vfat
       state: absent
@@ -785,7 +785,7 @@
       - patch
       - rule_1.5.2
 
-- name: "NOTSCORED | 1.5.3 | PATCH | Ensure authentication required for single user mode"
+- name: "SCORED | 1.5.3 | PATCH | Ensure authentication required for single user mode"
   shell: "set -o pipefail;
           if [ '{{ ubuntu1804cis_root_password }}' == 'random' ];
           then PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c24); else PASSWORD='{{ ubuntu1804cis_root_password }}';
@@ -798,7 +798,7 @@
       - current_root_password.stdout | length > 0
   tags:
       - level1
-      - notscored
+      - scored
       - patch
       - rule_1.5.3
       - notimplemented
@@ -815,7 +815,7 @@
       - rule_1.5.4
       - notimplemented
 
-- name: "NOTSCORED | 1.6.1 | PATCH | Ensure XD/NX support is enabled"
+- name: "SCORED | 1.6.1 | PATCH | Ensure XD/NX support is enabled"
   shell: |
       set -o pipefail;
       dmesg | grep -E "NX|XD" | grep " active"
@@ -827,7 +827,7 @@
       - not ubuntu1804cis_skip_for_travis
   tags:
       - level1
-      - notscored
+      - scored
       - patch
       - rule_1.6.1
 
@@ -952,7 +952,7 @@
       - banner
       - rule_1.8.1.1
 
-- name: "NOTSCORED | 1.8.1.2 | PATCH | Ensure local login warning banner is configured properly"
+- name: "SCORED | 1.8.1.2 | PATCH | Ensure local login warning banner is configured properly"
   template:
       src: etc/issue.j2
       dest: /etc/issue
@@ -960,12 +960,12 @@
       - ubuntu1804cis_rule_1_8_1_2
   tags:
       - level1
-      - notscored
+      - scored
       - patch
       - banner
       - rule_1.8.1.2
 
-- name: "NOTSCORED | 1.8.1.3 | PATCH | Ensure remote login warning banner is configured properly"
+- name: "SCORED | 1.8.1.3 | PATCH | Ensure remote login warning banner is configured properly"
   template:
       src: etc/issue.net.j2
       dest: /etc/issue.net
@@ -978,7 +978,7 @@
       - banner
       - rule_1.8.1.3
 
-- name: "NOTSCORED | 1.8.1.4 | PATCH | Ensure permissions on /etc/motd are configured"
+- name: "SCORED | 1.8.1.4 | PATCH | Ensure permissions on /etc/motd are configured"
   file:
       dest: /etc/motd
       state: file
@@ -989,7 +989,7 @@
       - ubuntu1804cis_rule_1_8_1_4
   tags:
       - level1
-      - notscored
+      - scored
       - patch
       - perms
       - rule_1.8.1.4
@@ -1010,7 +1010,7 @@
       - perms
       - rule_1.8.1.5
 
-- name: "NOTSCORED | 1.8.1.6 | PATCH | Ensure permissions on /etc/issue.net are configured"
+- name: "SCORED | 1.8.1.6 | PATCH | Ensure permissions on /etc/issue.net are configured"
   file:
       dest: /etc/issue.net
       state: file
@@ -1021,7 +1021,7 @@
       - ubuntu1804cis_rule_1_8_1_6
   tags:
       - level1
-      - notscored
+      - scored
       - patch
       - perms
       - rule_1.8.1.6

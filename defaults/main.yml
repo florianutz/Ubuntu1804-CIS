@@ -95,6 +95,7 @@ ubuntu1804cis_rule_2_1_11: true
 ubuntu1804cis_rule_2_2_1_1: true
 ubuntu1804cis_rule_2_2_1_2: true
 ubuntu1804cis_rule_2_2_1_3: true
+ubuntu1804cis_rule_2_2_1_4: true
 ubuntu1804cis_rule_2_2_2: true
 ubuntu1804cis_rule_2_2_3: true
 ubuntu1804cis_rule_2_2_4: true
@@ -128,6 +129,7 @@ ubuntu1804cis_rule_3_2_5: true
 ubuntu1804cis_rule_3_2_6: true
 ubuntu1804cis_rule_3_2_7: true
 ubuntu1804cis_rule_3_2_8: true
+ubuntu1804cis_rule_3_2_9: true
 ubuntu1804cis_rule_3_3_1: true
 ubuntu1804cis_rule_3_3_2: true
 ubuntu1804cis_rule_3_3_3: true
@@ -137,16 +139,35 @@ ubuntu1804cis_rule_3_4_1: true
 ubuntu1804cis_rule_3_4_2: true
 ubuntu1804cis_rule_3_4_3: true
 ubuntu1804cis_rule_3_4_4: true
-ubuntu1804cis_rule_3_4_5: true
-ubuntu1804cis_rule_3_5_1: true
-ubuntu1804cis_rule_3_5_2: true
-ubuntu1804cis_rule_3_5_3: true
-ubuntu1804cis_rule_3_5_4: true
-ubuntu1804cis_rule_3_6_1: true
-ubuntu1804cis_rule_3_6_2: true
-ubuntu1804cis_rule_3_6_3: true
-ubuntu1804cis_rule_3_6_4: true
-ubuntu1804cis_rule_3_6_5: true
+ubuntu1804cis_rule_3_5_1_1: true
+ubuntu1804cis_rule_3_5_2_1: true
+ubuntu1804cis_rule_3_5_2_2: true
+ubuntu1804cis_rule_3_5_2_3: true
+ubuntu1804cis_rule_3_5_2_4: true
+ubuntu1804cis_rule_3_5_2_5: true
+ubuntu1804cis_rule_3_5_3_1: true
+ubuntu1804cis_rule_3_5_3_2: true
+ubuntu1804cis_rule_3_5_3_3: true
+ubuntu1804cis_rule_3_5_3_4: true
+ubuntu1804cis_rule_3_5_3_5: true
+ubuntu1804cis_rule_3_5_3_6: true
+ubuntu1804cis_rule_3_5_3_7: true
+ubuntu1804cis_rule_3_5_3_8: true
+ubuntu1804cis_rule_3_5_4_1_1: true
+ubuntu1804cis_rule_3_5_4_1_2: true
+ubuntu1804cis_rule_3_5_4_1_3: true
+ubuntu1804cis_rule_3_5_4_1_4: true
+ubuntu1804cis_rule_3_5_4_2_1: true
+ubuntu1804cis_rule_3_5_4_2_2: true
+ubuntu1804cis_rule_3_5_4_2_3: true
+ubuntu1804cis_rule_3_5_4_2_4: true
+ubuntu1804cis_rule_3_5_4_3_1: true
+ubuntu1804cis_rule_3_5_4_3_2: true
+ubuntu1804cis_rule_3_5_4_3_3: true
+ubuntu1804cis_rule_3_5_4_3_4: true
+ubuntu1804cis_rule_3_5_4_3_5: true
+ubuntu1804cis_rule_3_6: true
+ubuntu1804cis_rule_3_7: true
 
 # Section 4 rules
 ubuntu1804cis_rule_4_1_1_1: true
@@ -212,6 +233,13 @@ ubuntu1804cis_rule_5_2_13: true
 ubuntu1804cis_rule_5_2_14: true
 ubuntu1804cis_rule_5_2_15: true
 ubuntu1804cis_rule_5_2_16: true
+ubuntu1804cis_rule_5_2_17: true
+ubuntu1804cis_rule_5_2_18: true
+ubuntu1804cis_rule_5_2_19: true
+ubuntu1804cis_rule_5_2_20: true
+ubuntu1804cis_rule_5_2_21: true
+ubuntu1804cis_rule_5_2_22: true
+ubuntu1804cis_rule_5_2_23: true
 ubuntu1804cis_rule_5_3_1: true
 ubuntu1804cis_rule_5_3_2: true
 ubuntu1804cis_rule_5_3_3: true
@@ -220,6 +248,7 @@ ubuntu1804cis_rule_5_4_1_1: true
 ubuntu1804cis_rule_5_4_1_2: true
 ubuntu1804cis_rule_5_4_1_3: true
 ubuntu1804cis_rule_5_4_1_4: true
+ubuntu1804cis_rule_5_4_1_5: true
 ubuntu1804cis_rule_5_4_2: true
 ubuntu1804cis_rule_5_4_3: true
 ubuntu1804cis_rule_5_4_4: true
@@ -260,6 +289,7 @@ ubuntu1804cis_rule_6_2_16: true
 ubuntu1804cis_rule_6_2_17: true
 ubuntu1804cis_rule_6_2_18: true
 ubuntu1804cis_rule_6_2_19: true
+ubuntu1804cis_rule_6_2_20: true
 
 # Service configuration booleans set true to keep service
 ubuntu1804cis_avahi_server: false
@@ -350,7 +380,10 @@ ubuntu1804cis_time_synchronization_servers:
   - uri: "3.pool.ntp.org"
     config: "minpoll 8"
 
-# 3.4.2 | PATCH | Ensure /etc/hosts.allow is configured
+# 3.3 TCP Wrappers
+ubuntu1804cis_setup_tcp_wrappers: false
+
+# 3.3.4 | PATCH | Ensure /etc/hosts.allow is configured
 ubuntu1804cis_host_allow:
   - "10.0.0.0/255.0.0.0"
   - "172.16.0.0/255.240.0.0"
@@ -359,6 +392,11 @@ ubuntu1804cis_host_allow:
 
 ubuntu1804cis_firewall: firewalld
 # ubuntu1804cis_firewall: iptables
+# ubuntu1804cis_firewall: ufw
+# ubuntu1804cis_firewall: nftables
+
+# 3.5.3.2 | PATCH | Ensure a table exists"
+ubuntu1804cis_nftables_table: filter
 
 ubuntu1804cis_firewall_services:
   - ssh
@@ -381,8 +419,9 @@ ubuntu1804cis_logrotate: "daily"
 ubuntu1804cis_sshd:
   clientalivecountmax: 3
   clientaliveinterval: 300
-  ciphers: "aes256-ctr,aes192-ctr,aes128-ctr"
+  ciphers: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
   macs: "hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com"
+  kexalgorithms: "curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256"
   logingracetime: 60
   ### Make sure you understand the precedence when working with these values!!
   # allowusers:
@@ -404,10 +443,12 @@ ubuntu1804cis_pwquality:
 
 ubuntu1804cis_pass:
   max_days: 365
-  min_days: 7
+  min_days: 1
   warn_age: 7
   inactive: 30
   history: 5
+
+ubuntu1804cis_password_change_date_in_future_action: expire # lock
 
 ubuntu1804cis_shell_timeout: 900
 # Syslog system

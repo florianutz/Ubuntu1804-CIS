@@ -10,7 +10,9 @@
   with_items:
       - { name: net.ipv4.conf.all.send_redirects, value: 0 }
       - { name: net.ipv4.conf.default.send_redirects, value: 0 }
-  when: not ubuntu1804cis_is_router
+  when:
+    - not ubuntu1804cis_is_router
+    - ubuntu1804cis_rule_3_1_1
   notify:
       - sysctl flush ipv4 route table
   tags:
@@ -21,17 +23,30 @@
       - rule_3.1.1
 
 - name: "SCORED | 3.1.2 | PATCH | Ensure IP forwarding is disabled"
-  sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
-      state: present
-      reload: true
-      ignoreerrors: true
-  with_items:
-      - { name: net.ipv4.ip_forward, value: 0 }
-  when: not ubuntu1804cis_is_router
-  notify:
-      - sysctl flush ipv4 route table
+  block:
+      - name: "SCORED | 3.1.2 | PATCH | Ensure IP forwarding is disabled | ipv4"
+        sysctl:
+            name: net.ipv4.ip_forward
+            value: "0"
+            state: present
+            reload: true
+            ignoreerrors: true
+        notify:
+            - sysctl flush ipv4 route table
+
+      - name: "SCORED | 3.1.2 | PATCH | Ensure IP forwarding is disabled | ipv6"
+        sysctl:
+            name: net.ipv6.conf.all.forwarding
+            value: "0"
+            state: present
+            reload: true
+            ignoreerrors: true
+        when: ubuntu1804cis_ipv6_required
+        notify:
+            - sysctl flush ipv6 route table
+  when:
+    - not ubuntu1804cis_is_router
+    - ubuntu1804cis_rule_3_1_2
   tags:
       - level1
       - scored
@@ -40,41 +55,37 @@
       - rule_3.1.2
 
 - name: "SCORED | 3.2.1 | PATCH | Ensure source routed packets are not accepted"
-  sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
-      sysctl_set: true
-      state: present
-      reload: true
-      ignoreerrors: true
-  with_items:
-      - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
-      - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
-  notify:
-      - sysctl flush ipv4 route table
-  when: ubuntu1804cis_rule_3_2_1
-  tags:
-      - level1
-      - scored
-      - patch
-      - sysctl
-      - rule_3.2.1
+  block:
+      - name: "SCORED | 3.2.1 | PATCH | Ensure source routed packets are not accepted | ipv4"
+        sysctl:
+            name: '{{ item.name }}'
+            value: '{{ item.value }}'
+            sysctl_set: true
+            state: present
+            reload: true
+            ignoreerrors: true
+        with_items:
+            - { name: net.ipv4.conf.all.accept_source_route, value: 0 }
+            - { name: net.ipv4.conf.default.accept_source_route, value: 0 }
+        notify:
+            - sysctl flush ipv4 route table
 
-- name: "SCORED | 3.2.1 | PATCH | Ensure source routed packets are not accepted - IPV6"
-  sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
-      sysctl_set: true
-      state: present
-      reload: true
-      ignoreerrors: true
-  with_items:
-      - { name: net.ipv6.conf.all.accept_source_route, value: 0 }
-      - { name: net.ipv6.conf.default.accept_source_route, value: 0 }
-  notify:
-      - sysctl flush ipv6 route table
+      - name: "SCORED | 3.2.1 | PATCH | Ensure source routed packets are not accepted | ipv6"
+        sysctl:
+            name: '{{ item.name }}'
+            value: '{{ item.value }}'
+            sysctl_set: true
+            state: present
+            reload: true
+            ignoreerrors: true
+        with_items:
+            - { name: net.ipv6.conf.all.accept_source_route, value: 0 }
+            - { name: net.ipv6.conf.default.accept_source_route, value: 0 }
+        when:
+            - ubuntu1804cis_ipv6_required
+        notify:
+            - sysctl flush ipv6 route table
   when:
-    - ubuntu1804cis_ipv6_required
     - ubuntu1804cis_rule_3_2_1
   tags:
       - level1
@@ -83,19 +94,39 @@
       - sysctl
       - rule_3.2.1
 
-- name: "SCORED | 3.2.2 | PATCH | Ensure ICMP redirects are not accepted"
-  sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
-      sysctl_set: true
-      state: present
-      reload: true
-      ignoreerrors: true
-  with_items:
-      - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
-      - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
-  notify:
-      - sysctl flush ipv4 route table
+- name: "SCORED | 3.2.2 | PATCH | Ensure ICMP redirects are not accepted | ipv4,ipv6"
+  block:
+      - name: "SCORED | 3.2.2 | PATCH | Ensure ICMP redirects are not accepted | ipv4"
+        sysctl:
+            name: '{{ item.name }}'
+            value: '{{ item.value }}'
+            sysctl_set: true
+            state: present
+            reload: true
+            ignoreerrors: true
+        with_items:
+            - { name: net.ipv4.conf.all.accept_redirects, value: 0 }
+            - { name: net.ipv4.conf.default.accept_redirects, value: 0 }
+        notify:
+            - sysctl flush ipv4 route table
+
+      - name: "SCORED | 3.2.2 | PATCH | Ensure ICMP redirects are not accepted | ipv6"
+        sysctl:
+            name: '{{ item.name }}'
+            value: '{{ item.value }}'
+            sysctl_set: true
+            state: present
+            reload: true
+            ignoreerrors: true
+        with_items:
+            - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
+            - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
+        when:
+            - ubuntu1804cis_ipv6_required
+        notify:
+            - sysctl flush ipv6 route table
+  when:
+    - ubuntu1804cis_rule_3_2_2
   tags:
       - level1
       - scored
@@ -114,6 +145,8 @@
   with_items:
       - { name: net.ipv4.conf.all.secure_redirects, value: 0 }
       - { name: net.ipv4.conf.default.secure_redirects, value: 0 }
+  when:
+    - ubuntu1804cis_rule_3_2_3
   notify:
       - sysctl flush ipv4 route table
   tags:
@@ -134,6 +167,8 @@
   with_items:
       - { name: net.ipv4.conf.all.log_martians, value: 1 }
       - { name: net.ipv4.conf.default.log_martians, value: 1 }
+  when:
+    - ubuntu1804cis_rule_3_2_4
   notify:
       - sysctl flush ipv4 route table
   tags:
@@ -150,6 +185,8 @@
       state: present
       reload: true
       ignoreerrors: true
+  when:
+    - ubuntu1804cis_rule_3_2_5
   notify:
       - sysctl flush ipv4 route table
   tags:
@@ -166,6 +203,8 @@
       state: present
       reload: true
       ignoreerrors: true
+  when:
+    - ubuntu1804cis_rule_3_2_6
   notify:
       - sysctl flush ipv4 route table
   tags:
@@ -186,6 +225,8 @@
   with_items:
       - { name: net.ipv4.conf.all.rp_filter, value: 1 }
       - { name: net.ipv4.conf.default.rp_filter, value: 1 }
+  when:
+    - ubuntu1804cis_rule_3_2_7
   notify:
       - sysctl flush ipv4 route table
   tags:
@@ -202,6 +243,8 @@
       state: present
       reload: true
       ignoreerrors: true
+  when:
+    - ubuntu1804cis_rule_3_2_8
   notify:
       - sysctl flush ipv4 route table
   tags:
@@ -210,6 +253,7 @@
       - patch
       - sysctl
       - rule_3.2.8
+
 - name: "SCORED | 3.2.9 | PATCH | Ensure IPv6 router advertisements are not accepted"
   sysctl:
       name: '{{ item.name }}'
@@ -218,9 +262,11 @@
       reload: true
       ignoreerrors: true
   with_items:
-      - { name: net.ipv6.conf.all.accept_ra, value: 0 }
-      - { name: net.ipv6.conf.default.accept_ra, value: 0 }
-  when: ubuntu1804cis_ipv6_required
+    - { name: net.ipv6.conf.all.accept_ra, value: 0 }
+    - { name: net.ipv6.conf.default.accept_ra, value: 0 }
+  when:
+    - ubuntu1804cis_ipv6_required
+    - ubuntu1804cis_rule_3_2_9
   notify:
       - sysctl flush ipv6 route table
   tags:
@@ -230,20 +276,48 @@
       - sysctl
       - rule_3.2.9
 
-- name: "SCORED | 3.3.1 | PATCH | Ensure TCP Wrappers is installed"
+- name: "NOTSCORED | 3.3.1 | PATCH | Ensure TCP Wrappers is installed"
   apt:
       name: "{{ tcp_wrapper_package[ansible_os_family] }}"
       state: present
       install_recommends: false
   when:
+      - ubuntu1804cis_setup_tcp_wrappers
       - ubuntu1804cis_rule_3_3_1
   tags:
       - level1
-      - scored
+      - notscored
       - patch
       - rule_3.3.1
 
-- name: "SCORED | 3.3.2 | PATCH | Ensure /etc/hosts.allow is configured"
+- name: "NOTSCORED | 3.3.2 | PATCH | Ensure /etc/hosts.allow is configured"
+  template:
+      src: hosts.allow.j2
+      dest: /etc/hosts.allow
+  when:
+      - ubuntu1804cis_setup_tcp_wrappers
+      - ubuntu1804cis_rule_3_3_2
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.3.2
+
+- name: "NOTSCORED | 3.3.3 | PATCH | Ensure /etc/hosts.deny is configured"
+  lineinfile:
+      dest: /etc/hosts.deny
+      regexp: "^(#)?ALL"
+      line: "ALL: ALL"
+  when:
+      - ubuntu1804cis_setup_tcp_wrappers
+      - ubuntu1804cis_rule_3_3_3
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.3.3
+
+- name: "SCORED | 3.3.4 | PATCH | Ensure permissions on /etc/hosts.allow are configured"
   template:
       src: hosts.allow.j2
       dest: /etc/hosts.allow
@@ -251,33 +325,7 @@
       group: root
       mode: 0644
   when:
-      - ubuntu1804cis_rule_3_3_2
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.3.2
-
-- name: "SCORED | 3.3.3 | PATCH | Ensure /etc/hosts.deny is configured"
-  lineinfile:
-      dest: /etc/hosts.deny
-      regexp: "^(#)?ALL"
-      line: "ALL: ALL"
-  when:
-      - ubuntu1804cis_rule_3_3_3
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.3.3
-
-- name: "SCORED | 3.3.4 | PATCH | Ensure permissions on /etc/hosts.allow are configured"
-  file:
-      dest: /etc/hosts.allow
-      owner: root
-      group: root
-      mode: 0644
-  when:
+      - ubuntu1804cis_setup_tcp_wrappers
       - ubuntu1804cis_rule_3_3_4
   tags:
       - level1
@@ -292,6 +340,7 @@
       group: root
       mode: 0644
   when:
+      - ubuntu1804cis_setup_tcp_wrappers
       - ubuntu1804cis_rule_3_3_5
   tags:
       - level1
@@ -299,7 +348,7 @@
       - patch
       - rule_3.3.5
 
-- name: "NOTSCORED | 3.4.1 | PATCH | Ensure DCCP is disabled"
+- name: "SCORED | 3.4.1 | PATCH | Ensure DCCP is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install dccp(\\s|$)"
@@ -308,12 +357,12 @@
   when:
       - ubuntu1804cis_rule_3_4_1
   tags:
-      - level1
-      - notscored
+      - level2
+      - scored
       - patch
       - rule_3.4.1
 
-- name: "NOTSCORED | 3.4.2 | PATCH | Ensure SCTP is disabled"
+- name: "SCORED | 3.4.2 | PATCH | Ensure SCTP is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install sctp(\\s|$)"
@@ -322,12 +371,12 @@
   when:
       - ubuntu1804cis_rule_3_4_2
   tags:
-      - level1
-      - notscored
+      - level2
+      - scored
       - patch
       - rule_3.4.2
 
-- name: "NOTSCORED | 3.4.3 | PATCH | Ensure RDS is disabled"
+- name: "SCORED | 3.4.3 | PATCH | Ensure RDS is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install rds(\\s|$)"
@@ -336,12 +385,12 @@
   when:
       - ubuntu1804cis_rule_3_4_3
   tags:
-      - level1
-      - notscored
+      - level2
+      - scored
       - patch
       - rule_3.4.3
 
-- name: "NOTSCORED | 3.4.4 | PATCH | Ensure TIPC is disabled"
+- name: "SCORED | 3.4.4 | PATCH | Ensure TIPC is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install tipc(\\s|$)"
@@ -350,164 +399,447 @@
   when:
       - ubuntu1804cis_rule_3_4_4
   tags:
-      - level1
-      - notscored
+      - level2
+      - scored
       - patch
       - rule_3.4.4
 
-- name: "SCORED | 3.4.5 | PATCH | Ensure IPv6 redirects are not accepted"
-  sysctl:
-      name: '{{ item.name }}'
-      value: '{{ item.value }}'
-      sysctl_set: true
-      state: present
-      reload: true
-      ignoreerrors: true
-  with_items:
-      - { name: net.ipv6.conf.all.accept_redirects, value: 0 }
-      - { name: net.ipv6.conf.default.accept_redirects, value: 0 }
-  when: ubuntu1804cis_ipv6_required
-  notify:
-      - sysctl flush ipv6 route table
+- name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | firewalld(CUSTOM),ufw,nftables,iptables"
+  block:
+      - name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | firewalld | CUSTOM"
+        apt:
+            name: iptables
+            state: present
+            install_recommends: false
+        when:
+            - ubuntu1804cis_firewall == "firewalld"
+
+      - name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | ufw"
+        apt:
+            name: ufw
+            state: present
+            install_recommends: false
+        when:
+            - ubuntu1804cis_firewall == "ufw"
+
+      - name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | nftables"
+        apt:
+            name: nftables
+            state: present
+            install_recommends: false
+        when:
+            - ubuntu1804cis_firewall == "nftables"
+
+      - name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | iptables"
+        apt:
+            name: iptables
+            state: present
+            install_recommends: false
+        when:
+            - ubuntu1804cis_firewall == "iptables"
+  when:
+      - ubuntu1804cis_rule_3_5_1_1
+      - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - scored
       - patch
-      - sysctl
-      - rule_3.4.5
+      - rule_3.5.1.1
 
-- name: "NOTSCORED | 3.4.6 | PATCH | Ensure IPv6 is disabled"
-  lineinfile:
-      dest: /etc/modprobe.d/CIS.conf
-      regexp: "^(#)?options ipv6 disable="
-      line: "options ipv6 disable=1"
-      create: true
-  when: not ubuntu1804cis_ipv6_required
+- name: "SCORED | 3.5.2.1 | PATCH | Ensure ufw service is enabled"
+  service:
+      name: ufw
+      state: started
+      enabled: true
+  when:
+      - ubuntu1804cis_rule_3_5_2_1
+      - ubuntu1804cis_firewall == "ufw"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.2.1
+
+- name: "SCORED | 3.5.2.2 | PATCH | Ensure default deny firewall policy"
+  ufw:
+      rule: "{{ item.rule }}"
+      direction: "{{ item.direction }}"
+  with_items:
+      - { rule: deny, direction: incoming }
+      - { rule: deny, direction: outgoing }
+      - { rule: deny, direction: routed }
+  when:
+      - ubuntu1804cis_rule_3_5_2_2
+      - ubuntu1804cis_firewall == "ufw"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.2.2
+
+- name: "SCORED | 3.5.2.3 | PATCH | Ensure loopback traffic is configured"
+  block:
+      - name: "SCORED | 3.5.2.3 | PATCH | Ensure loopback traffic is configured| ingress lo allow any"
+        ufw:
+            rule: allow
+            direction: in
+            interface: lo
+
+      - name: "SCORED | 3.5.2.3 | PATCH | Ensure loopback traffic is configured | ingress deny from lo network ipv4"
+        ufw:
+            rule: deny
+            direction: in
+            from: "127.0.0.0/8"
+
+      - name: "SCORED | 3.5.2.3 | PATCH | Ensure loopback traffic is configured | ingress deny from lo network ipv6"
+        ufw:
+            rule: deny
+            direction: in
+            from: "::1"
+        when: ubuntu1804cis_ipv6_required
+  when:
+      - ubuntu1804cis_rule_3_5_2_3
+      - ubuntu1804cis_firewall == "ufw"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.2.3
+
+- name: "NOTSCORED | 3.5.2.4 | PATCH | Ensure outbound and established connections are configured"
+  ufw:
+      rule: allow
+      direction: out
+      interface: all
+  when:
+      - ubuntu1804cis_rule_3_5_2_4
+      - ubuntu1804cis_firewall == "ufw"
+      - ubuntu1804cis_setup_firewall
   tags:
       - level1
       - notscored
       - patch
-      - rule_3.4.6
+      - rule_3.5.2.4
 
-- name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
-  apt:
-      name: firewalld
-      state: present
-      install_recommends: false
+- name: "NOTSCORED | 3.5.2.5 | PATCH | Ensure firewall rules exist for all open ports"
+  block:
+      - name: "NOTSCORED | 3.5.2.5 | PATCH | Ensure firewall rules exist for all open ports| ssh"
+        ufw:
+            rule: allow
+            proto: tcp
+            port: '22'
+
+      - name: "NOTSCORED | 3.5.2.5 | PATCH | Ensure firewall rules exist for all open ports| dns"
+        ufw:
+            rule: allow
+            proto: "{{ item }}"
+            port: '53'
+        loop:
+            - tcp
+            - udp
   when:
-      - ubuntu1804cis_firewall == "firewalld"
+      - ubuntu1804cis_rule_3_5_2_5
+      - ubuntu1804cis_firewall == "ufw"
       - ubuntu1804cis_setup_firewall
   tags:
       - level1
-      - scored
+      - notscored
       - patch
-      - rule_3.6
+      - rule_3.5.2.5
 
-- name: "SCORED | 3.6 | PATCH | Ensure firewalld is installed and started | CUSTOM"
-  service:
-      name: firewalld
-      state: started
-      enabled: true
+- name: "NOTSCORED | 3.5.3.1 | PATCH | Ensure iptables are flushed | ipv4, ipv6"
+  block:
+      - name: "NOTSCORED | 3.5.3.1 | PATCH | Ensure iptables are flushed | ipv4"
+        iptables:
+            flush: yes
+
+      - name: "NOTSCORED | 3.5.3.1 | PATCH | Ensure iptables are flushed | ipv6"
+        iptables:
+            flush: yes
+            ip_version: ipv6
+        when: ubuntu1804cis_ipv6_required
   when:
-      - ubuntu1804cis_firewall == "firewalld"
+      - ubuntu1804cis_rule_3_5_3_1
+      - ubuntu1804cis_firewall == "nftables"
       - ubuntu1804cis_setup_firewall
   tags:
       - level1
-      - scored
+      - notscored
       - patch
-      - rule_3.6
+      - rule_3.5.3.1
 
-- name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed"
-  apt:
-      name: iptables
-      state: present
-      install_recommends: false
-  when:
-      - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.6.1
-
-- name: "SCORED | 3.6.1 | PATCH | Ensure iptables is installed and started"
-  service:
-      name: iptables
-      state: started
-      enabled: true
-  when:
-      - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.6.1
-
-- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
-  lineinfile:
-      dest: /etc/firewalld/firewalld.conf
-      regexp: "^DefaultZone"
-      line: "DefaultZone=drop"
-  when:
-      - ubuntu1804cis_firewall == "firewalld"
-      - ubuntu1804cis_setup_firewall
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.6.2
-
-- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
-  firewalld:
-      state: enabled
-      zone: drop
-      permanent: true
-  when:
-      - ubuntu1804cis_firewall == "firewalld"
-      - ubuntu1804cis_setup_firewall
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.6.2
-
-- name: "SCORED | 3.6.2 | PATCH | Ensure default deny firewall policy"
-  command: /bin/true
+- name: "SCORED | 3.5.3.2 | PATCH | Ensure a table exists"
+  shell: |
+      nft create table inet {{ ubuntu1804cis_nftables_table }}
+  args:
+      executable: /bin/bash
   changed_when: false
-  when:
-      - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.6.2
-      - notimplemented
-
-- name: "SCORED | 3.6.3 | PATCH | Ensure loopback traffic is configured"
-  command: /bin/true
-  changed_when: false
-  when:
-      - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.6.3
-
-- name: "SCORED | 3.5.2.3 | PATCH | Ensure loopback traffic is configured"
-  replace:
-      dest: /etc/default/grub
-      regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!ipv6.disable=1)(?:")'
-      replace: '\1"\2 ipv6.disable=1"'
-      follow: true
+  check_mode: false
+  # default table name exist when install nftables by apt
+  # nft create table will raise an error
   ignore_errors: true
-  notify:
-      - generate new grub config
   when:
+      - ubuntu1804cis_rule_3_5_3_2
+      - ubuntu1804cis_firewall == "nftables"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.3.2
+
+- name: "SCORED | 3.5.3.3 | PATCH | Ensure base chains exist"
+  shell: |
+      nft chain inet {{ ubuntu1804cis_nftables_table }} {{ item }} { type filter hook {{ item }} priority 0\; }
+  args:
+      executable: /bin/bash
+  loop:
+      - input
+      - forward
+      - output
+  changed_when: false
+  check_mode: false
+  when:
+      - ubuntu1804cis_rule_3_5_3_3
+      - ubuntu1804cis_firewall == "nftables"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.3.3
+
+- name: "SCORED | 3.5.3.4 | PATCH | Ensure loopback traffic is configured"
+  block:
+      - name: "SCORED | 3.5.3.4 | PATCH | Ensure loopback traffic is configured | ingress lo allow nay"
+        shell: |
+            nft add rule inet {{ ubuntu1804cis_nftables_table }} input iif lo accept
+        args:
+            executable: /bin/bash
+        changed_when: false
+        check_mode: false
+
+      - name: "SCORED | 3.5.3.4 | PATCH | Ensure loopback traffic is configured | ingress deny from lo network ipv4"
+        shell: |
+            nft add rule inet {{ ubuntu1804cis_nftables_table }} input ip saddr 127.0.0.0/8 counter drop
+        args:
+            executable: /bin/bash
+        changed_when: false
+        check_mode: false
+
+      - name: "SCORED | 3.5.3.4 | PATCH | Ensure loopback traffic is configured | ingress deny from lo network ipv6"
+        shell: |
+            nft add rule inet {{ ubuntu1804cis_nftables_table }} input ip6 saddr ::1 counter drop
+        args:
+            executable: /bin/bash
+        changed_when: false
+        check_mode: false
+        when: ubuntu1804cis_ipv6_required
+  when:
+      - ubuntu1804cis_rule_3_5_3_4
+      - ubuntu1804cis_firewall == "nftables"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.3.4
+
+- name: "NOTSCORED | 3.5.3.5 | PATCH | Ensure outbound and established connections are configured"
+  shell: |
+      nft add rule inet {{ ubuntu1804cis_nftables_table }} input ip protocol {{ item }} ct state established accept
+      nft add rule inet {{ ubuntu1804cis_nftables_table }} output ip protocol {{ item }} ct state new,related,established accept
+  args:
+      executable: /bin/bash
+  loop:
+      - tcp
+      - udp
+      - icmp
+  changed_when: false
+  check_mode: false
+  when:
+      - ubuntu1804cis_rule_3_5_3_5
+      - ubuntu1804cis_firewall == "nftables"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.5.3.5
+
+- name: "SCORED | 3.5.3.6 | PATCH | Ensure base chains exist"
+  shell: |
+      nft chain inet {{ ubuntu1804cis_nftables_table }} {{ item }} { policy drop \; }
+  args:
+      executable: /bin/bash
+  loop:
+      - input
+      - forward
+      - output
+  changed_when: false
+  check_mode: false
+  when:
+      - ubuntu1804cis_rule_3_5_3_6
+      - ubuntu1804cis_firewall == "nftables"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.3.6
+
+- name: "SCORED | 3.5.3.7 | PATCH | Ensure nftables service is enabled"
+  service:
+      name: nftables
+      state: started
+      enabled: true
+  when:
+      - ubuntu1804cis_rule_3_5_3_7
+      - ubuntu1804cis_firewall == "nftables"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.3.7
+
+- name: "SCORED | 3.5.3.8 | PATCH | Ensure nftables rules are permanent"
+  shell:
+      nft list table inet {{ ubuntu1804cis_nftables_table }} > /etc/nftables.conf
+  when:
+      - ubuntu1804cis_rule_3_5_3_8
+      - ubuntu1804cis_firewall == "nftables"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.3.8
+
+- name: "SCORED | 3.5.4.1.1 | PATCH | Ensure default deny firewall policy"
+  iptables:
+      chain: "{{ item }}"
+      policy: DROP
+  loop:
+      - INPUT
+      - OUTPUT
+      - FORWARD
+  when:
+      - ubuntu1804cis_rule_3_5_4_1_1
+      - ubuntu1804cis_firewall == "iptables"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.4.1.1
+
+- name: "SCORED | 3.5.4.1.2 | PATCH | Ensure loopback traffic is configured"
+  block:
+      - name: "SCORED | 3.5.4.1.2 | PATCH | Ensure loopback traffic is configured| ingress lo allow any"
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            in_interface: lo
+
+      -   name: "SCORED | 3.5.4.1.2 | PATCH | Ensure loopback traffic is configured| egress lo allow any"
+          iptables:
+              chain: INPUT
+              jump: ACCEPT
+              in_interface: lo
+
+      - name: "SCORED | 3.5.4.1.2 | PATCH | Ensure loopback traffic is configured| ingress deny from lo network"
+        iptables:
+            chain: INPUT
+            jump: DROP
+            source: 127.0.0.0/8
+  when:
+      - ubuntu1804cis_rule_3_5_4_1_2
+      - ubuntu1804cis_firewall == "iptables"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.4.1.2
+
+- name: "NOTSCORED | 3.5.4.1.3 | PATCH | Ensure outbound and established connections are configured"
+  block:
+      - name: "NOTSCORED | 3.5.4.1.3 | PATCH | Ensure outbound and established connections are configured | input "
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            ctstate: NEW,ESTABLISHED
+            protocol: "{{ item }}"
+        loop:
+            - tcp
+            - udp
+            - icmp
+
+      -   name: "NOTSCORED | 3.5.4.1.3 | PATCH | Ensure outbound and established connections are configured | output"
+          iptables:
+              chain: OUTPUT
+              jump: ACCEPT
+              ctstate: NEW,ESTABLISHED
+              protocol: "{{ item }}"
+          loop:
+              - tcp
+              - udp
+              - icmp
+  when:
+      - ubuntu1804cis_rule_3_5_4_1_3
+      - ubuntu1804cis_firewall == "iptables"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.5.4.1.3
+
+- name: "SCORED | 3.5.4.1.4 | PATCH | Ensure firewall rules exist for all open ports"
+  block:
+      - name: "SCORED | 3.5.4.1.4 | PATCH | Ensure firewall rules exist for all open ports| ssh"
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            ctstate: NEW
+            protocol: tcp
+            destination_port: 22
+
+      -   name: "SCORED | 3.5.4.1.4 | PATCH | Ensure firewall rules exist for all open ports| dns"
+          iptables:
+              chain: INPUT
+              jump: ACCEPT
+              ctstate: NEW
+              protocol: "{{ item }}"
+              destination_port: 53
+          loop:
+              - tcp
+              - udp
+  when:
+      - ubuntu1804cis_rule_3_5_4_1_4
+      - ubuntu1804cis_firewall == "iptables"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.4.1.4
+
+- name: "SCORED | 3.5.4.2.1 | PATCH | Ensure IPv6 default deny firewall policy"
+  iptables:
+      chain: "{{ item }}"
+      policy: DROP
+      ip_version: ipv6
+  loop:
+      - INPUT
+      - OUTPUT
+      - FORWARD
+  when:
+      - ubuntu1804cis_rule_3_5_4_2_1
       - ubuntu1804cis_firewall == "iptables"
       - ubuntu1804cis_setup_firewall
       - ubuntu1804cis_ipv6_required
@@ -515,22 +847,171 @@
       - level1
       - scored
       - patch
-      - rule_3.5.2.3
+      - rule_3.5.4.2.1
 
-- name: "NOTSCORED | 3.6.4 | PATCH | Ensure outbound and established connections are configured"
-  command: /bin/true
-  changed_when: false
+- name: "SCORED | 3.5.4.2.2 | PATCH | Ensure IPv6 loopback traffic is configured"
+  block:
+      - name: "SCORED | 3.5.4.2.2 | PATCH | Ensure IPv6 loopback traffic is configured| ingress lo allow any"
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            in_interface: lo
+            ip_version: ipv6
+
+      -   name: "SCORED | 3.5.4.2.2 | PATCH | Ensure IPv6 loopback traffic is configured| egress lo allow any"
+          iptables:
+              chain: INPUT
+              jump: ACCEPT
+              in_interface: lo
+              ip_version: ipv6
+
+      - name: "SCORED | 3.5.4.2.2 | PATCH | Ensure IPv6 loopback traffic is configured| ingress deny from lo network"
+        iptables:
+            chain: INPUT
+            jump: DROP
+            source: "::1"
+            ip_version: ipv6
   when:
+      - ubuntu1804cis_rule_3_5_4_2_2
       - ubuntu1804cis_firewall == "iptables"
       - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_ipv6_required
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.4.2.2
+
+- name: "NOTSCORED | 3.5.4.2.3 | PATCH | Ensure IPv6 outbound and established connections are configured"
+  block:
+      - name: "NOTSCORED | 3.5.4.2.3 | PATCH | Ensure IPv6 outbound and established connections are configured | input "
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            ctstate: NEW,ESTABLISHED
+            protocol: "{{ item }}"
+            ip_version: ipv6
+        loop:
+            - tcp
+            - udp
+            - icmp
+
+      -   name: "NOTSCORED | 3.5.4.2.3 | PATCH | Ensure IPv6 outbound and established connections are configured | output"
+          iptables:
+              chain: OUTPUT
+              jump: ACCEPT
+              ctstate: NEW,ESTABLISHED
+              protocol: "{{ item }}"
+              ip_version: ipv6
+          loop:
+              - tcp
+              - udp
+              - icmp
+  when:
+      - ubuntu1804cis_rule_3_5_4_2_3
+      - ubuntu1804cis_firewall == "iptables"
+      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_ipv6_required
   tags:
       - level1
       - notscored
       - patch
-      - rule_3.6.4
-      - notimplemented
+      - rule_3.5.4.2.3
 
-- name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
+- name: "NOTSCORED | 3.5.4.2.4 | PATCH | Ensure IPv6 firewall rules exist for all open ports"
+  block:
+      - name: "NOTSCORED | 3.5.4.2.4 | PATCH | Ensure IPv6 firewall rules exist for all open ports| ssh"
+        iptables:
+            chain: INPUT
+            jump: ACCEPT
+            ctstate: NEW
+            protocol: tcp
+            destination_port: 22
+            ip_version: ipv6
+
+      -   name: "NOTSCORED | 3.5.4.2.4 | PATCH | Ensure IPv6 firewall rules exist for all open ports| dns"
+          iptables:
+              chain: INPUT
+              jump: ACCEPT
+              ctstate: NEW
+              protocol: "{{ item }}"
+              destination_port: 53
+              ip_version: ipv6
+          loop:
+              - tcp
+              - udp
+  when:
+      - ubuntu1804cis_rule_3_5_4_2_4
+      - ubuntu1804cis_firewall == "iptables"
+      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_ipv6_required
+  tags:
+      - level1
+      - notscored
+      - patch
+      - rule_3.5.4.2.4
+
+- name: "SCORED | 3.5.4.3.1 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+  apt:
+      name: firewalld
+      state: present
+      install_recommends: false
+  when:
+      - ubuntu1804cis_rule_3_5_4_3_1
+      - ubuntu1804cis_firewall == "firewalld"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.4.3.1
+
+- name: "SCORED | 3.5.4.3.2 | PATCH | Ensure firewalld is installed and started | CUSTOM"
+  service:
+      name: firewalld
+      state: started
+      enabled: true
+  when:
+      - ubuntu1804cis_rule_3_5_4_3_2
+      - ubuntu1804cis_firewall == "firewalld"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.4.3.2
+
+- name: "SCORED | 3.5.4.3.3 | PATCH | Ensure default deny firewall policy | CUSTOM"
+  lineinfile:
+      dest: /etc/firewalld/firewalld.conf
+      regexp: "^DefaultZone"
+      line: "DefaultZone=drop"
+  when:
+      - ubuntu1804cis_rule_3_5_4_3_3
+      - ubuntu1804cis_firewall == "firewalld"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.4.3.3
+
+- name: "SCORED | 3.5.4.3.4 | PATCH | Ensure default deny firewall policy | CUSTOM"
+  firewalld:
+      state: enabled
+      zone: drop
+      permanent: true
+  when:
+      - ubuntu1804cis_rule_3_5_4_3_4
+      - ubuntu1804cis_firewall == "firewalld"
+      - ubuntu1804cis_setup_firewall
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_3.5.4.3.4
+
+- name: "SCORED | 3.5.4.3.5 | PATCH | Ensure firewall rules exist for all open ports | CUSTOM"
   firewalld:
       service: "{{ item }}"
       state: enabled
@@ -538,6 +1019,7 @@
       permanent: true
       immediate: true
   when:
+      - ubuntu1804cis_rule_3_5_4_3_5
       - ubuntu1804cis_firewall == "firewalld"
       - ubuntu1804cis_setup_firewall
   notify: restart firewalld
@@ -546,27 +1028,21 @@
       - level1
       - scored
       - patch
-      - rule_3.6.5
-      - notimplemented
+      - rule_3.5.4.3.5
 
-- name: "SCORED | 3.6.5 | PATCH | Ensure firewall rules exist for all open ports"
-  command: /bin/true
-  changed_when: false
+- name: "NOTSCORED | 3.7 | Disable IPv6"
+  replace:
+      dest: /etc/default/grub
+      regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!ipv6.disable=1)(?:")'
+      replace: '\1"\2 ipv6.disable=1"'
+      follow: true
+  ignore_errors: true
   when:
-      - ubuntu1804cis_firewall == "iptables"
-      - ubuntu1804cis_setup_firewall
+      - ubuntu1804cis_rule_3_7
+  notify:
+      - generate new grub config
   tags:
-      - level1
-      - scored
-      - patch
-      - rule_3.6.5
-      - notimplemented
-
-- name: "NOTSCORED | 3.7 | PATCH | Ensure wireless interfaces are disabled"
-  command: /bin/true
-  changed_when: false
-  tags:
-      - level1
+      - level2
       - notscored
       - patch
       - rule_3.7

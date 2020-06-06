@@ -2,4 +2,28 @@
 - name: Prepare
   hosts: all
   gather_facts: false
-  tasks: []
+  tasks:
+    - name: install openssh-server for testing under docker
+      apt:
+        name: openssh-server
+        state: present
+        update_cache: yes
+    - name: install grub files for testing under docker
+      block:
+        - name: create /boot/grub
+          file:
+            name: /boot/grub
+            state: directory
+          changed_when: false
+
+        - name: touch /boot/grub/grub.cfg
+          file:
+            name: /boot/grub/grub.cfg
+            state: touch
+          changed_when: false
+
+        - name: touch /etc/default/grub
+          file:
+            name: /etc/default/grub
+            state: touch
+          changed_when: false
