@@ -49,7 +49,7 @@
     path: "/boot/grub/grub.cfg"
     owner: root
     group: root
-    mode: 0600
+    mode: 0400
   when:
     - ansible_os_family == "Debian"
     - ubuntu1804cis_rule_1_4_1
