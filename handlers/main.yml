@@ -103,5 +103,7 @@
 - name: restart systemd-coredump
   become: true
   service:
-      name: systemd-coredump
+      name: systemd-coredump.socket
+      daemon_reload: true
+      enabled: true
       state: restarted
