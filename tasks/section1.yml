@@ -1002,7 +1002,7 @@
       - ubuntu1804cis_rule_1_8_1_3
   tags:
       - level1
-      - notscored
+      - scored
       - patch
       - banner
       - rule_1.8.1.3
