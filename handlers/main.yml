@@ -99,3 +99,11 @@
       - not ubuntu1804cis_skip_for_travis
   tags:
       - skip_ansible_lint
+
+- name: restart systemd-coredump
+  become: true
+  service:
+      name: systemd-coredump.socket
+      daemon_reload: true
+      enabled: true
+      state: restarted
