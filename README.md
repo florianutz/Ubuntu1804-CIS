@@ -110,9 +110,6 @@ ubuntu1804cis_aide_cron:
   aide_weekday: '*'  
 ```
 
-##### SELinux policy
-`ubuntu1804cis_selinux_pol: targeted`
-
 
 ##### Set to 'true' if X Windows is needed in your environment
 `ubuntu1804cis_xwindows_required: no`

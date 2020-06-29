@@ -351,9 +351,6 @@ ubuntu1804cis_aide_cron:
   aide_month: '*'
   aide_weekday: '*'
 
-# SELinux policy
-ubuntu1804cis_selinux_pol: targeted
-
 # Whether or not to run tasks related to auditing/patching the desktop environment
 ubuntu1804cis_gui: false
 
@@ -416,6 +413,9 @@ ubuntu1804cis_auditd:
 ubuntu1804cis_logrotate: "daily"
 
 ## Section 5 Vars
+ubuntu1804cis_at_allow_users: []
+ubuntu1804cis_cron_allow_users: []
+
 ubuntu1804cis_sshd:
   clientalivecountmax: 3
   clientaliveinterval: 300
