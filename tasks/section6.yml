@@ -25,9 +25,9 @@
       - patch
       - rule_6.1.2
 
-- name: "SCORED | 6.1.3 | PATCH | Ensure permissions on /etc/shadow are configured"
+- name: "SCORED | 6.1.3 | PATCH | Ensure permissions on /etc/gshadow- are configured"
   file:
-      dest: /etc/shadow
+      dest: /etc/gshadow-
       owner: root
       group: shadow
       mode: 0640
@@ -39,12 +39,13 @@
       - patch
       - rule_6.1.3
 
-- name: "SCORED | 6.1.4 | PATCH | Ensure permissions on /etc/group are configured"
+
+- name: "SCORED | 6.1.4 | PATCH | Ensure permissions on /etc/shadow are configured"
   file:
-      dest: /etc/group
+      dest: /etc/shadow
       owner: root
-      group: root
-      mode: 0644
+      group: shadow
+      mode: 0640
   when:
       - ubuntu1804cis_rule_6_1_4
   tags:
@@ -53,12 +54,12 @@
       - patch
       - rule_6.1.4
 
-- name: "SCORED | 6.1.5 | PATCH | Ensure permissions on /etc/gshadow are configured"
+- name: "SCORED | 6.1.5 | PATCH | Ensure permissions on /etc/group are configured"
   file:
-      dest: /etc/gshadow
+      dest: /etc/group
       owner: root
-      group: shadow
-      mode: 0640
+      group: root
+      mode: 0644
   when:
       - ubuntu1804cis_rule_6_1_5
   tags:
@@ -72,7 +73,7 @@
       dest: /etc/passwd-
       owner: root
       group: root
-      mode: 0644
+      mode: 0600
   when:
       - ubuntu1804cis_rule_6_1_6
   tags:
@@ -86,7 +87,7 @@
       dest: /etc/shadow-
       owner: root
       group: shadow
-      mode: 0640
+      mode: 0600
   when:
       - ubuntu1804cis_rule_6_1_7
   tags:
@@ -109,9 +110,9 @@
       - patch
       - rule_6.1.8
 
-- name: "SCORED | 6.1.9 | PATCH | Ensure permissions on /etc/gshadow- are configured"
+- name: "SCORED | 6.1.9 | PATCH | Ensure permissions on /etc/gshadow are configured"
   file:
-      dest: /etc/gshadow-
+      dest: /etc/gshadow
       owner: root
       group: shadow
       mode: 0640
