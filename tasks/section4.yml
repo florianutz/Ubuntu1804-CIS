@@ -431,26 +431,11 @@
       - auditd
       - rule_4.1.18
 
-#4.2.4 is here due to dependencies to 4.2.1.x
-- name: "SCORED | 4.2.3 | PATCH | Ensure rsyslog or syslog-ng is installed"
+- name: "SCORED | 4.2.1.1 | PATCH | Ensure rsyslog or is installed"
   apt:
-      name: "{{ ubuntu1804cis_syslog }}"
+      name: rsyslog
       state: present
       install_recommends: false
-  when:
-      - ubuntu1804cis_rule_4_2_3
-  tags:
-      - level1
-      - scored
-      - patch
-      - syslog
-      - rule_4.2.3
-
-- name: "SCORED | 4.2.1.1 | PATCH | Ensure rsyslog Service is enabled"
-  service:
-      name: rsyslog
-      enabled: yes
-  changed_when: false
   when:
       - ubuntu1804cis_rule_4_2_1_1
       - ubuntu1804cis_syslog == "rsyslog"
@@ -461,36 +446,39 @@
       - syslog
       - rule_4.2.1.1
 
-- name: "NOTSCORED | 4.2.1.2 | PATCH | Ensure logging is configured"
-  command: /bin/true
+- name: "SCORED | 4.2.1.2 | PATCH | Ensure rsyslog Service is enabled"
+  service:
+      name: rsyslog
+      enabled: yes
   changed_when: false
   when:
       - ubuntu1804cis_rule_4_2_1_2
-  tags:
-      - level1
-      - notscored
-      - patch
-      - syslog
-      - rule_4.2.1.2
-      - notimplemented
-
-- name: "SCORED | 4.2.1.3 | PATCH | Ensure rsyslog default file permissions configured"
-  lineinfile:
-      dest: /etc/rsyslog.conf
-      regexp: '^\$FileCreateMode'
-      line: '$FileCreateMode 0640'
-  when:
-      - ubuntu1804cis_rule_4_2_1_3
+      - ubuntu1804cis_syslog == "rsyslog"
   tags:
       - level1
       - scored
       - patch
       - syslog
-      - rule_4.2.1.3
+      - rule_4.2.1.2
 
-- name: "SCORED | 4.2.1.4 | PATCH | Ensure rsyslog is configured to send logs to a remote log host"
+- name: "NOTSCORED | 4.2.1.3 | PATCH | Ensure logging is configured"
   command: /bin/true
   changed_when: false
+  when:
+      - ubuntu1804cis_rule_4_2_1_3
+  tags:
+      - level1
+      - notscored
+      - patch
+      - syslog
+      - rule_4.2.1.3
+      - notimplemented
+
+- name: "SCORED | 4.2.1.4 | PATCH | Ensure rsyslog default file permissions configured"
+  lineinfile:
+      dest: /etc/rsyslog.conf
+      regexp: '^\$FileCreateMode'
+      line: '$FileCreateMode 0640'
   when:
       - ubuntu1804cis_rule_4_2_1_4
   tags:
@@ -499,100 +487,83 @@
       - patch
       - syslog
       - rule_4.2.1.4
-      - notimplemented
 
-- name: "NOTSCORED | 4.2.1.5 | PATCH | Ensure remote rsyslog messages are only accepted on designated log hosts."
+- name: "SCORED | 4.2.1.5 | PATCH | Ensure rsyslog is configured to send logs to a remote log host"
   command: /bin/true
   changed_when: false
   when:
       - ubuntu1804cis_rule_4_2_1_5
   tags:
       - level1
-      - notscored
+      - scored
       - patch
       - syslog
       - rule_4.2.1.5
       - notimplemented
 
-- name: "NOTSCORED | 4.2.1.5 | PATCH | Ensure remote rsyslog messages are only accepted on designated log hosts."
+- name: "NOTSCORED | 4.2.1.6 | PATCH | Ensure remote rsyslog messages are only accepted on designated log hosts."
   command: /bin/true
   changed_when: false
   when:
-      - ubuntu1804cis_rule_4_2_1_5
+      - ubuntu1804cis_rule_4_2_1_6
   tags:
       - level1
       - notscored
       - patch
       - syslog
-      - rule_4.2.1.5
+      - rule_4.2.1.6
       - notimplemented
 
-- name: "SCORED | 4.2.2.1 | PATCH | Ensure syslog-ng service is enabled"
-  command: /bin/true
+- name: "SCORED | 4.2.2.1 | PATCH | Ensure journald is configured to send logs to rsyslog"
+  lineinfile:
+    dest: /etc/systemd/journald.conf
+    regexp: "^(#)?ForwardToSyslog=(yes|no)"
+    line: ForwardToSyslog=yes
   changed_when: false
   when:
       - ubuntu1804cis_rule_4_2_2_1
+  notify: 
+    - restart journald
   tags:
       - level1
       - scored
       - patch
       - syslog
       - rule_4.2.2.1
-      - notimplemented
 
-- name: "NOTSCORED | 4.2.2.2 | PATCH | Ensure logging is configured"
-  command: /bin/true
-  changed_when: false
+- name: "SCORED | 4.2.2.2 | PATCH | Ensure journald is configured to compress large log files"
+  lineinfile:
+    dest: /etc/systemd/journald.conf
+    regexp: "^(#)?Compress=(yes|no)"
+    line: Compress=yes
   when:
       - ubuntu1804cis_rule_4_2_2_2
+  notify: 
+    - restart journald
   tags:
       - level1
-      - notscored
+      - scored
       - patch
       - syslog
       - rule_4.2.2.2
-      - notimplemented
 
-- name: "SCORED | 4.2.2.3 | PATCH | Ensure syslog-ng default file permissions configured"
-  command: /bin/true
-  changed_when: false
+- name: "SCORED | 4.2.2.3 | PATCH | Ensure journald is configured to write logfiles to persistent disk"
+  lineinfile:
+    dest: /etc/systemd/journald.conf
+    regexp: "^(#)?Storage=(auto|persistent)"
+    line: Storage=persistent
   when:
       - ubuntu1804cis_rule_4_2_2_3
+  notify: 
+    - restart journald
   tags:
       - level1
       - scored
       - patch
       - syslog
       - rule_4.2.2.3
-      - notimplemented
 
-- name: "NOTSCORED | 4.2.2.4 | PATCH | Ensure syslog-ng is configured to send logs to a remote log host"
-  command: /bin/true
-  changed_when: false
-  when:
-      - ubuntu1804cis_rule_4_2_2_4
-  tags:
-      - level1
-      - notscored
-      - patch
-      - syslog
-      - rule_4.2.2.4
-      - notimplemented
-
-- name: "NOTSCORED | 4.2.2.5 | PATCH | Ensure remote syslog-ng messages are only accepted on designated log hosts"
-  command: /bin/true
-  changed_when: false
-  when:
-      - ubuntu1804cis_rule_4_2_2_5
-  tags:
-      - level1
-      - notscored
-      - patch
-      - syslog
-      - rule_4.2.2.5
-      - notimplemented
-
-- name: "SCORED | 4.2.4 | PATCH | Ensure permissions on all logfiles are configured"
+- name: "SCORED | 4.2.3 | PATCH | Ensure permissions on all logfiles are configured"
   command: find /var/log -type f -exec chmod g-wx,o-rwx {} +
   changed_when: false
   failed_when: false
