@@ -676,6 +676,12 @@
 - name: "SCORED | 1.4.1 | PATCH | Stat AIDE DB"
   stat: path=/var/lib/aide/aide.db
   register: aide_db
+  tags:
+      - level1
+      - scored
+      - aide
+      - patch
+      - rule_1.4.1
 
 - name: "SCORED | 1.4.1 | PATCH | Init AIDE | This may take a LONG time"
   command: /usr/sbin/aideinit

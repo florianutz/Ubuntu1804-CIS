@@ -109,41 +109,31 @@
 
 - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
   block:
-      - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+      - name: "SCORED | 5.1.8 | PATCH | Ensure at is restricted to authorized users"
         file:
             dest: /etc/at.deny
             state: absent
 
-      - name: "SCORED | 5.1.8 | PATCH | Check if at.allow exists"
-        stat:
-            path: "/etc/at.allow"
-        register: at_allow
-
-      - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
-        file:
+      - name: "SCORED | 5.1.8 | PATCH | Ensure at is restricted to authorized users"
+        template:
+            src: at.allow.j2
             dest: /etc/at.allow
-            state: '{{ "file" if  at_allow.stat.exists else "touch" }}'
             owner: root
             group: root
             mode: 0600
 
-      - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
+      - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users"
         file:
             dest: /etc/cron.deny
             state: absent
 
-      - name: "SCORED | 5.1.8 | PATCH | Check if cron.allow exists"
-        stat:
-            path: "/etc/cron.allow"
-        register: cron_allow
-
-      - name: "SCORED | 5.1.8 | PATCH | Ensure at/cron is restricted to authorized users"
-        file:
-            dest: /etc/cron.allow
-            state: '{{ "file" if  cron_allow.stat.exists else "touch" }}'
-            owner: root
-            group: root
-            mode: 0600
+      - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users"
+        template:
+          src: at.allow.j2
+          dest: /etc/at.allow
+          owner: root
+          group: root
+          mode: 0600
   when:
       - ubuntu1804cis_rule_5_1_8
   tags:
