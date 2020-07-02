@@ -517,7 +517,7 @@
 - name: "SCORED | 4.2.2.1 | PATCH | Ensure journald is configured to send logs to rsyslog"
   lineinfile:
     dest: /etc/systemd/journald.conf
-    regexp: "^(#)?ForwardToSyslog=(yes|no)"
+    regexp: "(#)?ForwardToSyslog=(yes|no)"
     line: ForwardToSyslog=yes
   changed_when: false
   when:
@@ -534,7 +534,7 @@
 - name: "SCORED | 4.2.2.2 | PATCH | Ensure journald is configured to compress large log files"
   lineinfile:
     dest: /etc/systemd/journald.conf
-    regexp: "^(#)?Compress=(yes|no)"
+    regexp: "(#)?Compress=(yes|no)"
     line: Compress=yes
   when:
       - ubuntu1804cis_rule_4_2_2_2
@@ -550,7 +550,7 @@
 - name: "SCORED | 4.2.2.3 | PATCH | Ensure journald is configured to write logfiles to persistent disk"
   lineinfile:
     dest: /etc/systemd/journald.conf
-    regexp: "^(#)?Storage=(auto|persistent)"
+    regexp: "(#)?Storage=(auto|persistent)"
     line: Storage=persistent
   when:
       - ubuntu1804cis_rule_4_2_2_3
@@ -568,13 +568,13 @@
   changed_when: false
   failed_when: false
   when:
-      - ubuntu1804cis_rule_4_2_4
+      - ubuntu1804cis_rule_4_2_3
   tags:
       - level1
       - scored
       - patch
       - syslog
-      - rule_4.2.4
+      - rule_4.2.3
 
 - name: "NOTSCORED | 4.3 | PATCH | Ensure logrotate is configured"
   block:
