@@ -110,6 +110,6 @@
 
 - name: restart journald
   become: true
-  service: 
+  service:
       name: systemd-journald
       state: restarted

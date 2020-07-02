@@ -522,7 +522,7 @@
   changed_when: false
   when:
       - ubuntu1804cis_rule_4_2_2_1
-  notify: 
+  notify:
     - restart journald
   tags:
       - level1
@@ -538,7 +538,7 @@
     line: Compress=yes
   when:
       - ubuntu1804cis_rule_4_2_2_2
-  notify: 
+  notify:
     - restart journald
   tags:
       - level1
@@ -554,7 +554,7 @@
     line: Storage=persistent
   when:
       - ubuntu1804cis_rule_4_2_2_3
-  notify: 
+  notify:
     - restart journald
   tags:
       - level1
