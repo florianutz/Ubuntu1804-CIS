@@ -65,7 +65,7 @@
       - auditd
       - rule_4.1.1.4
 
-- name: "NOTSCORED | 4.1.2.1 | PATCH | Ensure audit log storage size is configured"
+- name: "SCORED | 4.1.2.1 | PATCH | Ensure audit log storage size is configured"
   lineinfile:
       dest: /etc/audit/auditd.conf
       regexp: "^max_log_file( |=)"
@@ -78,7 +78,7 @@
       - restart auditd
   tags:
       - level2
-      - notscored
+      - scored
       - patch
       - auditd
       - rule_4.1.2.1
