@@ -129,8 +129,8 @@
 
       - name: "SCORED | 5.1.8 | PATCH | Ensure cron is restricted to authorized users"
         template:
-          src: at.allow.j2
-          dest: /etc/at.allow
+          src: cron.allow.j2
+          dest: /etc/cron.allow
           owner: root
           group: root
           mode: 0600

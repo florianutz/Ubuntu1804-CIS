@@ -107,3 +107,9 @@
       daemon_reload: true
       enabled: true
       state: restarted
+
+- name: restart journald
+  become: true
+  service:
+      name: systemd-journald
+      state: restarted
