@@ -137,7 +137,26 @@
       - auditd
       - rule_4.1.1.2
 
-- name: "SCORED | 4.1.4 | PATCH | Ensure events that modify date and time information are collected"
+- name: "SCORED | 4.1.3 | PATCH | Ensure events that modify date and time information are collected"
+  template:
+      src: audit/ubuntu1804cis_rule_4_1_3.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_3.rules
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - ubuntu1804cis_rule_4_1_3
+  notify:
+      - load audit rules
+      - restart auditd
+  tags:
+      - level2
+      - scored
+      - patch
+      - auditd
+      - rule_4.1.3
+
+- name: "SCORED | 4.1.4 | PATCH | Ensure events that modify user/group information are collected"
   template:
       src: audit/ubuntu1804cis_rule_4_1_4.rules.j2
       dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_4.rules
@@ -156,7 +175,7 @@
       - auditd
       - rule_4.1.4
 
-- name: "SCORED | 4.1.5 | PATCH | Ensure events that modify user/group information are collected"
+- name: "SCORED | 4.1.5 | PATCH | Ensure events that modify the system's network environment are collected"
   template:
       src: audit/ubuntu1804cis_rule_4_1_5.rules.j2
       dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_5.rules
@@ -175,7 +194,7 @@
       - auditd
       - rule_4.1.5
 
-- name: "SCORED | 4.1.6 | PATCH | Ensure events that modify the system's network environment are collected"
+- name: "SCORED | 4.1.6 | PATCH | Ensure events that modify the system's Mandatory Access Controls are collected"
   template:
       src: audit/ubuntu1804cis_rule_4_1_6.rules.j2
       dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_6.rules
@@ -194,7 +213,7 @@
       - auditd
       - rule_4.1.6
 
-- name: "SCORED | 4.1.7 | PATCH | Ensure events that modify the system's Mandatory Access Controls are collected"
+- name: "SCORED | 4.1.7 | PATCH | Ensure login and logout events are collected"
   template:
       src: audit/ubuntu1804cis_rule_4_1_7.rules.j2
       dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_7.rules
@@ -213,7 +232,7 @@
       - auditd
       - rule_4.1.7
 
-- name: "SCORED | 4.1.8 | PATCH | Ensure login and logout events are collected"
+- name: "SCORED | 4.1.8 | PATCH | Ensure session initiation information is collected"
   template:
       src: audit/ubuntu1804cis_rule_4_1_8.rules.j2
       dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_8.rules
@@ -232,7 +251,7 @@
       - auditd
       - rule_4.1.8
 
-- name: "SCORED | 4.1.9 | PATCH | Ensure session initiation information is collected"
+- name: "SCORED | 4.1.9 | PATCH | Ensure discretionary access control permission modification events are collected"
   template:
       src: audit/ubuntu1804cis_rule_4_1_9.rules.j2
       dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_9.rules
@@ -251,7 +270,7 @@
       - auditd
       - rule_4.1.9
 
-- name: "SCORED | 4.1.10 | PATCH | Ensure discretionary access control permission modification events are collected"
+- name: "SCORED | 4.1.10 | PATCH | Ensure unsuccessful unauthorized file access attempts are collected"
   template:
       src: audit/ubuntu1804cis_rule_4_1_10.rules.j2
       dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_10.rules
@@ -270,15 +289,43 @@
       - auditd
       - rule_4.1.10
 
-- name: "SCORED | 4.1.11 | PATCH | Ensure unsuccessful unauthorized file access attempts are collected"
+- name: "SCORED | 4.1.11 | PATCH | Ensure use of privileged commands is collected"
+  block:
+
+      - name: "SCORED | 4.1.11 | PATCH | Get list of setuid/setguid binaries"
+        shell: for i in  $(df | grep '^/dev' | awk '{ print $NF }'); do find $i -xdev -type f -perm -4000 -o -type f -perm -2000 2>/dev/null; done
+        register: priv_procs
+        changed_when: false
+        check_mode: false
+
+      - name: "SCORED | 4.1.11 | PATCH | Ensure use of privileged commands is collected"
+        template:
+            src: audit/ubuntu1804cis_rule_4_1_11.rules.j2
+            dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_11.rules
+            owner: root
+            group: root
+            mode: 0600
+        notify:
+            - load audit rules
+            - restart auditd
+  when:
+      - ubuntu1804cis_rule_4_1_11
+  tags:
+      - level2
+      - scored
+      - patch
+      - auditd
+      - rule_4.1.11
+
+- name: "SCORED | 4.1.12 | PATCH | Ensure successful file system mounts are collected"
   template:
-      src: audit/ubuntu1804cis_rule_4_1_11.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_11.rules
+      src: audit/ubuntu1804cis_rule_4_1_12.rules.j2
+      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_12.rules
       owner: root
       group: root
       mode: 0600
   when:
-      - ubuntu1804cis_rule_4_1_11
+      - ubuntu1804cis_rule_4_1_12
   notify:
       - load audit rules
       - restart auditd
@@ -287,37 +334,9 @@
       - scored
       - patch
       - auditd
-      - rule_4.1.11
-
-- name: "SCORED | 4.1.12 | PATCH | Ensure use of privileged commands is collected"
-  block:
-
-      - name: "SCORED | 4.1.12 | PATCH | Get list of setuid/setguid binaries"
-        shell: for i in  $(df | grep '^/dev' | awk '{ print $NF }'); do find $i -xdev -type f -perm -4000 -o -type f -perm -2000 2>/dev/null; done
-        register: priv_procs
-        changed_when: false
-        check_mode: false
-
-      - name: "SCORED | 4.1.12 | PATCH | Ensure use of privileged commands is collected"
-        template:
-            src: audit/ubuntu1804cis_rule_4_1_12.rules.j2
-            dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_12.rules
-            owner: root
-            group: root
-            mode: 0600
-        notify:
-            - load audit rules
-            - restart auditd
-  when:
-      - ubuntu1804cis_rule_4_1_12
-  tags:
-      - level2
-      - scored
-      - patch
-      - auditd
       - rule_4.1.12
 
-- name: "SCORED | 4.1.13 | PATCH | Ensure successful file system mounts are collected"
+- name: "SCORED | 4.1.13 | PATCH | Ensure file deletion events by users are collected"
   template:
       src: audit/ubuntu1804cis_rule_4_1_13.rules.j2
       dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_13.rules
@@ -336,7 +355,7 @@
       - auditd
       - rule_4.1.13
 
-- name: "SCORED | 4.1.14 | PATCH | Ensure file deletion events by users are collected"
+- name: "SCORED | 4.1.14 | PATCH | Ensure changes to system administration scope (sudoers) is collected"
   template:
       src: audit/ubuntu1804cis_rule_4_1_14.rules.j2
       dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_14.rules
@@ -355,7 +374,7 @@
       - auditd
       - rule_4.1.14
 
-- name: "SCORED | 4.1.15 | PATCH | Ensure changes to system administration scope (sudoers) is collected"
+- name: "SCORED | 4.1.15 | PATCH | Ensure system administrator actions (sudolog) are collected"
   template:
       src: audit/ubuntu1804cis_rule_4_1_15.rules.j2
       dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_15.rules
@@ -374,7 +393,7 @@
       - auditd
       - rule_4.1.15
 
-- name: "SCORED | 4.1.16 | PATCH | Ensure system administrator actions (sudolog) are collected"
+- name: "SCORED | 4.1.16 | PATCH | Ensure kernel module loading and unloading is collected"
   template:
       src: audit/ubuntu1804cis_rule_4_1_16.rules.j2
       dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_16.rules
@@ -393,7 +412,7 @@
       - auditd
       - rule_4.1.16
 
-- name: "SCORED | 4.1.17 | PATCH | Ensure kernel module loading and unloading is collected"
+- name: "SCORED | 4.1.17 | PATCH | Ensure the audit configuration is immutable"
   template:
       src: audit/ubuntu1804cis_rule_4_1_17.rules.j2
       dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_17.rules
@@ -411,25 +430,6 @@
       - patch
       - auditd
       - rule_4.1.17
-
-- name: "SCORED | 4.1.18 | PATCH | Ensure the audit configuration is immutable"
-  template:
-      src: audit/ubuntu1804cis_rule_4_1_18.rules.j2
-      dest: /etc/audit/rules.d/ubuntu1804cis_rule_4_1_18.rules
-      owner: root
-      group: root
-      mode: 0600
-  when:
-      - ubuntu1804cis_rule_4_1_18
-  notify:
-      - load audit rules
-      - restart auditd
-  tags:
-      - level2
-      - scored
-      - patch
-      - auditd
-      - rule_4.1.18
 
 - name: "SCORED | 4.2.1.1 | PATCH | Ensure rsyslog or is installed"
   apt:
