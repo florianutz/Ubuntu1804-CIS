@@ -720,7 +720,7 @@
       - patch
       - rule_1.4.2
 
-- name: "SCORED | 1.5.1 | PATCH | Ensure permissions on bootloader config are configured"
+- name: "SCORED | 1.5.1 | PATCH | Ensure permissions on bootloader config are configured for grub.cfg"
   file:
       path: "/boot/grub/grub.cfg"
       owner: root
@@ -729,6 +729,40 @@
   when:
       - ansible_os_family == "Debian"
       - ubuntu1804cis_rule_1_5_1
+  tags:
+      - level1
+      - scored
+      - grub
+      - patch
+      - rule_1.5.1
+
+- name: "SCORED | 1.5.1 | PATCH | Ensure permissions on bootloader config are configured for grub.conf"
+  file:
+      path: "/boot/grub/grub.conf"
+      owner: root
+      group: root
+      mode: 0400
+  when:
+      - ansible_os_family == "Debian"
+      - ubuntu1804cis_rule_1_5_1
+      - grub_conf.stat.exists
+  tags:
+      - level1
+      - scored
+      - grub
+      - patch
+      - rule_1.5.1
+
+- name: "SCORED | 1.5.1 | PATCH | Ensure permissions on bootloader config are configured for menu.lst"
+  file:
+      path: "/boot/grub/menu.lst"
+      owner: root
+      group: root
+      mode: 0400
+  when:
+      - ansible_os_family == "Debian"
+      - ubuntu1804cis_rule_1_5_1
+      - menu_lst.stat.exists
   tags:
       - level1
       - scored

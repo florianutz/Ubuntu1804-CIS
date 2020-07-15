@@ -322,10 +322,20 @@
   changed_when: false
   check_mode: false
 
-- name: "PRELIM | Check the grub configuration"
+- name: "PRELIM | Check the grub.cfg configuration"
   stat:
     path: /boot/grub/grub.cfg
   register: grub_cfg
+
+- name: "PRELIM | Check the grub.conf configuration"
+  stat:
+    path: /boot/grub/grub.conf
+  register: grub_conf
+
+- name: "PRELIM | Check the menu.lst configuration"
+  stat:
+    path: "/boot/grub/menu.lst"
+  register: menu_lst
 
 - name: "PRELIM | Check that system accounts are non-login #1"
   shell: >
