@@ -32,10 +32,9 @@
 - name: "SCORED | 4.1.1.3 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
   replace:
       dest: /etc/default/grub
-      regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!audit=1)(?:")'
-      replace: '\1"\2 audit=1"'
+      regexp: '^(GRUB_CMDLINE_LINUX=(?!.*audit)\"[^\"]*)(\".*)'
+      replace: '\1 audit=1\2'
       follow: true
-  ignore_errors: true
   notify:
       - generate new grub config
   when:
@@ -47,11 +46,11 @@
       - auditd
       - rule_4.1.1.3
 
-- name: "SCORED | 4.1.1.4 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
+- name: "SCORED | 4.1.1.4 | PATCH | Ensure audit_backlog_limit is sufficient"
   replace:
       dest: /etc/default/grub
-      regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!audit=1)(?:")'
-      replace: '\1"\2 audit=1"'
+      regexp: '^(GRUB_CMDLINE_LINUX=(?!.*audit_backlog_limit)\"[^\"]*)(\".*)'
+      replace: '\1 audit_backlog_limit={{ ubuntu1804cis_auditd.backlog_limit }}\2'
       follow: true
   ignore_errors: true
   notify:
