@@ -944,10 +944,11 @@
 - name: "SCORED | 1.6.4 | PATCH | Ensure hard core 0 is set"
   lineinfile:
     dest: /etc/security/limits.conf
-    line: '* hard core 0'
-    regexp: '(^#\s*?\*\s+hard\s+core\s+[0-9]+)'
+    line: '*                hard    core            0'
+    regexp: '(^#)?\*\s+hard\s+core\s+[0-9]+'
     state: present
     create: true
+    insertbefore: "# End of file"
   notify: restart systemd-coredump
   when:
       - ubuntu1804cis_rule_1_6_4
