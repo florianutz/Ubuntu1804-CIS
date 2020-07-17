@@ -124,45 +124,29 @@
       - patch
       - rule_6.1.9
 
-#- name: "SCORED | 6.1.10 | PATCH | Ensure no world writable files exist"
-#  block:
-#      - name: SCORED | 6.1.10 | PATCH | Find world writable files
-#        command: df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type f -perm -0002
-#        changed_when: false
-#        register: world_writable_files
-#
-#      - name: SCORED | 6.1.10 | PATCH | Ensure no world writable files exist
-#        file:
-#          path: "{{ item.stdout_lines }}"
-#          mode: o-w
-#        with_items: "{{ world_writable_files }}"
-#  when:
-#      - ubuntu1804cis_rule_6_1_10
-#  tags:
-#      - level1
-#      - scored
-#      - patch
-#      - rule_6.1.10
+- name: "SCORED | 6.1.10 | PATCH | Ensure no world writable files exist"
+  command: /bin/true
+  changed_when: false
+  when:
+      - ubuntu1804cis_rule_6_1_10
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.1.10
+      - notimplemented
 
-#- name: "SCORED | 6.1.11 | PATCH | Ensure no unowned files or directories exist"
-#  block:
-#      - name: SCORED | 6.1.11 | PATCH | Find unowned files or directories
-#        command: df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type f -perm -0002
-#        changed_when: false
-#        register: unowned_files
-#
-#      - name: SCORED | 6.1.11 | PATCH | Ensure no unowned files or directories exist
-#        file:
-#          path: "{{ item.stdout_lines }}"
-#          mode: o-w
-#        with_items: "{{ unowned_files }}"
-#  when:
-#      - ubuntu1804cis_rule_6_1_11
-#  tags:
-#      - level1
-#      - scored
-#      - patch
-#      - rule_6.1.11
+- name: "SCORED | 6.1.11 | PATCH | Ensure no unowned files or directories exist"
+  command: /bin/true
+  changed_when: false
+  when:
+      - ubuntu1804cis_rule_6_1_11
+  tags:
+      - level1
+      - scored
+      - patch
+      - rule_6.1.11
+      - notimplemented
 
 - name: "SCORED | 6.1.12 | PATCH | Ensure no ungrouped files or directories exist"
   command: /bin/true
