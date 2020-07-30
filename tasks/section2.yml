@@ -322,6 +322,16 @@
         when:
             - ubuntu1804cis_time_synchronization == "ntp"
             - chronyd_service_status.stdout == "loaded"
+
+      - name: "SCORED | 2.2.1.1 | PATCH | Ensure time synchronization is in use - mask systemd-timesyncd"
+        systemd:
+          name: systemd-timesyncd
+          enabled: no
+          masked: yes
+        when:
+          - ubuntu1804cis_time_synchronization == "ntp"
+          - chronyd_service_status.stdout == "loaded"
+
   when:
       - ubuntu1804cis_rule_2_2_1_1
   tags:
