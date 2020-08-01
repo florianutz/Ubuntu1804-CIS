@@ -1,1 +1,7 @@
--w /var/log/sudo.log -p wa -k actions
+-w /sbin/insmod -p x -k modules
+-w /sbin/rmmod -p x -k modules
+-w /sbin/modprobe -p x -k modules
+{% if ansible_architecture == 'x86_64' -%} 
+-a always,exit -F arch=b64 -S init_module -S delete_module -k modules
+{% endif %}
+-a always,exit -F arch=b32 -S init_module -S delete_module -k modules

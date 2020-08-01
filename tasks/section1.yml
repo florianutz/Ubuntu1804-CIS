@@ -974,8 +974,24 @@
       - rule_1.7.1.1
 
 - name: "SCORED | 1.7.1.2 | PATCH | Ensure AppArmor is enabled in the bootloader configuration"
-  command: /bin/true
-  changed_when: false
+  block:
+      - name: "SCORED | 1.7.1.2 | PATCH | Ensure AppArmor is enabled in the bootloader configuration"
+        replace:
+            dest: /etc/default/grub
+            regexp: '^(GRUB_CMDLINE_LINUX=(?!.*apparmor)\"[^\"]*)(\".*)'
+            replace: '\1 apparmor=1 security=apparmor\2'
+            follow: true
+        notify:
+            - generate new grub config
+
+      - name: "SCORED | 1.7.1.2 | PATCH | Ensure AppArmor Security is enabled in the bootloader configuration"
+        replace:
+            dest: /etc/default/grub
+            regexp: '^(GRUB_CMDLINE_LINUX=(?!.*security)\"[^\"]*)(\".*)'
+            replace: '\1 security=apparmor\2'
+            follow: true
+        notify:
+            - generate new grub config
   when:
       - ubuntu1804cis_rule_1_7_1_2
   tags:
@@ -983,7 +999,6 @@
       - scored
       - patch
       - rule_1.7.1.2
-      - notimplemented
 
 - name: "SCORED | 1.7.1.3 | PATCH | Ensure all AppArmor Profiles are in enforce or complain mode"
   command: /bin/true
