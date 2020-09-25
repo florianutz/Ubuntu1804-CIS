@@ -177,7 +177,6 @@ ubuntu1804cis_rule_4_1_1_4: true
 ubuntu1804cis_rule_4_1_2_1: true
 ubuntu1804cis_rule_4_1_2_2: true
 ubuntu1804cis_rule_4_1_2_3: true
-ubuntu1804cis_rule_4_1_2: true
 ubuntu1804cis_rule_4_1_3: true
 ubuntu1804cis_rule_4_1_4: true
 ubuntu1804cis_rule_4_1_5: true
@@ -193,7 +192,6 @@ ubuntu1804cis_rule_4_1_14: true
 ubuntu1804cis_rule_4_1_15: true
 ubuntu1804cis_rule_4_1_16: true
 ubuntu1804cis_rule_4_1_17: true
-ubuntu1804cis_rule_4_1_18: true
 ubuntu1804cis_rule_4_2_1_1: true
 ubuntu1804cis_rule_4_2_1_2: true
 ubuntu1804cis_rule_4_2_1_3: true
@@ -407,6 +405,7 @@ ubuntu1804cis_auditd:
   admin_space_left_action: halt
   max_log_file_action: keep_logs
   max_audit_log_file_size: 10
+  backlog_limit: "8192"
 
 ubuntu1804cis_logrotate: "daily"
 
