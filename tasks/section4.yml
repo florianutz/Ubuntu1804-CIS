@@ -34,7 +34,6 @@
       dest: /etc/default/grub
       regexp: '^(GRUB_CMDLINE_LINUX=(?!.*audit)\"[^\"]*)(\".*)'
       replace: '\1 audit=1\2'
-      follow: true
   notify:
       - generate new grub config
   when:
@@ -51,7 +50,6 @@
       dest: /etc/default/grub
       regexp: '^(GRUB_CMDLINE_LINUX=(?!.*audit_backlog_limit)\"[^\"]*)(\".*)'
       replace: '\1 audit_backlog_limit={{ ubuntu1804cis_auditd.backlog_limit }}\2'
-      follow: true
   ignore_errors: true
   notify:
       - generate new grub config
