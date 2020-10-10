@@ -980,7 +980,6 @@
             dest: /etc/default/grub
             regexp: '^(GRUB_CMDLINE_LINUX=(?!.*apparmor)\"[^\"]*)(\".*)'
             replace: '\1 apparmor=1 security=apparmor\2'
-            follow: true
         notify:
             - generate new grub config
 
@@ -989,7 +988,6 @@
             dest: /etc/default/grub
             regexp: '^(GRUB_CMDLINE_LINUX=(?!.*security)\"[^\"]*)(\".*)'
             replace: '\1 security=apparmor\2'
-            follow: true
         notify:
             - generate new grub config
   when:

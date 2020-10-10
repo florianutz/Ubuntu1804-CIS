@@ -1035,7 +1035,6 @@
       dest: /etc/default/grub
       regexp: '^(GRUB_CMDLINE_LINUX=(?!.*ipv6.disable)\"[^\"]*)(\".*)'
       replace: '\1 ipv6.disable=1\2'
-      follow: true
   ignore_errors: true
   when:
       - ubuntu1804cis_rule_3_7
