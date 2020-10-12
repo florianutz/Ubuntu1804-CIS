@@ -1,0 +1,5 @@
+exclude_paths:
+- molecule/
+warn_list:
+- '106'
+- '208'
