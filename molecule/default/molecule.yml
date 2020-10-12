@@ -3,14 +3,21 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
-  enabled: false
+lint: |
+  set -e
+  ansible-lint
 platforms:
   - name: instance
-    image: solita/ubuntu-systemd:18.04
+    image: florianutz/docker-systemd:18.04
+    command: /lib/systemd/systemd
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
-    command: /sbin/init
+#    command: /sbin/init
 provisioner:
   name: ansible
   lint:
@@ -27,10 +34,7 @@ provisioner:
       conditional_bare_variables: false
     connection:
       pipelining: true
-scenario:
-  name: default
+#scenario:
+#  name: default
 verifier:
-  name: testinfra
-  lint:
-    name: flake8
-  enabled: false
+  name: ansible
