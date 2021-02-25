@@ -997,7 +997,7 @@
       - rule_3.5.4.3.3
 
 - name: "SCORED | 3.5.4.3.4 | PATCH | Ensure default deny firewall policy | CUSTOM"
-  firewalld:
+  ansible.posix.firewalld:
       state: enabled
       zone: drop
       permanent: true
@@ -1012,7 +1012,7 @@
       - rule_3.5.4.3.4
 
 - name: "SCORED | 3.5.4.3.5 | PATCH | Ensure firewall rules exist for all open ports | CUSTOM"
-  firewalld:
+  ansible.posix.firewalld:
       service: "{{ item }}"
       state: enabled
       zone: drop
