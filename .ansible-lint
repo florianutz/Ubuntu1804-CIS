@@ -1,9 +1,11 @@
 exclude_paths:
 - molecule/
-#warn_list:  # or 'skip_list' to silence them completely
-skip_list:
-  - experimental  # all rules tagged as experimental
-  - experimental
-  - yaml
-  - parser-error
-  - role-name
+warn_list:
+- '106'
+- '208'
+#skip_list:
+#  - experimental  # all rules tagged as experimental
+#  - experimental
+#  - yaml
+#  - parser-error
+#  - role-name
