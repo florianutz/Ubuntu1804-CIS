@@ -1,4 +1,7 @@
 ---
+collections:
+- ansible.posix
+
 - name: "SCORED | 3.1.1 | PATCH | Ensure packet redirect sending is disabled"
   sysctl:
       name: '{{ item.name }}'
@@ -997,7 +1000,7 @@
       - rule_3.5.4.3.3
 
 - name: "SCORED | 3.5.4.3.4 | PATCH | Ensure default deny firewall policy | CUSTOM"
-  ansible.posix.firewalld:
+  firewalld:
       state: enabled
       zone: drop
       permanent: true
@@ -1012,7 +1015,7 @@
       - rule_3.5.4.3.4
 
 - name: "SCORED | 3.5.4.3.5 | PATCH | Ensure firewall rules exist for all open ports | CUSTOM"
-  ansible.posix.firewalld:
+  firewalld:
       service: "{{ item }}"
       state: enabled
       zone: drop

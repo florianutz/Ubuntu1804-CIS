@@ -1,6 +1,9 @@
 ---
 # handlers file for Ubuntu1804-CIS
 
+collections:
+- ansible.posix
+
 - name: sysctl flush ipv4 route table
   become: true
   sysctl:
