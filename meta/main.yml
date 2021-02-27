@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: "florianutz"
+  author: "Florian Utz"
   description: "Ansible role to apply Ubuntu 18.04 CIS Baseline"
   company: "none"
   license: MIT
