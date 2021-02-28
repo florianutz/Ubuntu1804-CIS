@@ -9,6 +9,8 @@ jobs:
       matrix:
         ansible:
           - 2.4
+          - 2.5
+          - 2.6
           - 2.7
     steps:
       - name: Check out the codebase.
