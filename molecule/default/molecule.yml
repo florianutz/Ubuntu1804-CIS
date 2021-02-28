@@ -4,7 +4,6 @@ dependency:
 driver:
   name: docker
 lint: |
-  set -e
   ansible-lint -c .ansible-lint
 platforms:
   - name: instance
