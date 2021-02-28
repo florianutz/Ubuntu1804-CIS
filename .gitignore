@@ -20,3 +20,4 @@ pip-selfcheck.json
 molecule/default/cache
 /venv/
 .venv
+*.bak*
