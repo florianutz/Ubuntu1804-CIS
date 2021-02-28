@@ -1,7 +1,4 @@
 ---
-collections:
-- ansible.posix
-
 - name: "SCORED | 1.1.1.1 | PATCH | Ensure mounting of cramfs filesystems is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf

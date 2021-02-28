@@ -28,7 +28,3 @@
             state: touch
           changed_when: false
           
-         - name: Install netaddr dependency on controlling host (virtualenv)
-            pip:
-              name: netaddr
-            delegate_to: 127.0.0.1

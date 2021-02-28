@@ -1,7 +1,4 @@
 ---
-collections:
-- ansible.posix
-
 - name: "SCORED | 3.1.1 | PATCH | Ensure packet redirect sending is disabled"
   sysctl:
       name: '{{ item.name }}'
