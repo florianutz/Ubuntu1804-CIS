@@ -4,6 +4,9 @@ on: [push, pull_request]
 jobs:
   molecule:
     runs-on: ubuntu-latest
+    env:
+      PY_COLORS: '1'
+      ANSIBLE_FORCE_COLOR: '1'    
     steps:
       - uses: actions/checkout@v2
         with:
