@@ -19,3 +19,4 @@ pip-selfcheck.json
 /share/
 molecule/default/cache
 /venv/
+.venv
