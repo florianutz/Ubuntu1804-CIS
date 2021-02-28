@@ -6,7 +6,7 @@ help:
 	@echo
 	@echo '   make test'
 	@echo '   make clean'
-	@echo '   make compare'
+	@echo '   make travis'
 	@echo
 	@echo
 	@echo To use the isolated environment from this directory:

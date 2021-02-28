@@ -5,12 +5,7 @@ driver:
   name: docker
 lint: |
   set -e
-  pwd
-  echo "-start"
-  cat .ansible-lint
-  ansible-lint --version
   ansible-lint -c .ansible-lint
-  echo "-end"
 platforms:
   - name: instance
     image: florianutz/docker-systemd:18.04
@@ -26,7 +21,7 @@ platforms:
 provisioner:
   name: ansible
   lint:
-    name: ansible-lint
+    name: ansible-lint -c .ansible-lint
     enabled: true
   config_options:
     defaults:
