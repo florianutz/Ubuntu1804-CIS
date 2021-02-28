@@ -21,3 +21,4 @@ molecule/default/cache
 /venv/
 .venv
 *.bak*
+*.cache

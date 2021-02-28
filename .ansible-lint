@@ -1,20 +1,5 @@
 exclude_paths:
 - molecule/
-warn_list:
-  - 106
-  - 208
-  - 204
-  - 303
-  - 701
-  - 601
-  - 206
-  - 602
-  - 403
-  - 301
-  - 502
-  - 306
-skip_list:
-  - experimental
+warn_list:  # or 'skip_list' to silence them completely
+  - experimental  # all rules tagged as experimental
   - yaml
-  - parser-error
-  - role-name
