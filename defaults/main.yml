@@ -14,7 +14,7 @@ ubuntu1804cis_selinux_disable: false
 ubuntu1804cis_auditd_disable: false
 
 # Ignore remount errors if you're building an image or are going to reboot anyway
-ubuntu1804cis_ignore_remount_errors: false
+ubuntu1804cis_ignore_remount_errors: true
 
 # These variables correspond with the CIS rule IDs or paragraph numbers defined in
 # the CIS benchmark documents.
