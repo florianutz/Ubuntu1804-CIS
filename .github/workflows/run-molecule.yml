@@ -1,6 +1,12 @@
 ---
 name: Run the Molecule Test Suite
-on: [push, pull_request]
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
 jobs:
   molecule:
     runs-on: ubuntu-latest
