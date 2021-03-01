@@ -3,9 +3,6 @@
 
 - name: Verify
   hosts: all
-  collections:
-    - ansible.posix
-
   tasks:
   - name: Example assertion
     assert:
