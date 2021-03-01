@@ -1,6 +1,11 @@
 ---
 name: Lint the Playbook with Ansible Lint
-on: [push, pull_request]
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   build:
