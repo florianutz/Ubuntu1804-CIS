@@ -332,7 +332,7 @@ ubuntu1804cis_set_boot_pass: false
 ubuntu1804cis_is_router: false
 
 # IPv6 required
-ubuntu1804cis_ipv6_required: true
+ubuntu1804cis_ipv6_required: false
 
 # AIDE
 ubuntu1804cis_config_aide: true
@@ -340,12 +340,12 @@ ubuntu1804cis_config_aide: true
 ubuntu1804cis_aide_cron:
   cron_user: root
   cron_file: /etc/crontab
-  aide_job: '/usr/bin/aide.wrapper --config /etc/aide/aide.conf --check'
+  aide_job: "/usr/bin/aide.wrapper --config /etc/aide/aide.conf --check"
   aide_minute: 0
   aide_hour: 5
-  aide_day: '*'
-  aide_month: '*'
-  aide_weekday: '*'
+  aide_day: "*"
+  aide_month: "*"
+  aide_weekday: "*"
 
 # Whether or not to run tasks related to auditing/patching the desktop environment
 ubuntu1804cis_gui: false
@@ -383,9 +383,8 @@ ubuntu1804cis_host_allow:
   - "192.168.0.0/255.255.0.0"
   - "0.0.0.0/0.0.0.0"
 
-ubuntu1804cis_firewall: firewalld
+ubuntu1804cis_firewall: ufw
 # ubuntu1804cis_firewall: iptables
-# ubuntu1804cis_firewall: ufw
 # ubuntu1804cis_firewall: nftables
 
 # 3.5.3.2 | PATCH | Ensure a table exists"
@@ -397,9 +396,8 @@ ubuntu1804cis_firewall_services:
 
 # Warning Banner Content (issue, issue.net, motd)
 ubuntu1804cis_warning_banner: |
-   Authorized uses only. All activity may be monitored and reported.
+  Authorized uses only. All activity may be monitored and reported.
 # End Banner
-
 ## Section 4 Vars
 ubuntu1804cis_auditd:
   admin_space_left_action: halt
@@ -427,16 +425,16 @@ ubuntu1804cis_sshd:
   # denygroups:
 
 ubuntu1804cis_pwquality:
-  - key: 'minlen'
-    value: '14'
-  - key: 'dcredit'
-    value: '-1'
-  - key: 'ucredit'
-    value: '-1'
-  - key: 'ocredit'
-    value: '-1'
-  - key: 'lcredit'
-    value: '-1'
+  - key: "minlen"
+    value: "14"
+  - key: "dcredit"
+    value: "-1"
+  - key: "ucredit"
+    value: "-1"
+  - key: "ocredit"
+    value: "-1"
+  - key: "lcredit"
+    value: "-1"
 
 ubuntu1804cis_pass:
   max_days: 365

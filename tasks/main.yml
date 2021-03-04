@@ -2,25 +2,25 @@
 # tasks file for Ubuntu1804-CIS
 - name: Check OS version and family
   fail:
-      msg: "This role can only be run agaist Ubuntu 18.04. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
+    msg: "This role can only be run agaist Ubuntu 18.04. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
   when:
-      - not ansible_distribution == "Ubuntu"
-      - not ansible_distribution_release == "bionic"
+    - not ansible_distribution == "Ubuntu"
+    - not ansible_distribution_release == "bionic"
   tags:
-      - always
+    - always
 
 - name: Check ansible version
   fail:
-      msg: You must use ansible 2.3 or greater!
+    msg: You must use ansible 2.3 or greater!
   when: not ansible_version.full is version_compare('2.3', '>=')
   tags:
-      - always
+    - always
 
 - include: prelim.yml
   become: true
   tags:
-      - prelim_tasks
-      - always
+    - prelim_tasks
+    - always
 
 - include: section1.yml
   become: true
@@ -55,5 +55,5 @@
 - include: post.yml
   become: true
   tags:
-      - post_tasks
-      - always
+    - post_tasks
+    - always
