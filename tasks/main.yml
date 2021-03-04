@@ -57,3 +57,18 @@
   tags:
     - post_tasks
     - always
+
+-  name: test handlers
+   command: /bin/true
+   notify:
+    - generate new grub config
+    - restart systemd-coredump
+    - load audit rules
+    - restart auditd
+    - reload dconf
+    - systemd restart tmp.mount
+    - systemd restart var-tmp.mount
+  when:
+    - handler_test
+  tags:
+    - handler_test
