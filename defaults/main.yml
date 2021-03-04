@@ -14,7 +14,7 @@ ubuntu1804cis_selinux_disable: false
 ubuntu1804cis_auditd_disable: false
 
 # Ignore remount errors if you're building an image or are going to reboot anyway
-ubuntu1804cis_ignore_remount_errors: false
+ubuntu1804cis_ignore_remount_errors: true
 
 # These variables correspond with the CIS rule IDs or paragraph numbers defined in
 # the CIS benchmark documents.
@@ -141,7 +141,7 @@ ubuntu1804cis_rule_3_4_3: true
 ubuntu1804cis_rule_3_4_4: true
 ubuntu1804cis_rule_3_5_1_1: true
 ubuntu1804cis_rule_3_5_2_1: true
-ubuntu1804cis_rule_3_5_2_2: true
+ubuntu1804cis_rule_3_5_2_2: false
 ubuntu1804cis_rule_3_5_2_3: true
 ubuntu1804cis_rule_3_5_2_4: true
 ubuntu1804cis_rule_3_5_2_5: true
@@ -250,7 +250,7 @@ ubuntu1804cis_rule_5_4_3: true
 ubuntu1804cis_rule_5_4_4: true
 ubuntu1804cis_rule_5_4_5: true
 ubuntu1804cis_rule_5_5: true
-ubuntu1804cis_rule_5_6: false
+ubuntu1804cis_rule_5_6: true
 
 # Section 6 rules
 ubuntu1804cis_rule_6_1_1: true
@@ -325,8 +325,8 @@ ubuntu1804cis_xinetd_required: false
 ubuntu1804cis_rhnsd_required: false
 
 # 1.4.2 Bootloader password
-ubuntu1804cis_bootloader_password: random
-ubuntu1804cis_set_boot_pass: false
+ubuntu1804cis_bootloader_password: "P4ssw0rd!"
+ubuntu1804cis_set_boot_pass: true
 
 # System network parameters (host only OR host and router)
 ubuntu1804cis_is_router: false
@@ -360,8 +360,8 @@ ubuntu1804cis_rsh_required: false
 ubuntu1804cis_ypbind_required: false
 
 # Time Synchronization
-ubuntu1804cis_time_synchronization: chrony
-# ubuntu1804cis_time_synchronization: ntp
+# ubuntu1804cis_time_synchronization: chrony
+ubuntu1804cis_time_synchronization: ntp
 
 ubuntu1804cis_time_synchronization_servers:
   - uri: "0.pool.ntp.org"
@@ -374,7 +374,7 @@ ubuntu1804cis_time_synchronization_servers:
     config: "minpoll 8"
 
 # 3.3 TCP Wrappers
-ubuntu1804cis_setup_tcp_wrappers: false
+ubuntu1804cis_setup_tcp_wrappers: true
 
 # 3.3.4 | PATCH | Ensure /etc/hosts.allow is configured
 ubuntu1804cis_host_allow:
@@ -420,7 +420,7 @@ ubuntu1804cis_sshd:
   logingracetime: 60
   ### Make sure you understand the precedence when working with these values!!
   # allowusers:
-  # allowgroups: systems dba
+  allowgroups: systems dba sudo
   # denyusers:
   # denygroups:
 
@@ -438,7 +438,7 @@ ubuntu1804cis_pwquality:
 
 ubuntu1804cis_pass:
   max_days: 365
-  min_days: 1
+  min_days: 7
   warn_age: 7
   inactive: 30
   history: 5
@@ -495,4 +495,4 @@ chrony_config_file:
   Debian: /etc/chrony/chrony.conf
 
 ### Firewall
-ubuntu1804cis_setup_firewall: false
+ubuntu1804cis_setup_firewall: true
