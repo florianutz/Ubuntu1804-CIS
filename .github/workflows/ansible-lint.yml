@@ -1,0 +1,28 @@
+---
+name: Lint the Playbook with Ansible Lint
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PY_COLORS: '1'
+      ANSIBLE_FORCE_COLOR: '1'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Lint Ansible Playbook
+      uses: ansible/ansible-lint-action@master
+      with:
+        targets: |
+          defaults/*.yml
+          handlers/*.yml
+          tasks/*.yml
+        override-deps: |
+          ansible==2.7
+          ansible-lint==4.2.0
+        args: "-c .ansible-lint -x 204"
