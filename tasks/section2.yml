@@ -330,7 +330,7 @@
           masked: yes
         when:
           - ubuntu1804cis_time_synchronization == "ntp"
-          - chronyd_service_status.stdout == "loaded"
+          - systemd_timesyncd_service_status.stdout == "loaded"
 
   when:
       - ubuntu1804cis_rule_2_2_1_1

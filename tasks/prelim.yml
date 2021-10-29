@@ -124,6 +124,15 @@
   changed_when: false
   check_mode: false
 
+- name: "PRELIM | Check for systemd-timesyncd service"
+  shell: "set -o pipefail;
+      systemctl show systemd-timesyncd | grep LoadState | cut -d = -f 2"
+  args:
+      executable: /bin/bash
+  register: systemd_timesyncd_service_status
+  changed_when: false
+  check_mode: false
+
 - name: "PRELIM | Check for avahi-daemon service"
   shell: "set -o pipefail;
       systemctl show avahi-daemon | grep LoadState | cut -d = -f 2"
