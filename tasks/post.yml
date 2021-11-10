@@ -6,6 +6,8 @@
       dpkg --list | (grep ^rc || true) | tr -s ' ' | cut -d ' ' -f 2"
   args:
       executable: /bin/bash
+  when: 
+    - not skip_post
   register: apt_rc_packages
   changed_when: false
 
@@ -16,6 +18,8 @@
     purge: true
   changed_when: false
   ignore_errors: true
-  when: not ansible_check_mode
+  when: 
+    - not ansible_check_mode
+    - not skip_post
   tags:
     - skip_ansible_lint
