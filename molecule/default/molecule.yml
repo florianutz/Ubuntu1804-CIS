@@ -34,7 +34,7 @@ provisioner:
       conditional_bare_variables: false
     connection:
       pipelining: true
-scenario:
-  name: default
+#scenario:
+#  name: default
 verifier:
   name: ansible
