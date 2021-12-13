@@ -408,7 +408,7 @@
   block:
       - name: "SCORED | 3.5.1.1 | PATCH | Ensure a Firewall package is installed | firewalld | CUSTOM"
         apt:
-            name: iptables
+            name: firewalld
             state: present
             install_recommends: false
         when:
