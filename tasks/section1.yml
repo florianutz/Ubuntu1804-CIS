@@ -258,7 +258,7 @@
       - filesystems
       - rule_1.1.1.8
 
-- name: "SCORED | 1.1.2 | PATCH | Ensure separate partition exists for /tmp | enable and start/restart tmp.mount"
+- name: "SCORED | 1.1.2 | PATCH | Ensure /tmp is configured | enable and start/restart tmp.mount"
   copy:
       src: "{{ tmp_mount_file[ansible_os_family] }}"
       dest: /etc/systemd/system/tmp.mount
@@ -278,7 +278,7 @@
       - patch
       - rule_1.1.2
 
-- name: "SCORED | 1.1.2 | PATCH | Ensure separate partition exists for /tmp | enable and start/restart tmp.mount"
+- name: "SCORED | 1.1.2 | PATCH | Ensure /tmp is configured | enable and start/restart tmp.mount"
   systemd:
       name: tmp.mount
       daemon_reload: yes

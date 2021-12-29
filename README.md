@@ -140,10 +140,10 @@ ubuntu1804cis_time_synchronization_servers:
     config: "minpoll 8"
 
 ```
-##### - name: "SCORED | 1.1.5 | PATCH | Ensure noexec option set on /tmp partition"
-It is not implemented, noexec for /tmp will disrupt apt. /tmp contains executable scripts during package installation
-```
-
+##### 1.1.5 | PATCH | Ensure noexec option set on /tmp partition
+It is not implemented because noexec for /tmp will disrupt apt. /tmp contains executable scripts during package installation
+```yaml
+ubuntu1804cis_rule_1_1_5: false
 ```  
 ##### 1.5.3 | PATCH | Ensure authentication required for single user mode
 It is disabled by default as it is setting random password for root. To enable it set:
