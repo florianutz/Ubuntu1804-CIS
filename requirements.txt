@@ -1,2 +1,0 @@
-molecule[docker]==3.0.8
-ansible-lint

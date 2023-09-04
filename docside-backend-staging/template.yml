@@ -1,0 +1,1008 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: tft-serverless-api
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  AppName:
+    Type: String
+  Environment:
+    Type: String
+    Default: dev
+  ENVIRONMENT:
+    Type: String
+    Default: DEV
+
+Globals:
+  Function:
+    Layers:
+      - !Ref RuntimeDependenciesLayer
+    Environment:
+      Variables:
+        UserPoolArn: !Sub "{{resolve:ssm:/${ENVIRONMENT}/FRONTEND/COGNITO_USER_POOL_ARN}}"
+        AWS_A_KEY: !Sub "{{resolve:secretsmanager:programatic_user_credentials:SecretString:PROGRAMATIC_USER_ACCESS_KEY_ID}}"
+        AWS_S_KEY: !Sub "{{resolve:secretsmanager:programatic_user_credentials:SecretString:PROGRAMATIC_USER_SECRET_ACCESS_KEY}}"
+        S3_FILENAME_PREFIX: "TFA_"
+        S3_UPLOAD_FILES: !Sub "bucket-${AppName}-profile-${Environment}"
+    Runtime: nodejs16.x
+    MemorySize: 128
+    Timeout: 100
+
+Resources:
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Sub ${Environment}
+      Name: !Sub ${AppName}-api-gateway-${Environment}
+      # Domain:
+      #   DomainName: !Sub ${DomainName}
+      #   CertificateArn: !Sub ${CertificateArn}
+      GatewayResponses:
+        DEFAULT_4xx:
+          ResponseParameters:
+            Headers:
+              Access-Control-Allow-Origin: "'*'"
+        DEFAULT_5xx:
+          ResponseParameters:
+            Headers:
+              Access-Control-Allow-Origin: "'*'"
+      Cors:
+        AllowMethods: "'*'"
+        AllowHeaders: "'*'"
+        AllowOrigin: "'*'"
+        AllowCredentials: false
+      # Auth:
+      #   DefaultAuthorizer: MyCognitoAuthorizer
+      #   AddDefaultAuthorizerToCorsPreflight: false
+      #   Authorizers:
+      #     MyCognitoAuthorizer:
+      #       UserPoolArn: !Sub "{{resolve:ssm:/${ENVIRONMENT}/FRONTEND/COGNITO_USER_POOL_ARN}}"
+
+  ##Data table queryable parameters
+  Payments:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: tft_payments
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: stripe_session_id
+          AttributeType: S
+        - AttributeName: stripe_payment_intent
+          AttributeType: S
+      GlobalSecondaryIndexes:
+        - IndexName: stripe_payment_intent
+          KeySchema:
+            - AttributeName: stripe_payment_intent
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      KeySchema:
+        - AttributeName: stripe_session_id
+          KeyType: HASH
+
+  Subscriptions:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: tft_subscriptions
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: stripe_session_id
+          AttributeType: S
+        - AttributeName: stripe_subscription_id
+          AttributeType: S
+      GlobalSecondaryIndexes:
+        - IndexName: stripe_subscription_id
+          KeySchema:
+            - AttributeName: stripe_subscription_id
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      KeySchema:
+        - AttributeName: stripe_session_id
+          KeyType: HASH
+  Users:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: tft_users
+      # ProvisionedThroughput:
+      #   ReadCapacityUnits: 10
+      #   WriteCapacityUnits: 10
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: user_id
+          AttributeType: S
+        - AttributeName: email
+          AttributeType: S
+        - AttributeName: role
+          AttributeType: S
+        - AttributeName: cognito_id
+          AttributeType: S
+        - AttributeName: events_id
+          AttributeType: S
+      GlobalSecondaryIndexes:
+        - IndexName: role
+          KeySchema:
+            - AttributeName: role
+              KeyType: HASH
+            - AttributeName: user_id
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: email
+          KeySchema:
+            - AttributeName: email
+              KeyType: HASH
+            - AttributeName: user_id
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: cognito_id
+          KeySchema:
+            - AttributeName: cognito_id
+              KeyType: HASH
+            - AttributeName: user_id
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: events_id
+          KeySchema:
+            - AttributeName: events_id
+              KeyType: HASH
+            - AttributeName: user_id
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      KeySchema:
+        - AttributeName: user_id
+          KeyType: HASH
+        - AttributeName: cognito_id
+          KeyType: RANGE
+
+  Calls:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: tft_calls
+      # ProvisionedThroughput:
+      #   ReadCapacityUnits: 10
+      #   WriteCapacityUnits: 10
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: user_id
+          AttributeType: S
+        - AttributeName: call_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: call_id
+          KeyType: HASH
+        - AttributeName: user_id
+          KeyType: RANGE
+  Channels:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: tft_channel
+      # ProvisionedThroughput:
+      #   ReadCapacityUnits: 10
+      #   WriteCapacityUnits: 10
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: external_channel_id
+          AttributeType: S
+        - AttributeName: channel_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: channel_id
+          KeyType: HASH
+        - AttributeName: external_channel_id
+          KeyType: RANGE
+  EventTypes:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub tft_event_type3_${Environment}
+      # ProvisionedThroughput:
+      #   ReadCapacityUnits: 10
+      #   WriteCapacityUnits: 10
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: event_type_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: event_type_id
+          KeyType: HASH
+  WorkingHours:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub tft_working_hors_${Environment}
+      # ProvisionedThroughput:
+      #   ReadCapacityUnits: 10
+      #   WriteCapacityUnits: 10
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: working_hours_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: working_hours_id
+          KeyType: HASH
+  Appointment:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub tft_appointment_${Environment}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: appointment_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: appointment_id
+          KeyType: HASH
+
+  LambdaRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+      Policies:
+        - PolicyName: !Sub ${AppName}-lambdapolicy-${Environment}
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Action:
+                  - "logs:*"
+                Effect: Allow
+                Resource: "*"
+              - Action:
+                  - "dynamodb:*"
+                  - "ses:SendEmail"
+                  - "s3:*"
+                  - "chime:ListChannelMembershipsForAppInstanceUser"
+                  - "chime:DescribeChannel"
+                Effect: Allow
+                Resource: "*"
+              - Action:
+                  - "secretsmanager:GetSecretValue"
+                Effect: Allow
+                Resource:
+                  - '*'
+
+  ##End Points
+  createStripeCheckoutSession:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/payments/create.createStripeCheckoutSession
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /payments
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+  findProviders:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/providers/findAll.findProviders
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /providers
+            RestApiId: !Ref ApiGateway
+            Method: GET
+      Role: !GetAtt LambdaRole.Arn
+  updateProvider:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/providers/update.updateProvider
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /providers/{id}
+            RestApiId: !Ref ApiGateway
+            Method: PUT
+      Role: !GetAtt LambdaRole.Arn
+
+  refundByStripePaymentIntent:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/payments/refund.refundByStripePaymentIntent
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /refund
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+
+  handleStripeWebhooks:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/payments/webhook.handleStripeWebhooks
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /webhook
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+
+  createUser:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/users/create.createUser
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+
+  findAllUser:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/users/findAll.findAllUser
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users
+            RestApiId: !Ref ApiGateway
+            Method: GET
+      Role: !GetAtt LambdaRole.Arn
+
+  # This is a Lambda function config associated with the source code: put-item.js
+  findOneUser:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/users/findOne.findOneUser
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/{id}
+            RestApiId: !Ref ApiGateway
+            Method: GET
+      Role: !GetAtt LambdaRole.Arn
+
+  findOneByEmail:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/users/findOne.findOneByEmail
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/byEmail/{email}
+            RestApiId: !Ref ApiGateway
+            Method: GET
+      Role: !GetAtt LambdaRole.Arn
+
+  findMe:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/users/findOne.findMe
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/me
+            RestApiId: !Ref ApiGateway
+            Method: GET
+      Role: !GetAtt LambdaRole.Arn
+
+  createMe:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/users/create.createMe
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/me
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+
+  deleteUser:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/users/delete.deleteUser
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/{id}
+            RestApiId: !Ref ApiGateway
+            Method: DELETE
+      Role: !GetAtt LambdaRole.Arn
+
+  deleteMe:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/users/delete.deleteMe
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/me
+            RestApiId: !Ref ApiGateway
+            Method: DELETE
+      Role: !GetAtt LambdaRole.Arn
+
+  updateUser:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/users/update.updateUser
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/{id}
+            RestApiId: !Ref ApiGateway
+            Method: PUT
+      Role: !GetAtt LambdaRole.Arn
+  userUploadAvatar:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/users/uploadAvatar.userUploadAvatar
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/photo/{id}
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+  updateMe:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/users/update.updateMe
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/me
+            RestApiId: !Ref ApiGateway
+            Method: PUT
+      Role: !GetAtt LambdaRole.Arn
+
+  setPin:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/unlock/create.setPin
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/unlock/pin
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+
+  verifyPin:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/unlock/verify.verifyPin
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/unlock/pin/verify
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+
+  deletePin:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/unlock/delete.deletePin
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/unlock/pin
+            RestApiId: !Ref ApiGateway
+            Method: DELETE
+      Role: !GetAtt LambdaRole.Arn
+
+  setUnlockMethod:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/unlock/unlockMethod.setUnlockMethod
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /users/unlock/unlock-method
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+  #Calls endpoints
+  findOneCall:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/calls/findOne.findOneCall
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /calls/{id}
+            RestApiId: !Ref ApiGateway
+            Method: GET
+      Role: !GetAtt LambdaRole.Arn
+  findAllCalls:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/calls/findAll.findAllCall
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /calls/findAll/{user_id}
+            RestApiId: !Ref ApiGateway
+            Method: GET
+      Role: !GetAtt LambdaRole.Arn
+
+  deleteCall:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/calls/delete.deleteCall
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /calls/{id}
+            RestApiId: !Ref ApiGateway
+            Method: DELETE
+      Role: !GetAtt LambdaRole.Arn
+  updateCall:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/calls/update.updateCall
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /calls/{id}
+            RestApiId: !Ref ApiGateway
+            Method: PUT
+      Role: !GetAtt LambdaRole.Arn
+  createCall:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/calls/create.createCall
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /calls
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+  findOneChannel:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/channels/findOne.findOneChannel
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /channel/{id}
+            RestApiId: !Ref ApiGateway
+            Method: GET
+      Role: !GetAtt LambdaRole.Arn
+  findAllChannel:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/channels/findAll.findAllChannel
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /channel/findAll/{user_id}
+            RestApiId: !Ref ApiGateway
+            Method: GET
+      Role: !GetAtt LambdaRole.Arn
+
+  findAllUserChannel:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/channels/findAll.findAllUserChannel
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /channel/findAll
+            RestApiId: !Ref ApiGateway
+            Method: GET
+      Role: !GetAtt LambdaRole.Arn
+
+  findChannelMembers:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/channels/findChannelMembers.findChannelMembers
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /channel/findChannelMembers
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+
+  deleteChannel:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/channels/delete.deleteChannel
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /channel/{id}
+            RestApiId: !Ref ApiGateway
+            Method: DELETE
+      Role: !GetAtt LambdaRole.Arn
+  updateChannel:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/channels/update.updateChannel
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /channel/{id}
+            RestApiId: !Ref ApiGateway
+            Method: PUT
+      Role: !GetAtt LambdaRole.Arn
+  archiveUnarchiveChannel:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/channels/update.archiveUnarchiveChannel
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /channel/archive/{id}
+            RestApiId: !Ref ApiGateway
+            Method: PUT
+      Role: !GetAtt LambdaRole.Arn
+  unreadReadChannel:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/channels/update.unreadReadChannel
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /channel/read/{id}
+            RestApiId: !Ref ApiGateway
+            Method: PUT
+      Role: !GetAtt LambdaRole.Arn
+  createChannel:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/channels/create.createChannel
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /channel
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+  channelUploadAvatar:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/channels/uploadAvatar.channelUploadAvatar
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /channel/photo/{id}
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+  createEventType:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/eventty/create.createEventType
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /event-types
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+  findAllEventTypes:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/eventty/findAll.findAllEventTypes
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /event-types/findAll
+            RestApiId: !Ref ApiGateway
+            Method: GET
+      Role: !GetAtt LambdaRole.Arn
+  findOneEventType:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/eventty/findOne.findOneEventType
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /event-types/{id}
+            RestApiId: !Ref ApiGateway
+            Method: GET
+      Role: !GetAtt LambdaRole.Arn
+  deleteEventType:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/eventty/delete.deleteEventType
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /event-types/{id}
+            RestApiId: !Ref ApiGateway
+            Method: DELETE
+      Role: !GetAtt LambdaRole.Arn
+  updateEventType:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/eventty/update.updateEventType
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /event-types/{id}
+            RestApiId: !Ref ApiGateway
+            Method: PUT
+      Role: !GetAtt LambdaRole.Arn
+  createWorkingHours:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/workinghours/create.createWorkingHours
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /working-hours
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+  findMyWorkingHour:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/workinghours/findOne.findMyWorkingHour
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /working-hours/findMine
+            RestApiId: !Ref ApiGateway
+            Method: GET
+      Role: !GetAtt LambdaRole.Arn
+  updateMyWorkingHour:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/workinghours/update.updateMyWorkingHour
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /working-hours
+            RestApiId: !Ref ApiGateway
+            Method: PUT
+      Role: !GetAtt LambdaRole.Arn
+  createAppointment:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/appointment/create.createAppointment
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /appointments
+            RestApiId: !Ref ApiGateway
+            Method: POST
+      Role: !GetAtt LambdaRole.Arn
+  findAllAppointment:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/appointment/findAll.findAllAppointment
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /appointments/findAll
+            RestApiId: !Ref ApiGateway
+            Method: GET
+      Role: !GetAtt LambdaRole.Arn
+  findOneAppointment:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/appointment/findOne.findOneAppointment
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /appointments/{id}
+            RestApiId: !Ref ApiGateway
+            Method: GET
+      Role: !GetAtt LambdaRole.Arn
+  deleteAppointment:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/appointment/delete.deleteAppointment
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /appointments/{id}
+            RestApiId: !Ref ApiGateway
+            Method: DELETE
+      Role: !GetAtt LambdaRole.Arn
+  updateAppointment:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Handler: dist/appointment/update.updateAppointment
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /appointments/{id}
+            RestApiId: !Ref ApiGateway
+            Method: PUT
+      Role: !GetAtt LambdaRole.Arn
+  #  =================================================================
+  #  =================================================================
+  #  =================================================================
+  #  =================================================================
+  #  =================================================================
+  #  =================================================================
+  #  =================================================================
+  RuntimeDependenciesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Metadata:
+      BuildMethod: makefile
+    Properties:
+      Description: Runtime dependencies for Lambdas
+      ContentUri: ./
+      CompatibleRuntimes:
+        - nodejs16.x
+      RetentionPolicy: Retain
+
+  IconsBucket:
+    Type: "AWS::S3::Bucket"
+    DeletionPolicy: "Delete"
+    Properties:
+      AccessControl: "PublicRead"
+      BucketName: !Sub bucket-${AppName}-icons-${Environment}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: ObjectWriter
+      Tags:
+        - Key: AppName
+          Value: !Ref AppName
+        - Key: Environment
+          Value: !Ref Environment
+
+Outputs:
+  WebEndpoint:
+    Description: "API Gateway endpoint URL for Prod stage"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/${Environment}/"

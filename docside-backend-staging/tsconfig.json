@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "preserveConstEnums": true,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "target": "es2017",
+    "outDir": "./dist",
+    "moduleResolution": "node",
+    "lib": ["es2017"],
+    "rootDir": "./src",    
+    "strict": true,
+    "module": "commonjs",
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.js"],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}

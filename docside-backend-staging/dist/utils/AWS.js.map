@@ -1,0 +1,1 @@
+{"version":3,"file":"AWS.js","sourceRoot":"","sources":["../../src/utils/AWS.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,mDAAkC;AAElC,iBAAG,CAAC,MAAM,CAAC,MAAM,CAAC;IAChB,WAAW,EAAE,OAAO,CAAC,GAAG,CAAC,SAAS;IAClC,eAAe,EAAE,OAAO,CAAC,GAAG,CAAC,SAAS;CACvC,CAAC,CAAC;AAEU,QAAA,QAAQ,GAAG,IAAI,YAAE,CAAC;IAC7B,gBAAgB,EAAE,IAAI;CACvB,CAAC,CAAC"}
